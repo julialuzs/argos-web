@@ -1,0 +1,112 @@
+<main class="flex justify-center">
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4 sm:w-64"
+    autocomplete="off"
+  >
+  <div class="flex w-full flex-col">
+    <label pLabel for="cadastro-nome">Nome</label>
+    <input
+      class="w-full"
+      name="cadastro-nome"
+      pInputText 
+      id="cadastro-nome"
+      placeholder="Digite seu nome"
+      formControlName="nome"
+      autocomplete="off"
+      /* [invalid]="isInvalid('email')" */
+    />
+    @if (isInvalid('email')) {
+      @if (form.get('email')?.errors?.['required']) {
+        <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+      }
+      @if (form.get('email')?.errors?.['email']) {
+        <p-message severity="error" size="small" variant="simple"
+          >Please enter a valid email.</p-message
+        >
+      }
+    }
+  </div>
+
+    <div class="flex w-full flex-col">
+      <label pLabel for="cadastro-email">E-mail</label>
+      <input
+        class="w-full"
+        name="cadastro-email"
+        pInputText
+        type="email"
+        id="cadastro-email"
+        placeholder="Digite seu e-mail"
+        formControlName="email"
+        autocomplete="off"
+        /* [invalid]="isInvalid('email')" */
+      />
+      @if (isInvalid('email')) {
+        @if (form.get('email')?.errors?.['required']) {
+          <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+        }
+        @if (form.get('email')?.errors?.['email']) {
+          <p-message severity="error" size="small" variant="simple"
+            >Please enter a valid email.</p-message
+          >
+        }
+      }
+    </div>
+
+    <div class="flex w-full flex-col">
+      <label pLabel for="cadastro-senha">Senha</label>
+      <input
+        pInputPassword
+        id="cadastro-senha"
+        name="cadastro-senha"
+        formControlName="senha"
+        placeholder="Digite a senha"
+        autocomplete="off"
+      />
+      <ul class="flex flex-col gap-2 list-none ms-1 my-1 p-0">
+        @for (req of requirements; track req.id) {
+          <li class="flex items-center gap-2 text-sm transition-all duration-300">
+            <svg
+              data-p-icon="check-circle"
+              [class]="
+                'transition-all duration-300 ease-out ' +
+                (req.test(senha)
+                  ? 'text-green-500 scale-110 opacity-100'
+                  : 'text-surface-400 scale-90 opacity-70')
+              "
+            ></svg>
+            <span
+              [class]="
+                'transition-all duration-300 ease-out ' +
+                (req.test(senha)
+                  ? 'text-green-700 dark:text-green-400 line-through decoration-2 decoration-green-500/70'
+                  : 'text-surface-400 dark:text-surface-300 dark:opacity-70')
+              "
+            >
+              {{ req.label }}
+            </span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="flex w-full flex-col">
+      <label pLabel for="cadastro-confirmacao_senha">Confirme a senha</label>
+      <input
+        pInputPassword
+        id="cadastro-confirmacao_senha"
+        name="cadastro-confirmacao_senha"
+        formControlName="confirmacaoSenha"
+        placeholder="Digite a senha"
+        autocomplete="off"
+      />
+    </div>
+    <!-- @if (error(); as message) {
+      <p role="alert">{{ message }}</p>
+    } -->
+
+    <button pButton type="submit" [disabled]="loading()">Cadastrar</button>
+    <a routerLink="/login">Ir para login</a>
+  </form>
+</main>

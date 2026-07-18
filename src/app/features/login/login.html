@@ -1,0 +1,54 @@
+<main class="flex justify-center">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 sm:w-64">
+    <div class="flex w-full flex-col">
+      <label pLabel for="email_usuario">E-mail</label>
+      <input
+        class="w-full"
+        pInputText
+        type="email"
+        id="email_usuario"
+        placeholder="Digite seu E-mail"
+        formControlName="email"
+        /* [invalid]="isInvalid('email')" */
+      />
+      @if (isInvalid('email')) {
+        @if (form.get('email')?.errors?.['required']) {
+          <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+        }
+        @if (form.get('email')?.errors?.['email']) {
+          <p-message severity="error" size="small" variant="simple"
+            >Please enter a valid email.</p-message
+          >
+        }
+      }
+    </div>
+
+    <div class="flex w-full flex-col">
+      <label pLabel for="senha_usuario">Senha</label>
+      <p-iconfield class="w-full">
+        <input
+          class="w-full"
+          pInputPassword
+          placeholder="Digite sua senha"
+          id="senha_usuario"
+          formControlName="senha"
+          [(mask)]="mask"
+        />
+        <p-inputicon (click)="mask = !mask" style="cursor: pointer">
+          @if (mask) {
+            <svg data-p-icon="eye"></svg>
+          } @else {
+            <svg data-p-icon="eye-slash"></svg>
+          }
+        </p-inputicon>
+      </p-iconfield>
+    </div>
+
+    @if (error(); as message) {
+      <p role="alert">{{ message }}</p>
+    }
+
+    <button pButton type="submit" [disabled]="loading()">Entrar</button>
+    <a routerLink="/cadastro">Ir para cadastro</a>
+  </form>
+</main>
