@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -37,8 +37,8 @@ export class Login {
   private readonly router = inject(Router);
 
   form = new FormGroup({
-    email: new FormControl(''),
-    senha: new FormControl(''),
+    email: new FormControl('', [Validators.required]),
+    senha: new FormControl('', [Validators.required]),
   });
 
   mask = true;

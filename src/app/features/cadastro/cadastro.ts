@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UsuarioService, UsuarioRequest } from '@shared/services/usuario.service';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -35,10 +35,10 @@ export class Cadastro {
   router = inject(Router);
 
   form = new FormGroup({
-    nome: new FormControl(''),
-    email: new FormControl(''),
-    senha: new FormControl(''),
-    confirmacaoSenha: new FormControl(''),
+    nome: new FormControl('', [Validators.required, Validators.min(2), Validators.max(80)]),
+    email: new FormControl('', [Validators.required]),
+    senha: new FormControl('', [Validators.required, Validators.min(8)]),
+    confirmacaoSenha: new FormControl('', [Validators.required, Validators.min(8)]),
   });
 
   formSubmitted = false;
@@ -88,6 +88,6 @@ export class Cadastro {
   }
 
   redirectLogin() {
-    this.router.navigate(['login'])
+    this.router.navigate(['login']);
   }
 }

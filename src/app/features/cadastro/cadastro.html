@@ -15,7 +15,7 @@
         @if (isInvalid('nome')) {
           @if (form.get('nome')?.errors?.['required']) {
             <p-message severity="error" size="small" variant="simple"
-              >Nome é obrigatório.</p-message
+              >Campo obrigatório.</p-message
             >
           }
         }
@@ -35,11 +35,11 @@
         />
         @if (isInvalid('email')) {
           @if (form.get('email')?.errors?.['required']) {
-            <p-message severity="error" size="small" variant="simple">E-mail é obrigatório.</p-message>
+            <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
           }
           @if (form.get('email')?.errors?.['email']) {
             <p-message severity="error" size="small" variant="simple"
-              >Please enter a valid email.</p-message
+              >Digite um e-mail válido.</p-message
             >
           }
         }

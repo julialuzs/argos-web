@@ -1,24 +1,28 @@
 <main class="flex justify-center items-center">
   <p-card class="max-w-sm w-full" header="Argos" subheader="Entre com seu e-mail para continuar.">
-    <form [formGroup]="form"   class="space-y-6 mt-3">
+    <form [formGroup]="form" class="space-y-6 mt-3">
       <div class="flex flex-col gap-2">
         <label pLabel for="email_usuario">Email</label>
         <input
           class="w-full"
           pInputText
+          email
           type="email"
           id="email_usuario"
           placeholder="Digite seu E-mail"
           formControlName="email"
+          [invalid]="isInvalid('email')"
         />
 
         @if (isInvalid('email')) {
           @if (form.get('email')?.errors?.['required']) {
-            <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+            <p-message severity="error" size="small" variant="simple"
+              >Campo obrigatório.</p-message
+            >
           }
           @if (form.get('email')?.errors?.['email']) {
             <p-message severity="error" size="small" variant="simple"
-              >Please enter a valid email.</p-message
+              >Digite um e-mail válido.</p-message
             >
           }
         }
@@ -37,6 +41,7 @@
             id="senha_usuario"
             formControlName="senha"
             [(mask)]="mask"
+            [invalid]="isInvalid('senha')"
           />
           <p-inputicon (click)="mask = !mask" style="cursor: pointer">
             @if (mask) {
@@ -46,6 +51,14 @@
             }
           </p-inputicon>
         </p-iconfield>
+
+        @if (isInvalid('senha')) {
+          @if (form.get('senha')?.errors?.['required']) {
+            <p-message severity="error" size="small" variant="simple"
+              >Campo obrigatório.</p-message
+            >
+          }
+        }
       </div>
     </form>
     @if (error(); as message) {
