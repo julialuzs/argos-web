@@ -21,6 +21,7 @@
     "@primeuix/themes": "^3.0.0-rc.1",
     "primeng": "^22.0.0-rc.1",
     "rxjs": "~7.8.0",
+    "tailwindcss-primeui": "^0.6.1",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

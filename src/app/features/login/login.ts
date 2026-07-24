@@ -12,11 +12,13 @@ import { MessageModule } from 'primeng/message';
 import { InputTextModule } from 'primeng/inputtext';
 import { LabelModule } from 'primeng/label';
 import { AuthService } from '@core/services/auth.service';
+import { CardModule } from 'primeng/card';
 
 const icons = [Eye, EyeSlash];
 const primeNgModules = [
   InputPasswordModule,
   MessageModule,
+  CardModule,
   ButtonModule,
   IconFieldModule,
   InputIconModule,
@@ -26,7 +28,7 @@ const primeNgModules = [
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, ...primeNgModules, ...icons],
+  imports: [ReactiveFormsModule, ...primeNgModules, ...icons],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -69,5 +71,9 @@ export class Login {
   isInvalid(controlName: string) {
     const control = this.form.get(controlName);
     return control?.invalid && (control.touched || this.formSubmitted);
+  }
+
+  redirectCadastro() {
+    this.router.navigate(['cadastro'])
   }
 }

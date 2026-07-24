@@ -10,12 +10,14 @@ import { LabelModule } from 'primeng/label';
 import { MessageModule } from 'primeng/message';
 import { CheckCircle } from '@primeicons/angular/check-circle';
 import { Router } from '@angular/router';
+import { CardModule } from 'primeng/card';
 
 const icons = [CheckCircle];
 const primeNgModules = [
   InputPasswordModule,
   MessageModule,
   ButtonModule,
+  CardModule,
   IconFieldModule,
   InputIconModule,
   LabelModule,
@@ -83,5 +85,9 @@ export class Cadastro {
   isInvalid(controlName: string) {
     const control = this.form.get(controlName);
     return control?.invalid && (control.touched || this.formSubmitted);
+  }
+
+  redirectLogin() {
+    this.router.navigate(['login'])
   }
 }

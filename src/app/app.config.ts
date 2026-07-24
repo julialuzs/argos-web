@@ -4,9 +4,9 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeuix/themes/aura';
 import { environment } from '@env/environment';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
+import { argosPreset } from './preset';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     providePrimeNG({
         theme: {
-            preset: Aura,
+            preset: argosPreset,
         },
         license: environment.primeNgLicenseKey
     })
