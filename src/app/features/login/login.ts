@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputPasswordModule } from 'primeng/inputpassword';
@@ -59,7 +59,7 @@ export class Login {
     this.auth.login(this.loginRequest).subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['/layout']);
+        this.router.navigate(['']);
       },
       error: () => {
         this.loading.set(false);
@@ -74,6 +74,6 @@ export class Login {
   }
 
   redirectCadastro() {
-    this.router.navigate(['cadastro'])
+    this.router.navigate(['cadastro']);
   }
 }
