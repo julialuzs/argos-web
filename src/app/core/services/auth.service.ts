@@ -2,6 +2,7 @@ import { inject, Service, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '@env/environment';
+import { isJwtExpired } from '@core/utils/jwt.util';
 import { LoginRequest } from './login-request';
 import { LoginResponse } from './login-response';
 
@@ -13,7 +14,15 @@ export class AuthService {
   private readonly token = signal<string | null>(localStorage.getItem(TOKEN_KEY));
 
   isAuthenticated(): boolean {
-    return !!this.token();
+    const token = this.token();
+    if (!token) return false;
+
+    if (isJwtExpired(token)) {
+      this.logout();
+      return false;
+    }
+
+    return true;
   }
 
   getToken(): string | null {

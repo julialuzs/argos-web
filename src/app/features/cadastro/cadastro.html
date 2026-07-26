@@ -10,13 +10,12 @@
           placeholder="Digite seu nome"
           formControlName="nome"
           autocomplete="off"
+          [invalid]="isInvalid('nome')"
         />
 
         @if (isInvalid('nome')) {
           @if (form.get('nome')?.errors?.['required']) {
-            <p-message severity="error" size="small" variant="simple"
-              >Campo obrigatório.</p-message
-            >
+            <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
           }
         }
       </div>
@@ -31,7 +30,7 @@
           placeholder="Digite seu e-mail"
           formControlName="email"
           autocomplete="off"
-          /* [invalid]="isInvalid('email')" */
+          [invalid]="isInvalid('email')"
         />
         @if (isInvalid('email')) {
           @if (form.get('email')?.errors?.['required']) {
@@ -54,6 +53,7 @@
           formControlName="senha"
           placeholder="Digite a senha"
           autocomplete="off"
+          [invalid]="isInvalid('senha')"
         />
         <ul class="flex flex-col gap-2 list-none ms-1 my-1 p-0">
           @for (req of requirements; track req.id) {
@@ -89,19 +89,27 @@
           id="cadastro-confirmacao_senha"
           name="cadastro-confirmacao_senha"
           formControlName="confirmacaoSenha"
-          placeholder="Digite a senha"
+          placeholder="Digite a senha novamente"
           autocomplete="off"
+          [invalid]="isInvalid('confirmacaoSenha')"
         />
+        @if (isInvalid('confirmacaoSenha')) {
+          @if (form.get('confirmacaoSenha')?.errors?.['required']) {
+            <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
+          } @else if (form.get('confirmacaoSenha')?.errors?.['match']) {
+            <p-message severity="error" size="small" variant="simple"
+              >As senhas não batem.</p-message
+            >
+          }
+        }
       </div>
     </form>
 
-    @if (error(); as message) {
-      <p role="alert">{{ message }}</p>
-    }
-
     <ng-template #footer>
       <div class="flex flex-col gap-4 mt-6">
-        <button pButton type="submit" (click)="onSubmit()" [disabled]="loading()">Cadastrar</button>
+        <button pButton type="submit" (click)="onSubmit()" [disabled]="loading() || !formValido">
+          Cadastrar
+        </button>
         <div class="mt-2 text-center text-surface-500 text-sm">
           Já possui conta?
           <button type="button" pButton variant="link" (click)="redirectLogin()" class="p-0">

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { authGuard } from './auth.guard';
-import { Auth } from '../services/auth';
+import { AuthService } from '../services/auth.service';
 
 describe('authGuard', () => {
   let auth: { isAuthenticated: ReturnType<typeof vi.fn> };
@@ -12,7 +12,7 @@ describe('authGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
-        { provide: Auth, useValue: auth },
+        { provide: AuthService, useValue: auth },
       ],
     });
   });

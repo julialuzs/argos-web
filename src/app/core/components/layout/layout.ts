@@ -1,13 +1,19 @@
-import { Component, signal, OnInit } from '@angular/core';
-import { RouterOutlet, RouterLinkWithHref } from '@angular/router';
+import { Component, signal, OnInit, inject } from '@angular/core';
+import { RouterOutlet, RouterLinkWithHref, Router } from '@angular/router';
 import { SidebarModule } from 'primeng/sidebar';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { MenubarModule } from 'primeng/menubar';
 import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
-// import { Receipt, Search, ChartBar } from '@primeicons/angular';
 import { PIcon } from '@primeicons/angular/p-icon';
+import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
+import { UsuarioService } from '@shared/services/usuario.service';
+import { ButtonModule } from 'primeng/button';
+import { Cog } from '@primeicons/angular/cog';
+import { Plus } from '@primeicons/angular/plus';
+import { UsuarioLogado } from '@shared/services/usuario';
+import { DividerModule } from 'primeng/divider';
 
 const primeNgModules = [
   SidebarModule,
@@ -17,9 +23,11 @@ const primeNgModules = [
   InputTextModule,
   RippleModule,
   PIcon,
+  ButtonModule,
+  DividerModule,
 ];
 
-// const icons = [Receipt, Search, ChartBar];
+const icons = [Cog, Plus];
 
 interface NavItem {
   icon: string;
@@ -28,52 +36,26 @@ interface NavItem {
   badge?: string;
   subItems?: { label: string; isActive?: boolean }[];
 }
-interface NavGroup {
-  label: string;
-  action?: boolean;
-  items: NavItem[];
-}
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, ...primeNgModules, RouterLinkWithHref],
+  imports: [RouterOutlet, RouterLinkWithHref, ...primeNgModules, ...icons],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
-export class Layout {
-  isMobile = signal(false);
+export class Layout implements OnInit {
+  usuarioService = inject(UsuarioService);
+  projetoSelecionadoService = inject(ProjetoSelecionadoService);
+  router = inject(Router);
+
   open = signal(true);
+  isMobile = signal(false);
+  usuarioLogado = signal<UsuarioLogado | null>(null);
 
   items = [
     {
       label: 'Home',
       icon: 'home',
-    },
-    {
-      label: 'Projetos',
-      icon: 'search',
-      badge: '3', // apenas exemplo, mudar depois pra ser programático
-      routerLink: '/projetos',
-      items: [
-        {
-          label: 'Core',
-          icon: 'bolt',
-          shortcut: '⌘+S',
-        },
-        {
-          label: 'Blocks',
-          icon: 'server',
-          shortcut: '⌘+B',
-        },
-        {
-          separator: true,
-        },
-        {
-          label: 'UI Kit',
-          icon: 'pencil',
-          shortcut: '⌘+U',
-        },
-      ],
     },
     {
       label: 'Relatórios',
@@ -87,17 +69,15 @@ export class Layout {
     },
   ];
 
-  navGroups: NavGroup[] = [
-    {
-      label: 'Navigation',
-      items: [
-        { icon: 'home', label: 'Home', isActive: true },
-        { icon: 'inbox', label: 'Análises' },
-        { icon: 'search', label: 'Dashboard' },
-        { icon: 'bell', label: 'Notifications' },
-      ],
-    },
-  ];
+  ngOnInit(): void {
+    this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
+      this.usuarioLogado.set(usuario);
+    });
+  }
+
+  selecionarProjeto() {
+    this.router.navigate(['projetos']);
+  }
 
   hasActiveSub(item: NavItem): boolean {
     return !!item.subItems?.some((s) => s.isActive);

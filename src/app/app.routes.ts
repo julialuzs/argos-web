@@ -6,6 +6,7 @@ import { Layout } from '@core/components/layout/layout';
 import { Relatorios } from '@features/relatorios/relatorios';
 import { Dashboard } from '@features/dashboard/dashboard';
 import { Projetos } from '@features/projetos/projetos';
+import { ProjetoForm } from '@features/projetos/projeto-form/projeto-form';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,10 @@ export const routes: Routes = [
       {
         path: 'projetos',
         component: Projetos,
+      },
+      {
+        path: 'projetos/novo',
+        component: ProjetoForm,
       },
     ],
   },

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
-import { Auth } from '@core/services/auth';
+import { AuthService } from '@core/services/auth.service';
 import { Login } from './login';
 
 describe('Login', () => {
@@ -16,7 +16,7 @@ describe('Login', () => {
 
     await TestBed.configureTestingModule({
       imports: [Login],
-      providers: [provideRouter([]), { provide: Auth, useValue: auth }],
+      providers: [provideRouter([]), { provide: AuthService, useValue: auth }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Login);
@@ -29,10 +29,9 @@ describe('Login', () => {
   });
 
   it('should call auth.login on submit', () => {
-    component.email = 'a@b.com';
-    component.password = 'secret';
+    component.form.setValue({ email: 'a@b.com', senha: 'secret' });
     component.onSubmit();
 
-    expect(auth.login).toHaveBeenCalledWith({ email: 'a@b.com', password: 'secret' });
+    expect(auth.login).toHaveBeenCalledWith({ email: 'a@b.com', senha: 'secret' });
   });
 });

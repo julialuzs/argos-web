@@ -1,0 +1,104 @@
+<p-dialog [(visible)]="visivel" [modal]="true" [style]="{ width: '25rem' }">
+  <ng-template #header>
+    <div class="inline-flex items-center justify-center gap-2">
+      <span class="font-bold whitespace-nowrap">Novo projeto</span>
+    </div>
+  </ng-template>
+  <form [formGroup]="form" class="space-y-6 mt-3">
+    <div class="flex flex-col gap-2">
+      <label pLabel for="nome_projeto">Nome do projeto</label>
+      <input pInputText id="nome_projeto" formControlName="nome" [invalid]="isInvalid('nome')" />
+
+      @if (isInvalid('nome')) {
+        @if (form.get('nome')?.errors?.['required']) {
+          <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
+        }
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label pLabel for="descricao_projeto">Descrição</label>
+
+      <textarea
+        pTextarea
+        id="descricao_projeto"
+        formControlName="descricao"
+        [invalid]="isInvalid('descricao')"
+      ></textarea>
+
+      @if (isInvalid('descricao')) {
+        @if (form.get('descricao')?.errors?.['required']) {
+          <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
+        }
+      }
+    </div>
+  </form>
+  <ng-template #footer>
+    <button type="button" pButton [outlined]="true" severity="secondary" (click)="fechar()">
+      Cancelar
+    </button>
+    <button type="button" pButton severity="primary" (click)="salvar()">Salvar</button>
+  </ng-template>
+</p-dialog>
+<!-- 
+<div class="mt-12 mx-8">
+  <section class="flex justify-between">
+    <h1 class="font-semibold text-3xl">Novo Projeto</h1>
+  </section>
+
+  <p-divider />
+
+  <div class="flex f-col justify-center">
+    <section class="p-8">
+      <form [formGroup]="form" class="space-y-6 mt-3">
+        <div class="flex flex-col gap-2">
+          <label pLabel for="nome_projeto">Nome do projeto</label>
+          <input
+            pInputText
+            id="nome_projeto"
+            formControlName="nome"
+            [invalid]="isInvalid('nome')"
+          />
+
+          @if (isInvalid('nome')) {
+            @if (form.get('nome')?.errors?.['required']) {
+              <p-message severity="error" size="small" variant="simple"
+                >Campo obrigatório.</p-message
+              >
+            }
+          }
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label pLabel for="descricao_projeto">Descrição</label>
+
+          <textarea
+            pTextarea
+            id="descricao_projeto"
+            formControlName="descricao"
+            [invalid]="isInvalid('descricao')"
+          ></textarea>
+
+          @if (isInvalid('descricao')) {
+            @if (form.get('descricao')?.errors?.['required']) {
+              <p-message severity="error" size="small" variant="simple"
+                >Campo obrigatório.</p-message
+              >
+            }
+          }
+        </div>
+      </form>
+    </section>
+
+    <p-divider layout="vertical" />
+
+    <section class="p-8">
+      <span> aaaaa</span>
+    </section>
+  </div>
+
+  <div class="flex f-col justify-center">
+    <button pButton severity="secondary">Voltar</button>
+    <button pButton>Salvar</button>
+  </div>
+</div> -->

@@ -1,23 +1,27 @@
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { environment } from '@env/environment';
-import { Auth } from '../services/auth';
+import { AuthService } from '../services/auth.service';
 import { authInterceptor } from './auth.interceptor';
 
 describe('authInterceptor', () => {
   let http: HttpClient;
   let httpMock: HttpTestingController;
-  let auth: { getToken: ReturnType<typeof vi.fn> };
+  let auth: { getToken: ReturnType<typeof vi.fn>; logout: ReturnType<typeof vi.fn> };
+  let router: { navigate: ReturnType<typeof vi.fn> };
 
   beforeEach(() => {
-    auth = { getToken: vi.fn() };
+    auth = { getToken: vi.fn(), logout: vi.fn() };
+    router = { navigate: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([authInterceptor])),
         provideHttpClientTesting(),
-        { provide: Auth, useValue: auth },
+        { provide: AuthService, useValue: auth },
+        { provide: Router, useValue: router },
       ],
     });
 
@@ -47,5 +51,17 @@ describe('authInterceptor', () => {
     const req = httpMock.expectOne(`${environment.apiUrl}resource`);
     expect(req.request.headers.has('Authorization')).toBe(false);
     req.flush({});
+  });
+
+  it('should logout and redirect to login on 401 response', () => {
+    auth.getToken.mockReturnValue('jwt-token');
+
+    http.get(`${environment.apiUrl}resource`).subscribe({ error: () => {} });
+
+    const req = httpMock.expectOne(`${environment.apiUrl}resource`);
+    req.flush({}, { status: 401, statusText: 'Unauthorized' });
+
+    expect(auth.logout).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

@@ -9,8 +9,12 @@
         </div>
       </ng-template>
       <ng-template #item let-item let-root="root">
-        <a pRipple class="flex items-center px-3 py-2 cursor-pointer gap-2" [routerLink]="item.routerLink">
-            <svg [pIcon]="item.icon"></svg>
+        <a
+          pRipple
+          class="flex items-center px-3 py-2 cursor-pointer gap-2"
+          [routerLink]="item.routerLink"
+        >
+          <svg [pIcon]="item.icon"></svg>
           <span class="text-sm">{{ item.label }}</span>
           @if (item.badge) {
             <p-badge [class]="root ? '' : 'ms-auto'" [value]="item.badge" />
@@ -28,11 +32,18 @@
       </ng-template>
       <ng-template #end>
         <div class="flex items-center gap-2">
-          <!-- <input type="text" pInputText placeholder="Search" class="w-36" /> -->
-          <p-avatar
-            image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-            shape="circle"
-          />
+          @if (projetoSelecionadoService.projetoSelecionado() === null) {
+            <button pButton rounded variant="outlined" (click)="selecionarProjeto()">
+              <svg data-p-icon="plus"></svg> Selecionar projeto
+            </button>
+          } @else {
+            <span class="text-sm">{{ projetoSelecionadoService.projetoSelecionado()?.nome }}</span>
+          }
+          <p-divider layout="vertical" />
+          <span class="font-medium text-sm pr-2">{{ usuarioLogado()?.nome }}</span>
+          <button pButton iconOnly variant="outlined" rounded aria-label="Configurações">
+            <svg data-p-icon="cog"></svg>
+          </button>
         </div>
       </ng-template>
     </p-menubar>
