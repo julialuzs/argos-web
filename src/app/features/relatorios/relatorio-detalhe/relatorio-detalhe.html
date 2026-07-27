@@ -3,9 +3,30 @@
     <div>
       <h1 class="font-semibold text-3xl">Relatório de Acessibilidade</h1>
 
-      <small>Executado em 24/05/2026 às 17:35</small>
+      <small
+        >Executado em {{ relatorio()?.dataHoraExecucao | date: "dd/MM/yyyy 'às' HH:mm" }}
+      </small>
     </div>
   </section>
 
   <p-divider />
+
+  <section class="grid grid-cols-4 gap-4">
+    <app-stat-card title="Erros" [value]="relatorio()?.quantidadeErros ?? 0" icon="error" />
+
+    <app-stat-card title="Avisos" [value]="relatorio()?.quantidadeAvisos ?? 0" icon="warning" />
+
+    <app-stat-card
+      title="VLibras"
+      [value]="relatorio()?.tradutorLibrasIdentificado ? 'Identificado' : 'Não identificado'"
+      [icon]="relatorio()?.tradutorLibrasIdentificado ? 'found' : 'not-found'"
+    />
+
+    <app-stat-card
+      title="Pontuação"
+      [value]="`${relatorio()?.pontuacao ?? 0} de 100`"
+      icon="trophy"
+      [iconColor]="getColor(relatorio()?.pontuacao ?? 0)"
+    />
+  </section>
 </div>

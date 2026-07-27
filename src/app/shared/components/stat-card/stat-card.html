@@ -1,0 +1,29 @@
+<p-card class="max-w-sm w-full">
+  <div class="flex items-center gap-4">
+    @switch (icon()) {
+      @case ('found') {
+        <svg data-p-icon="check-circle" color="green" size="30"></svg>
+      }
+      @case ('not-found') {
+        <svg data-p-icon="exclamation-circle" color="red" size="30"></svg>
+      }
+      @case ('warning') {
+        <svg data-p-icon="exclamation-circle" color="orange" size="30"></svg>
+      }
+      @case ('trophy') {
+        <svg data-p-icon="trophy" [attr.color]="iconColor()" size="30"></svg>
+      }
+      @case ('error') {
+        <svg data-p-icon="times-circle" color="red" size="30"></svg>
+      }
+      @default {
+        <svg data-p-icon="check-circle" color="green" size="30"></svg>
+      }
+    }
+
+    <div>
+      <h3 class="font-semibold text-lg">{{ title() }}</h3>
+      <p class="text-sm text-surface-500 dark:text-surface-400">{{ value() }}</p>
+    </div>
+  </div>
+</p-card>
