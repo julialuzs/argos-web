@@ -1,1 +1,93 @@
-<p>relatorios works!</p>
+<div class="mt-12 mx-8">
+  <section class="flex justify-between">
+    <h1 class="font-semibold text-3xl">Últimas análises executadas</h1>
+
+    <button type="button" variant="outlined" rounded pButton (click)="getRelatorios()">
+      <svg data-p-icon="refresh"></svg>
+      Atualizar
+    </button>
+  </section>
+
+  <p-divider />
+
+  <section>
+    <p-table
+      [value]="relatorios()"
+      [loading]="loading()"
+      stripedRows
+      [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]" 
+      [tableStyle]="{ 'min-width': '50rem' }"
+    >
+      <ng-template #header>
+        <tr>
+          <th>Data/Hora da execução</th>
+          <th>Erros encontrados</th>
+          <th>Avisos encontrados</th>
+          <th>Pontuação</th>
+          <th></th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-analise>
+        <tr>
+          <td>
+            <span class="font-medium">{{
+              analise.dataHoraExecucao | date: 'dd/MM/yyyy HH:mm'
+            }}</span>
+          </td>
+          <td>
+            <span class="font-medium">{{ analise.quantidadeErros }}</span>
+          </td>
+          <td>
+            <span class="font-medium">{{ analise.quantidadeAvisos }}</span>
+          </td>
+          <td>
+            <p-tag [value]="analise.pontuacao" [severity]="getSeverity(analise.pontuacao)" />
+          </td>
+          <td class="flex justify-end">
+            <button
+              type="button"
+              pButton
+              variant="outlined"
+              rounded
+              (click)="irParaRelatorio(analise.id)"
+            >
+              <svg data-p-icon="chevron-right"></svg>
+              Acessar
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="5">
+            <div class="flex flex-col items-center justify-center gap-3 py-10 text-center">
+              <div
+                class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center"
+              >
+                <svg
+                  data-p-icon="receipt"
+                  [size]="28"
+                  class="text-surface-400 dark:text-surface-500"
+                ></svg>
+              </div>
+              <div>
+                <p class="m-0 font-semibold text-surface-900 dark:text-surface-0">
+                  Nenhum relatório encontrado
+                </p>
+                <p class="mt-1 text-sm text-surface-500 dark:text-surface-400">
+                  Execute o avaliador Argos para gerar um relatório ou atualize a tabela.
+                </p>
+              </div>
+              <button type="button" pButton size="small" (click)="getRelatorios()">
+                <svg data-p-icon="refresh"></svg>
+                Atualizar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </section>
+</div>

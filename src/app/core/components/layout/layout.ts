@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
+import { Component, signal, OnInit, inject, computed } from '@angular/core';
 import { RouterOutlet, RouterLinkWithHref, Router } from '@angular/router';
 import { SidebarModule } from 'primeng/sidebar';
 import { AvatarModule } from 'primeng/avatar';
@@ -52,22 +52,27 @@ export class Layout implements OnInit {
   isMobile = signal(false);
   usuarioLogado = signal<UsuarioLogado | null>(null);
 
-  items = [
-    {
-      label: 'Home',
-      icon: 'home',
-    },
-    {
-      label: 'Relatórios',
-      icon: 'receipt',
-      routerLink: '/relatorios',
-    },
-    {
-      label: 'Dashboard',
-      icon: 'chart-bar',
-      routerLink: '/dashboard',
-    },
-  ];
+  items = computed(() => {
+    return [
+      {
+        label: 'Home',
+        icon: 'home',
+        routerLink: '/projetos',
+      },
+      {
+        label: 'Relatórios',
+        icon: 'receipt',
+        routerLink: `${this.projetoSelecionadoService.projetoSelecionado()?.id}/relatorios`,
+        disabled: this.projetoSelecionadoService.projetoSelecionado() === null,
+      },
+      {
+        label: 'Dashboard',
+        icon: 'chart-bar',
+        routerLink: `${this.projetoSelecionadoService.projetoSelecionado()?.id}/dashboard`,
+        disabled: this.projetoSelecionadoService.projetoSelecionado() === null,
+      },
+    ];
+  });
 
   ngOnInit(): void {
     this.usuarioService.getUsuarioLogado().subscribe((usuario) => {

@@ -6,7 +6,7 @@ import { Layout } from '@core/components/layout/layout';
 import { Relatorios } from '@features/relatorios/relatorios';
 import { Dashboard } from '@features/dashboard/dashboard';
 import { Projetos } from '@features/projetos/projetos';
-import { ProjetoForm } from '@features/projetos/projeto-form/projeto-form';
+import { RelatorioDetalhe } from '@features/relatorios/relatorio-detalhe/relatorio-detalhe';
 
 export const routes: Routes = [
   {
@@ -16,25 +16,25 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'projetos',
         pathMatch: 'full',
       },
       {
-        path: 'relatorios',
+        path: ':projetoId/relatorios',
         component: Relatorios,
       },
       {
-        path: 'dashboard',
+        path: ':projetoId/relatorios/:relatorioId',
+        component: RelatorioDetalhe,
+      },
+      {
+        path: ':projetoId/dashboard',
         component: Dashboard,
       },
       {
         path: 'projetos',
         component: Projetos,
-      },
-      {
-        path: 'projetos/novo',
-        component: ProjetoForm,
-      },
+      }, 
     ],
   },
   {
