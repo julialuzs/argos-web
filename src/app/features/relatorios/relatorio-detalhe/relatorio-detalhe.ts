@@ -3,7 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { RelatoriosService } from '../relatorios.service';
 import { MessageService } from 'primeng/api';
-import { Relatorio } from '@shared/models/relatorio';
+import { RelatorioDetalhe as RelatorioDetalheType } from '@shared/models/relatorio';
 import { DatePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { StatCard } from '@shared/components/stat-card/stat-card';
@@ -21,7 +21,7 @@ export class RelatorioDetalhe implements OnInit {
   private relatoriosService = inject(RelatoriosService);
   private messageService = inject(MessageService);
 
-  relatorio = signal<Relatorio | null>(null);
+  relatorio = signal<RelatorioDetalheType | null>(null);
   relatorioId = input.required<number, unknown>({ transform: numberAttribute });
   projetoId = input.required<number, unknown>({ transform: numberAttribute });
 
