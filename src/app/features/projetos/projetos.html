@@ -1,6 +1,6 @@
 <div class="mt-12 mx-8">
-  <section class="flex justify-between">
-    <h1 class="font-semibold text-3xl">Projetos</h1>
+  <section class="flex justify-between pb-3">
+    <h1 class="font-semibold text-4xl">Projetos</h1>
     <button pButton rounded variant="outlined" (click)="novoProjeto()">
       <svg data-p-icon="plus"></svg> Novo projeto
     </button>
@@ -13,43 +13,44 @@
       <ng-template #list let-items>
         <div class="grid grid-cols-12 gap-4 grid-nogutter">
           @for (item of items; track item.id; let first = $first) {
-            <div class="col-span-12">
-              <div
-                class="flex flex-col sm:flex-row sm:items-center p-5 gap-4"
-                (class)="({ 'border-t border-surface-200 dark:border-surface-700': !first })"
-              >
-                <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-5">
-                  <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-                    <div class="flex flex-row justify-between items-start gap-2">
-                      <div class="font-medium text-surface-900 dark:text-surface-0 mt-1">
-                        {{ item.nome }}
-                      </div>
-
-                      <p-divider layout="vertical" />
-
-                      <div class="text-surface-900 dark:text-surface-0 mt-1">
-                        {{ item.descricao }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex flex-col md:items-end gap-7">
-                    <div class="flex flex-row-reverse md:flex-row gap-2">
-                      <button
-                        type="button"
-                        pButton
-                        class="flex-auto md:flex-initial whitespace-nowrap"
-                        (click)="selecionarProjeto(item)"
-                        [disabled]="projetoSelecionadoService.projetoSelecionado()?.id === item.id"
-                      >
-                        <svg data-p-icon="check" class="w-4 h-4"></svg>Selecionar
-                      </button>
-
-                      <button pButton iconOnly rounded variant="text" aria-label="Menu">
-                        <svg data-p-icon="ellipsis-v"></svg>
-                      </button>
-                    </div>
-                  </div>
+            <div
+              class="col-span-12 flex flex-col sm:flex-row justify-between sm:items-center p-5 gap-4"
+              (class)="({ 'border-t border-surface-200 dark:border-surface-700': !first })"
+            >
+              <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                <div class="flex flex-row gap-2 items-end">
+                  <h3 class="font-medium text-2xl text-surface-900 dark:text-surface-0 mt-1">
+                    {{ item.nome }}
+                  </h3>
+                  <div class="text-surface-500 dark:text-surface-0 mt-1">Última execução: {{item.ultimaExecucao | date:'dd/MM/yyyy HH:mm'}}</div>
                 </div>
+
+                <!-- <p-divider layout="vertical" /> -->
+
+                <div class="text-surface-900 dark:text-surface-0 mt-1">
+                  {{ item.descricao }}
+                </div>
+              </div>
+
+              <div class="flex md:flex-row gap-2">
+                <button
+                  type="button"
+                  pButton
+                  class="flex-auto md:flex-initial whitespace-nowrap"
+                  (click)="selecionarProjeto(item)"
+                  [disabled]="estaSelecionado(item)"
+                >
+                  @if (estaSelecionado(item)) {
+                    <svg data-p-icon="check" class="w-4 h-4"></svg>
+                    Selecionado
+                  } @else {
+                    Selecionar
+                  }
+                </button>
+
+                <button pButton iconOnly rounded variant="text" aria-label="Menu">
+                  <svg data-p-icon="ellipsis-v"></svg>
+                </button>
               </div>
             </div>
           }

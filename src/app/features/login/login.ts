@@ -63,7 +63,6 @@ export class Login {
       },
       error: () => {
         this.loading.set(false);
-        this.error.set('E-mail ou senha incorretos.');
       },
     });
   }

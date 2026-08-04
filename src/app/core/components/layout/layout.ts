@@ -55,7 +55,7 @@ export class Layout implements OnInit {
   items = computed(() => {
     return [
       {
-        label: 'Home',
+        label: 'Projetos',
         icon: 'home',
         routerLink: '/projetos',
       },

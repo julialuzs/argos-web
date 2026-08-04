@@ -6,9 +6,10 @@ import { MessageService } from 'primeng/api';
 import { RelatorioDetalhe as RelatorioDetalheType } from '@shared/models/relatorio';
 import { DatePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
+import { AccordionModule } from 'primeng/accordion';
 import { StatCard } from '@shared/components/stat-card/stat-card';
 
-const primeNgModules = [ButtonModule, DividerModule, CardModule];
+const primeNgModules = [ButtonModule, DividerModule, CardModule, AccordionModule];
 
 @Component({
   selector: 'app-relatorio-detalhe',
@@ -24,6 +25,8 @@ export class RelatorioDetalhe implements OnInit {
   relatorio = signal<RelatorioDetalheType | null>(null);
   relatorioId = input.required<number, unknown>({ transform: numberAttribute });
   projetoId = input.required<number, unknown>({ transform: numberAttribute });
+
+  padraoAberto = signal<number>(0);
 
   ngOnInit() {
     this.relatoriosService.getRelatorioPorId(this.projetoId(), this.relatorioId()).subscribe({

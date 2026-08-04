@@ -11,22 +11,25 @@ import { DataViewModule } from 'primeng/dataview';
 import { DividerModule } from 'primeng/divider';
 import { ProjetoForm } from './projeto-form/projeto-form';
 import { ProjetoService } from './projeto.service';
+import { DatePipe } from '@angular/common';
 
 const primeNgModules = [DividerModule, ButtonModule, DataViewModule];
 
 @Component({
   selector: 'app-projetos',
-  imports: [...primeNgModules, Plus, Check, ProjetoForm, EllipsisV],
+  imports: [...primeNgModules, DatePipe, Plus, Check, ProjetoForm, EllipsisV],
   templateUrl: './projetos.html',
   styleUrl: './projetos.css',
 })
 export class Projetos implements OnInit {
   // todo: add breadcrumbs
-  projetos = signal<Projeto[]>([]);
+
   usuarioService = inject(UsuarioService);
   projetoService = inject(ProjetoService);
   projetoSelecionadoService = inject(ProjetoSelecionadoService);
   projetoFormVisivel = signal(false);
+
+  projetos = signal<Projeto[]>([]);
 
   router = inject(Router);
 
@@ -42,5 +45,9 @@ export class Projetos implements OnInit {
 
   selecionarProjeto(projeto: Projeto) {
     this.projetoSelecionadoService.selecionar(projeto);
+  }
+
+  estaSelecionado(projeto: Projeto) {
+    return this.projetoSelecionadoService.projetoSelecionado()?.id === projeto.id;
   }
 }

@@ -1,7 +1,7 @@
 <div class="mt-12 mx-8">
-  <section class="flex justify-between">
+  <section class="flex justify-between pb-3">
     <div>
-      <h1 class="font-semibold text-3xl">Relatório de Acessibilidade</h1>
+      <h1 class="font-semibold text-4xl">Relatório de Acessibilidade</h1>
 
       <small
         >Executado em {{ relatorio()?.dataHoraExecucao | date: "dd/MM/yyyy 'às' HH:mm" }}
@@ -11,7 +11,8 @@
 
   <p-divider />
 
-  <section class="grid grid-cols-4 gap-4">
+  <!-- resumo -->
+  <section class="grid grid-cols-4 gap-4 pb-3">
     <app-stat-card title="Erros" [value]="relatorio()?.quantidadeErros ?? 0" icon="error" />
 
     <app-stat-card title="Avisos" [value]="relatorio()?.quantidadeAvisos ?? 0" icon="warning" />
@@ -30,7 +31,31 @@
     />
   </section>
 
+  <!-- resultados -->
   <section>
-    
+    <p-accordion [(value)]="padraoAberto" [multiple]="true">
+      @for (resultado of relatorio()?.resultados; track $index) {
+        <p-accordion-panel [value]="$index">
+          <p-accordion-header>{{ resultado.url }}</p-accordion-header>
+          <p-accordion-content>
+            @for (apontamento of resultado.apontamentos; track $index) {
+              <h3 class="font-medium text-1xl text-surface-900 dark:text-surface-0 mt-1">
+                [{{ apontamento.fonte }}] {{ apontamento.titulo }}
+              </h3>
+              <p class="text-sm">{{ apontamento.descricao }}</p>
+              <p class="text-sm">{{ apontamento.tipo }}</p>
+              <p class="text-sm">{{ apontamento.severidade }}</p>
+              <p class="text-sm ">
+                Ajuda:
+                <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{ apontamento.urlAjuda }}</a>
+              </p>
+              @if($index < resultado.apontamentos.length - 1) {
+                <p-divider />
+              }
+            }
+          </p-accordion-content>
+        </p-accordion-panel>
+      }
+    </p-accordion>
   </section>
 </div>
