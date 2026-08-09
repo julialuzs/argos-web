@@ -10,5 +10,34 @@
 
   <p-divider />
 
-  <section></section>
+  <section>
+    <div id="chart-pie">
+      <apx-chart
+        [series]="chartOptions.series!"
+        [chart]="chartOptions.chart!"
+        [labels]="chartOptions.labels!"
+        [colors]="chartOptions.colors!"
+        [plotOptions]="chartOptions.plotOptions!"
+        [stroke]="chartOptions.stroke!"
+        [dataLabels]="chartOptions.dataLabels!"
+        [legend]="chartOptions.legend!"
+        [title]="chartOptions.title!"
+        [responsive]="chartOptions.responsive!"
+      />
+    </div>
+    <div id="chart-bar">
+      <apx-chart
+        [series]="barChartOptions.series!"
+        [chart]="barChartOptions.chart!"
+        [labels]="barChartOptions.labels!"
+        [colors]="barChartOptions.colors!"
+        [plotOptions]="barChartOptions.plotOptions!"
+        [stroke]="barChartOptions.stroke!"
+        [dataLabels]="barChartOptions.dataLabels!"
+        [legend]="barChartOptions.legend!"
+        [title]="barChartOptions.title!"
+        [responsive]="barChartOptions.responsive!"
+      />
+    </div>
+  </section>
 </div>
