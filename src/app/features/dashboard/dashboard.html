@@ -1,17 +1,16 @@
 <div class="mt-12 mx-8">
   <section class="flex justify-between pb-3">
     <h1 class="font-semibold text-4xl">Dashboard</h1>
-
-    <button type="button" variant="outlined" rounded pButton (click)="getDadosDashboard()">
-      <svg data-p-icon="refresh"></svg>
-      Atualizar
+    <button pButton rounded variant="outlined" (click)="getDadosDashboard()">
+      <svg data-p-icon="refresh"></svg> Atualizar
+      <!-- Atualizar -->
     </button>
   </section>
 
   <p-divider />
 
   <section>
-    <div id="chart-pie">
+    <!-- <div id="chart-pie">
       <apx-chart
         [series]="chartOptions.series!"
         [chart]="chartOptions.chart!"
@@ -24,19 +23,19 @@
         [title]="chartOptions.title!"
         [responsive]="chartOptions.responsive!"
       />
-    </div>
+    </div> -->
     <div id="chart-bar">
       <apx-chart
-        [series]="barChartOptions.series!"
-        [chart]="barChartOptions.chart!"
-        [labels]="barChartOptions.labels!"
-        [colors]="barChartOptions.colors!"
-        [plotOptions]="barChartOptions.plotOptions!"
-        [stroke]="barChartOptions.stroke!"
-        [dataLabels]="barChartOptions.dataLabels!"
-        [legend]="barChartOptions.legend!"
-        [title]="barChartOptions.title!"
-        [responsive]="barChartOptions.responsive!"
+        [series]="barChartOptions().series!"
+        [chart]="barChartOptions().chart!"
+        [xaxis]="barChartOptions().xaxis!"
+        [yaxis]="barChartOptions().yaxis!"
+        [plotOptions]="barChartOptions().plotOptions!"
+        [stroke]="barChartOptions().stroke!"
+        [dataLabels]="barChartOptions().dataLabels!"
+        [fill]="barChartOptions().fill!"
+        [tooltip]="barChartOptions().tooltip!"
+        [title]="barChartOptions().title!"
       />
     </div>
   </section>
