@@ -11,40 +11,56 @@
   <section>
     <p-dataview #dv [value]="projetos()" [rows]="5" [paginator]="true">
       <ng-template #list let-items>
-        <div class="grid grid-cols-12 gap-4 grid-nogutter">
+        <div class="grid grid-cols-12 gap-2 grid-nogutter">
           @for (item of items; track item.id; let first = $first) {
             <div
-              class="col-span-12 flex flex-col sm:flex-row justify-between sm:items-center p-5 gap-4"
+              class="col-span-12 flex flex-col sm:flex-row justify-between sm:items-center rounded-sm p-5 gap-6"
               (class)="({ 'border-t border-surface-200 dark:border-surface-700': !first })"
             >
-              <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-                <div class="flex flex-row gap-2 items-end">
-                  <h3 class="font-medium text-2xl text-surface-900 dark:text-surface-0 mt-1">
+              <div class="flex items-center gap-4">
+                <div
+                  class="flex items-center min-w-20 max-w-40 min-h-20 max-h-40 rounded-lg bg-linear-to-br from-violet-500 to-indigo-600 text-white text-lg font-bold justify-center"
+                >
+                  {{ item.nome | primeiraLetra }}
+                </div>
+                <div class="flex flex-row md:flex-col justify-between items-start gap-1">
+                  <h3 class="font-semibold text-2xl text-surface-900 dark:text-surface-0">
                     {{ item.nome }}
                   </h3>
-                  <div class="text-surface-500 dark:text-surface-0 mt-1">Última execução: {{item.ultimaExecucao | date:'dd/MM/yyyy HH:mm'}}</div>
-                </div>
+                  <div class="text-surface-500 dark:text-surface-0">
+                    Última execução: {{ item.ultimaExecucao | date: 'dd/MM/yyyy HH:mm' }}
+                  </div>
 
-                <div class="text-surface-900 dark:text-surface-0 mt-1">
-                  {{ item.descricao }}
+                  <div class="text-surface-900 dark:text-surface-0">
+                    {{ item.descricao }}
+                  </div>
                 </div>
               </div>
 
               <div class="flex md:flex-row gap-2">
-                <button
-                  type="button"
-                  pButton
-                  class="flex-auto md:flex-initial whitespace-nowrap"
-                  (click)="selecionarProjeto(item)"
-                  [disabled]="estaSelecionado(item)"
-                >
-                  @if (estaSelecionado(item)) {
+                @if (estaSelecionado(item)) {
+                  <button
+                    type="button"
+                    pButton
+                    class="flex-auto md:flex-initial whitespace-nowrap"
+                    (click)="selecionarProjeto(item)"
+                  >
                     <svg data-p-icon="check" class="w-4 h-4"></svg>
                     Selecionado
-                  } @else {
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    pButton
+                    variant="outlined"
+                    class="flex-auto md:flex-initial whitespace-nowrap"
+                    (click)="selecionarProjeto(item)"
+                    [disabled]="estaSelecionado(item)"
+                  >
                     Selecionar
-                  }
-                </button>
+                    <svg data-p-icon="chevron-right" class="w-4 h-4"></svg>
+                  </button>
+                }
 
                 <button pButton iconOnly rounded variant="text" aria-label="Menu">
                   <svg data-p-icon="ellipsis-v"></svg>

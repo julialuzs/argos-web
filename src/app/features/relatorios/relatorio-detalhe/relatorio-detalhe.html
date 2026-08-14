@@ -1,5 +1,5 @@
 <div class="mt-12 mx-8">
-  <section class="flex justify-between pb-3">
+  <section class="flex justify-between pb-4">
     <div>
       <h1 class="font-semibold text-4xl">Relatório de Acessibilidade</h1>
 
@@ -9,10 +9,8 @@
     </div>
   </section>
 
-  <p-divider />
-
   <!-- resumo -->
-  <section class="grid grid-cols-4 gap-4 pb-3">
+  <section class="grid grid-cols-4 gap-4 pb-4">
     <app-stat-card title="Erros" [value]="relatorio()?.quantidadeErros ?? 0" icon="error" />
 
     <app-stat-card title="Avisos" [value]="relatorio()?.quantidadeAvisos ?? 0" icon="warning" />
@@ -45,11 +43,13 @@
               <p class="text-sm">{{ apontamento.descricao }}</p>
               <p class="text-sm">{{ apontamento.tipo }}</p>
               <p class="text-sm">{{ apontamento.severidade }}</p>
-              <p class="text-sm ">
+              <p class="text-sm">
                 Ajuda:
-                <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{ apontamento.urlAjuda }}</a>
+                <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{
+                  apontamento.urlAjuda
+                }}</a>
               </p>
-              @if($index < resultado.apontamentos.length - 1) {
+              @if ($index < resultado.apontamentos.length - 1) {
                 <p-divider />
               }
             }

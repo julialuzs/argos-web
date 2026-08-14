@@ -12,8 +12,10 @@ import { UsuarioService } from '@shared/services/usuario.service';
 import { ButtonModule } from 'primeng/button';
 import { Cog } from '@primeicons/angular/cog';
 import { Plus } from '@primeicons/angular/plus';
+import { SignOut } from '@primeicons/angular/sign-out';
 import { UsuarioLogado } from '@shared/services/usuario';
 import { DividerModule } from 'primeng/divider';
+import { AuthService } from '@core/services/auth.service';
 
 const primeNgModules = [
   SidebarModule,
@@ -27,7 +29,11 @@ const primeNgModules = [
   DividerModule,
 ];
 
-const icons = [Cog, Plus];
+const icons = [
+  // Cog,
+  SignOut,
+  Plus,
+];
 
 interface NavItem {
   icon: string;
@@ -45,6 +51,7 @@ interface NavItem {
 })
 export class Layout implements OnInit {
   usuarioService = inject(UsuarioService);
+  authService = inject(AuthService);
   projetoSelecionadoService = inject(ProjetoSelecionadoService);
   router = inject(Router);
 
@@ -86,5 +93,10 @@ export class Layout implements OnInit {
 
   hasActiveSub(item: NavItem): boolean {
     return !!item.subItems?.some((s) => s.isActive);
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['login']);
   }
 }

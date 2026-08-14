@@ -15,11 +15,13 @@
       [value]="relatorios()"
       [loading]="loading()"
       stripedRows
-      [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]" 
-      [tableStyle]="{ 'min-width': '50rem' }"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [tableStyle]="{ 'min-width': '50rem', 'border-collapse': 'separate' }"
     >
       <ng-template #header>
-        <tr>
+        <tr class="table-row">
           <th>Data/Hora da execução</th>
           <th>Erros encontrados</th>
           <th>Avisos encontrados</th>

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Plus } from '@primeicons/angular/plus';
 import { EllipsisV } from '@primeicons/angular/ellipsis-v';
 import { Check } from '@primeicons/angular/check';
+import { ChevronRight } from '@primeicons/angular/chevron-right';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { Projeto } from '@shared/models/projeto';
 import { UsuarioService } from '@shared/services/usuario.service';
@@ -12,12 +13,21 @@ import { DividerModule } from 'primeng/divider';
 import { ProjetoForm } from './projeto-form/projeto-form';
 import { ProjetoService } from './projeto.service';
 import { DatePipe } from '@angular/common';
+import { BadgeModule } from 'primeng/badge';
+import { PrimeiraLetraPipe } from '@shared/pipes/primeira-letra-pipe';
 
-const primeNgModules = [DividerModule, ButtonModule, DataViewModule];
+const primeNgModules = [DividerModule, ButtonModule, DataViewModule, BadgeModule];
+const icons = [Plus, EllipsisV, Check, ChevronRight];
 
 @Component({
   selector: 'app-projetos',
-  imports: [...primeNgModules, DatePipe, Plus, Check, ProjetoForm, EllipsisV],
+  imports: [
+    ...primeNgModules,
+    ...icons,
+    PrimeiraLetraPipe,
+    DatePipe,
+    ProjetoForm, 
+  ],
   templateUrl: './projetos.html',
   styleUrl: './projetos.css',
 })

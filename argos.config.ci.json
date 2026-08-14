@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:4200",
-  "routes": ["/", "/login", "/cadastro", "/relatorios", "/projetos", "/dashboard"],
-  "includeW3c": true
+  "routes": ["/", "/login", "/cadastro"],
+  "includeW3c": false,
+  "projectId": "6"
 }

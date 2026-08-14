@@ -1,0 +1,7 @@
+.table-row th:first-child {
+  border-top-left-radius: 6px;
+}
+
+.table-row th:last-child {
+  border-top-right-radius: 6px;
+}
