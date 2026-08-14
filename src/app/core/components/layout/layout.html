@@ -39,6 +39,17 @@
           <span class="text-sm">{{ projetoSelecionadoService.projetoSelecionado()?.nome }}</span>
         }
         <p-divider layout="vertical" />
+        <p-toggleswitch
+          inputId="alternar-tema"
+          [ngModel]="temaService.temaEscuro()"
+          (onChange)="temaService.alternar()"
+          [ariaLabel]="temaService.temaEscuro() ? 'Ativar tema claro' : 'Ativar tema escuro'"
+        >
+          <ng-template #handle let-checked="checked">
+            <svg [pIcon]="checked ? 'moon' : 'sun'" [size]="10"></svg>
+          </ng-template>
+        </p-toggleswitch>
+        <p-divider layout="vertical" />
         <span class="font-medium text-sm pr-2">{{ usuarioLogado()?.nome }}</span>
         <button
           pButton

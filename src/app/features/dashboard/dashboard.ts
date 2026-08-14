@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-} from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
@@ -36,6 +29,8 @@ import { RelatoriosService } from '@features/relatorios/relatorios.service';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { Relatorio } from '@shared/models/relatorio';
 import { Refresh } from '@primeicons/angular/refresh';
+import { TemaService } from '@core/services/tema.service';
+import { CardModule } from 'primeng/card';
 
 export type ChartOptions = {
   series?: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -64,6 +59,10 @@ export const BAR_CHART_OPTIONS: Partial<ChartOptions> = {
   title: {
     text: 'Erros/Avisos/Pontuação por Data',
     align: 'left',
+    style: {
+      fontSize: '16px',
+      fontWeight: 500,
+    },
   },
   series: [
     {
@@ -82,6 +81,7 @@ export const BAR_CHART_OPTIONS: Partial<ChartOptions> = {
   chart: {
     type: 'bar',
     height: 350,
+    fontFamily: 'Inter Variable, Inter, "Segoe UI Symbol", "Segoe UI", sans-serif',
   },
   plotOptions: {
     bar: {
@@ -94,6 +94,9 @@ export const BAR_CHART_OPTIONS: Partial<ChartOptions> = {
   dataLabels: {
     enabled: false,
   },
+  theme: {
+    mode: 'light',
+  },
   stroke: {
     show: true,
     width: 2,
@@ -101,10 +104,19 @@ export const BAR_CHART_OPTIONS: Partial<ChartOptions> = {
   },
   xaxis: {
     categories: [],
+    labels: {
+      style: {
+        fontSize: '14px',
+      },
+    },
   },
   yaxis: {
     title: {
       text: 'Quantidade',
+      style: {
+        fontSize: '14px',
+        fontWeight: 500,
+      },
     },
   },
   fill: {
@@ -170,7 +182,7 @@ export const PIE_CHART_OPTIONS: Partial<ChartOptions> = {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [DividerModule, ButtonModule, Refresh, NgApexchartsModule],
+  imports: [DividerModule, CardModule, ButtonModule, Refresh, NgApexchartsModule],
   providers: [MessageService],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
@@ -179,13 +191,22 @@ export class Dashboard implements OnInit {
   @ViewChild('chart') chart!: ChartComponent;
 
   private relatoriosService = inject(RelatoriosService);
+  private temaService = inject(TemaService);
   private projetoSelecionadoService = inject(ProjetoSelecionadoService);
   private messageService = inject(MessageService);
 
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
 
   public barChartOptions = signal<Partial<ChartOptions>>(BAR_CHART_OPTIONS);
-  public chartOptions = signal<Partial<ChartOptions>>(PIE_CHART_OPTIONS);
+  public pieChartOptions = signal<Partial<ChartOptions>>(PIE_CHART_OPTIONS);
+
+  modoTema = computed(() => (this.temaService.temaEscuro() ? 'dark' : 'light'));
+  chartOptionsTema = computed(() => {
+    return {
+      ...this.barChartOptions().chart,
+      background: this.modoTema() === 'dark' ? 'var(--p-surface-900)' : 'var(--p-surface-0)',
+    };
+  });
 
   ngOnInit() {
     if (this.projeto() !== null) {

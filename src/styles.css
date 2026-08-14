@@ -1,64 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
-@import "tailwindcss-primeui";
-/* @layer reset, primeng; */
-/* Reset CSS */
+@import 'tailwindcss-primeui';
+@import '@fontsource-variable/inter';
 
-/* @layer reset {
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-  *:not(dialog) {
-    margin: 0;
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    html {
-      interpolate-size: allow-keywords;
-    }
-  }
-  body {
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-  img,
-  picture,
-  video,
-  canvas,
-  svg {
-    display: block;
-    max-width: 100%;
-  }
-  input,
-  button,
-  textarea,
-  select {
-    font: inherit;
-  }
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    overflow-wrap: break-word;
-  }
-  p {
-    text-wrap: pretty;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    text-wrap: balance;
-  }
-  #root,
-  #__next {
-    isolation: isolate;
-  }
-} */
+@theme {
+  --font-sans:
+    'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Alinha o variante `dark:` do Tailwind ao `darkModeSelector` configurado no PrimeNG. */
+@custom-variant dark (&:where(.argos-dark, .argos-dark *));
+
+body {
+  background-color: var(--p-app-background);
+  color: var(--p-text-color);
+}

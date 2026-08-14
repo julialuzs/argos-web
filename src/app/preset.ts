@@ -19,5 +19,10 @@ export const argosPreset = definePreset(Aura, {
       900: '{violet.900}',
       950: '{violet.950}',
     },
+    extend: {
+      app: {
+        background: 'light-dark({surface.50}, {surface.950})',
+      },
+    },
   },
 });

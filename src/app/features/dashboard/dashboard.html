@@ -24,19 +24,22 @@
         [responsive]="chartOptions.responsive!"
       />
     </div> -->
-    <div id="chart-bar">
-      <apx-chart
-        [series]="barChartOptions().series!"
-        [chart]="barChartOptions().chart!"
-        [xaxis]="barChartOptions().xaxis!"
-        [yaxis]="barChartOptions().yaxis!"
-        [plotOptions]="barChartOptions().plotOptions!"
-        [stroke]="barChartOptions().stroke!"
-        [dataLabels]="barChartOptions().dataLabels!"
-        [fill]="barChartOptions().fill!"
-        [tooltip]="barChartOptions().tooltip!"
-        [title]="barChartOptions().title!"
-      />
-    </div>
+    <p-card>
+      <div id="chart-bar">
+        <apx-chart
+          [theme]="{ mode: modoTema() }"
+          [series]="barChartOptions().series!"
+          [chart]="chartOptionsTema()"
+          [xaxis]="barChartOptions().xaxis!"
+          [yaxis]="barChartOptions().yaxis!"
+          [plotOptions]="barChartOptions().plotOptions!"
+          [stroke]="barChartOptions().stroke!"
+          [dataLabels]="barChartOptions().dataLabels!"
+          [fill]="barChartOptions().fill!"
+          [tooltip]="barChartOptions().tooltip!"
+          [title]="barChartOptions().title!"
+        />
+      </div>
+    </p-card>
   </section>
 </div>

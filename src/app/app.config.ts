@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
@@ -9,6 +14,7 @@ import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { responseInterceptor } from '@core/interceptors/response.interceptor';
 import { MessageService } from 'primeng/api';
 import { argosPreset } from './preset';
+import { DARK_MODE_CLASS, TemaService } from '@core/services/tema.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,11 +22,17 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([authInterceptor, responseInterceptor])),
     MessageService,
+    provideAppInitializer(() => {
+      inject(TemaService);
+    }),
     providePrimeNG({
-        theme: {
-            preset: argosPreset,
+      theme: {
+        preset: argosPreset,
+        options: {
+          darkModeSelector: `.${DARK_MODE_CLASS}`,
         },
-        license: environment.primeNgLicenseKey
-    })
-  ]
+      },
+      license: environment.primeNgLicenseKey,
+    }),
+  ],
 };

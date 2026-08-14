@@ -1,4 +1,5 @@
 import { Component, signal, OnInit, inject, computed } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLinkWithHref, Router } from '@angular/router';
 import { SidebarModule } from 'primeng/sidebar';
 import { AvatarModule } from 'primeng/avatar';
@@ -15,7 +16,9 @@ import { Plus } from '@primeicons/angular/plus';
 import { SignOut } from '@primeicons/angular/sign-out';
 import { UsuarioLogado } from '@shared/services/usuario';
 import { DividerModule } from 'primeng/divider';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AuthService } from '@core/services/auth.service';
+import { TemaService } from '@core/services/tema.service';
 
 const primeNgModules = [
   SidebarModule,
@@ -27,6 +30,7 @@ const primeNgModules = [
   PIcon,
   ButtonModule,
   DividerModule,
+  ToggleSwitchModule,
 ];
 
 const icons = [
@@ -45,7 +49,7 @@ interface NavItem {
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, RouterLinkWithHref, ...primeNgModules, ...icons],
+  imports: [RouterOutlet, RouterLinkWithHref, FormsModule, ...primeNgModules, ...icons],
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
@@ -53,6 +57,7 @@ export class Layout implements OnInit {
   usuarioService = inject(UsuarioService);
   authService = inject(AuthService);
   projetoSelecionadoService = inject(ProjetoSelecionadoService);
+  temaService = inject(TemaService);
   router = inject(Router);
 
   open = signal(true);
