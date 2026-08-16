@@ -5,17 +5,63 @@
 
   <p-divider />
 
-  <section>
-    <h2 class="font-semibold text-2xl">1. Configuração do projeto</h2>
-    <app-code-snippet language="json" [code]="argosConfigSnippet" />
-  </section>
+  <div class="grid grid-cols-2 gap-4 ">
+    <p-card>
+      <section class="space-y-2">
+        <h2 class="font-semibold text-xl">1. Configuração do projeto</h2>
+        <p>
+          Adicione o arquivo <code>argos.config.ci.json</code> na raiz do projeto em que você deseja
+          rodar a avaliação de acessibilidade.
+        </p>
+        <p>
+          <strong><code>baseUrl</code></strong
+          >: URL base do seu site.
+        </p>
+        <p>
+          <strong><code>routes</code></strong
+          >: Rotas que devem ser avaliadas.
+        </p>
+        <p>
+          <strong><code>projectId</code></strong
+          >: ID do projeto que você deseja avaliar.
+        </p>
+        <span> *É necessário criar um projeto no Argos para obter o ID.</span>
 
-  <section>
-    <h2 class="font-semibold text-2xl">2. Adicionando na pipeline</h2>
-    <app-code-snippet language="yml" [code]="githubActionsSnippet" />
-  </section>
+        <app-code-snippet language="json" [code]="argosConfigSnippet" />
+      </section>
+    </p-card>
+    <p-card>
+      <section class="space-y-2">
+        <h2 class="font-semibold text-xl">2. Adicionando na pipeline</h2>
+        <p>Adicione os seguintes steps no arquivo de configuração .yml do seu projeto de CI/CD.</p>
+        <app-code-snippet language="yml" [code]="githubActionsSnippet" />
+      </section>
+    </p-card>
 
-  <section>
-    <h2 class="font-semibold text-2xl">3.</h2>
-  </section>
+    <p-card class="mb-3">
+      <section class="space-y-2">
+        <h2 class="font-semibold text-xl">3. Commite os arquivos e execute a pipeline CD</h2>
+
+        <p>
+          Ao final da avaliação, o Argos irá gerar um relatório de acessibilidade e disponibilizá-lo
+          em seu dashboard.
+        </p>
+      </section>
+    </p-card>
+
+    <p-card class="mb-3">
+      <section class="flex gap-2 flex-col space-y-2">
+        <h2 class="font-semibold text-xl">4. (opcional) Rodar via CLI</h2>
+        <p>
+          Caso deseje rodar a avaliação de forma local, você pode instalar o pacote na raiz do
+          projeto e executar o comando <code>npm run audit</code>.
+        </p>
+        <app-code-snippet language="bash" [code]="'npm install argos-avaliador-acessibilidade'" />
+        <app-code-snippet
+          language="bash"
+          [code]="'npm run audit -- https://exemplo-url-base.com --config ../argos-web/argos.config.ci.json --out reports/report-argos-web.json'"
+        />
+      </section>
+    </p-card>
+  </div>
 </div>

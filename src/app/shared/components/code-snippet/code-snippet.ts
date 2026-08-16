@@ -4,13 +4,16 @@ import * as Prism from 'prismjs';
 
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-yaml';
+import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-typescript';
 
-export type CodeSnippetLanguage = 'json' | 'yml';
+export type CodeSnippetLanguage = 'json' | 'yml' | 'bash' | 'cmd';
 
 const PRISM_LANGUAGE: Record<CodeSnippetLanguage, string> = {
   json: 'json',
   yml: 'yaml',
+  bash: 'bash',
+  cmd: 'cmd',
 };
 
 @Component({

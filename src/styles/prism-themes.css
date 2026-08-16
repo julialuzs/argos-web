@@ -1,0 +1,124 @@
+@import 'prismjs/themes/prism.css';
+
+html:not(.argos-dark) code[class*='language-'],
+html:not(.argos-dark) pre[class*='language-'] {
+  color: #333;
+  text-shadow: none;
+}
+
+html:not(.argos-dark) .token.comment,
+html:not(.argos-dark) .token.prolog,
+html:not(.argos-dark) .token.doctype,
+html:not(.argos-dark) .token.cdata {
+  color: slategray;
+}
+
+html:not(.argos-dark) .token.punctuation {
+  color: #999;
+}
+
+html:not(.argos-dark) .token.property,
+html:not(.argos-dark) .token.tag,
+html:not(.argos-dark) .token.boolean,
+html:not(.argos-dark) .token.number,
+html:not(.argos-dark) .token.constant,
+html:not(.argos-dark) .token.symbol,
+html:not(.argos-dark) .token.deleted {
+  color: #905;
+}
+
+html:not(.argos-dark) .token.selector,
+html:not(.argos-dark) .token.attr-name,
+html:not(.argos-dark) .token.string,
+html:not(.argos-dark) .token.char,
+html:not(.argos-dark) .token.builtin,
+html:not(.argos-dark) .token.inserted {
+  color: #690;
+}
+
+html:not(.argos-dark) .token.operator,
+html:not(.argos-dark) .token.entity,
+html:not(.argos-dark) .token.url,
+html:not(.argos-dark) .token.variable {
+  color: #9a6e3a;
+  background: none;
+}
+
+html:not(.argos-dark) .token.atrule,
+html:not(.argos-dark) .token.attr-value,
+html:not(.argos-dark) .token.keyword {
+  color: #07a;
+}
+
+html:not(.argos-dark) .token.function,
+html:not(.argos-dark) .token.class-name {
+  color: #dd4a68;
+}
+
+html:not(.argos-dark) .token.regex,
+html:not(.argos-dark) .token.important {
+  color: #e90;
+}
+
+.argos-dark code[class*='language-'],
+.argos-dark pre[class*='language-'] {
+  color: #f8f8f2;
+  text-shadow: none;
+}
+
+.argos-dark .token.comment,
+.argos-dark .token.prolog,
+.argos-dark .token.doctype,
+.argos-dark .token.cdata {
+  color: #8292a2;
+}
+
+.argos-dark .token.punctuation {
+  color: #f8f8f2;
+}
+
+.argos-dark .token.property,
+.argos-dark .token.tag,
+.argos-dark .token.constant,
+.argos-dark .token.symbol,
+.argos-dark .token.deleted {
+  color: #f92672;
+}
+
+.argos-dark .token.boolean,
+.argos-dark .token.number {
+  color: #ae81ff;
+}
+
+.argos-dark .token.selector,
+.argos-dark .token.attr-name,
+.argos-dark .token.string,
+.argos-dark .token.char,
+.argos-dark .token.builtin,
+.argos-dark .token.inserted {
+  color: #a6e22e;
+}
+
+.argos-dark .token.operator,
+.argos-dark .token.entity,
+.argos-dark .token.url,
+.argos-dark .token.variable {
+  color: #f8f8f2;
+  background: none;
+}
+
+.argos-dark .token.atrule,
+.argos-dark .token.attr-value,
+.argos-dark .token.function,
+.argos-dark .token.class-name {
+  color: #e6db74;
+}
+
+.argos-dark .token.keyword {
+  color: #66d9ef;
+}
+
+.argos-dark .token.regex,
+.argos-dark .token.important {
+  color: #fd971f;
+}

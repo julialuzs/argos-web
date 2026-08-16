@@ -1,6 +1,10 @@
-<div class="snippet">
-  <div class="snippet-header">
-    <span class="language-tag">{{ languageLabel() }}</span>
+<div
+  class="overflow-hidden rounded-md border border-surface-200 bg-surface-50 dark:border-surface-700 dark:bg-surface-900"
+>
+  <div
+    class="flex items-center justify-between border-b border-surface-200 bg-surface-100 px-4 py-2 dark:border-surface-700 dark:bg-surface-950"
+  >
+    <span class="text-xs font-bold tracking-wide text-muted-color">{{ languageLabel() }}</span>
     <button type="button" pButton variant="link" class="p-0" (click)="copyToClipboard()">
       @if (copiado()) {
         <span>Copiado</span>

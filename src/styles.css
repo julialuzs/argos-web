@@ -3,6 +3,7 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @import '@fontsource-variable/inter';
+@import './styles/prism-themes.css';
 
 @theme {
   --font-sans:
