@@ -18,6 +18,34 @@ dotnet run
 npm run audit -- https://localhost:4200  --config ../argos-web/argos.config.ci.json --out reports/report-argos-web.json
 ```
 
+### Adicionando na pipeline:
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      /** demais steps **/
+
+      - name: Install Argos
+        run: npm install argos-avaliador-acessibilidade --prefix argos
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+        working-directory: argos/node_modules/argos-avaliador-acessibilidade
+
+      - name: Run accessibility audit against deployed site
+        env:
+          SITE_URL: https://<url-do-site-deployado>
+        run: |
+          mkdir -p reports
+          npm run audit --prefix argos/node_modules/argos-avaliador-acessibilidade -- \
+            --config "$GITHUB_WORKSPACE/audit.config.ci.json" \
+            --out "$GITHUB_WORKSPACE/reports/report.json" \
+            "$SITE_URL"
+```
+
 ### Libs:
 - TailwindCSS
 - PrimeNG

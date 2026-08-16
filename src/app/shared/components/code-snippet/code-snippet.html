@@ -1,0 +1,15 @@
+<div class="snippet">
+  <div class="snippet-header">
+    <span class="language-tag">{{ languageLabel() }}</span>
+    <button type="button" pButton variant="link" class="p-0" (click)="copyToClipboard()">
+      @if (copiado()) {
+        <span>Copiado</span>
+      } @else {
+        <span>Copiar</span>
+      }
+    </button>
+  </div>
+  <pre
+    [class]="'language-' + prismLanguage()"
+  ><code [class]="'language-' + prismLanguage()" [innerHTML]="highlightedCode()"></code></pre>
+</div>

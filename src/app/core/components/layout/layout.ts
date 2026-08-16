@@ -70,18 +70,27 @@ export class Layout implements OnInit {
         label: 'Projetos',
         icon: 'home',
         routerLink: '/projetos',
+        isActive: () => this.router.url.includes('/projetos'),
       },
       {
         label: 'Relatórios',
         icon: 'receipt',
         routerLink: `${this.projetoSelecionadoService.projetoSelecionado()?.id}/relatorios`,
         disabled: this.projetoSelecionadoService.projetoSelecionado() === null,
+        isActive: () => this.router.url.includes('/relatorios'),
       },
       {
         label: 'Dashboard',
         icon: 'chart-bar',
         routerLink: `${this.projetoSelecionadoService.projetoSelecionado()?.id}/dashboard`,
         disabled: this.projetoSelecionadoService.projetoSelecionado() === null,
+        isActive: () => this.router.url.includes('/dashboard'),
+      },
+      {
+        label: 'Tutorial',
+        icon: 'book',
+        routerLink: '/tutorial',
+        isActive: () => this.router.url.includes('/tutorial'),
       },
     ];
   });

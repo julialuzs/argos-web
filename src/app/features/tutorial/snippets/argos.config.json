@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://exemplo-url-base.com",
+  "routes": ["/", "/login", "/cadastro"],
+  "includeW3c": false,
+  "projectId": "6"
+}

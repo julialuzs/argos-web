@@ -11,6 +11,7 @@
       <a
         pRipple
         class="flex items-center px-3 py-2 cursor-pointer gap-2"
+        [class.text-primary]="item.isActive()"
         [routerLink]="item.routerLink"
       >
         <svg [pIcon]="item.icon"></svg>

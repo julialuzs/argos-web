@@ -24,6 +24,7 @@
     "argos-avaliador-acessibilidade": "^1.0.1",
     "ng-apexcharts": "^3.0.0",
     "primeng": "^22.0.0-rc.1",
+    "prismjs": "^1.30.0",
     "rxjs": "~7.8.0",
     "tailwindcss-primeui": "^0.6.1",
     "tslib": "^2.3.0"
@@ -33,6 +34,7 @@
     "@angular/cli": "^22.0.6",
     "@angular/compiler-cli": "^22.0.0",
     "@tailwindcss/postcss": "^4.1.12",
+    "@types/prismjs": "^1.26.6",
     "jsdom": "^28.0.0",
     "postcss": "^8.5.3",
     "prettier": "^3.8.1",

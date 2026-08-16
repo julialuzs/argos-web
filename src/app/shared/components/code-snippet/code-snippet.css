@@ -1,0 +1,36 @@
+.snippet {
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #272822;
+}
+
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #1d1f21;
+  border-bottom: 1px solid #373b41;
+}
+
+.language-tag {
+  color: #b4b7b4;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+pre[class*='language-'] {
+  margin: 0 !important;
+  padding: 1rem !important;
+  overflow-x: auto;
+  white-space: pre;
+  background: transparent !important;
+}
+
+code[class*='language-'] {
+  display: block;
+  white-space: pre;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}

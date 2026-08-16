@@ -1,0 +1,20 @@
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Argos
+        run: npm install argos-avaliador-acessibilidade --prefix argos
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+        working-directory: argos/node_modules/argos-avaliador-acessibilidade
+
+      - name: Run accessibility audit against deployed site
+        env:
+          SITE_URL: https://exemplo-url-base.com
+        run: |
+          mkdir -p reports
+          npm run audit --prefix argos/node_modules/argos-avaliador-acessibilidade -- \
+            --config "$GITHUB_WORKSPACE/audit.config.ci.json" \
+            --out "$GITHUB_WORKSPACE/reports/report.json" \
+            "$SITE_URL"

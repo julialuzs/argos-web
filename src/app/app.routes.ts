@@ -7,6 +7,7 @@ import { Relatorios } from '@features/relatorios/relatorios';
 import { Dashboard } from '@features/dashboard/dashboard';
 import { Projetos } from '@features/projetos/projetos';
 import { RelatorioDetalhe } from '@features/relatorios/relatorio-detalhe/relatorio-detalhe';
+import { Tutorial } from '@features/tutorial/tutorial';
 
 export const routes: Routes = [
   {
@@ -16,8 +17,12 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'projetos',
+        redirectTo: 'tutorial',
         pathMatch: 'full',
+      },
+      {
+        path: 'tutorial',
+        component: Tutorial,
       },
       {
         path: ':projetoId/relatorios',

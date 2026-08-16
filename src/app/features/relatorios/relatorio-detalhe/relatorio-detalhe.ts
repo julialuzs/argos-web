@@ -8,12 +8,14 @@ import { DatePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { AccordionModule } from 'primeng/accordion';
 import { StatCard } from '@shared/components/stat-card/stat-card';
+import { ChevronCircleRight } from '@primeicons/angular/chevron-circle-right';
+import { ChevronRight } from '@primeicons/angular/chevron-right';
 
 const primeNgModules = [ButtonModule, DividerModule, CardModule, AccordionModule];
 
 @Component({
   selector: 'app-relatorio-detalhe',
-  imports: [StatCard, DatePipe, ...primeNgModules],
+  imports: [StatCard, DatePipe, ChevronRight, ...primeNgModules],
   providers: [MessageService],
   templateUrl: './relatorio-detalhe.html',
   styleUrl: './relatorio-detalhe.css',

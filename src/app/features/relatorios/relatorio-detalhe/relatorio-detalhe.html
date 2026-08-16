@@ -10,7 +10,7 @@
   </section>
 
   <!-- resumo -->
-  <section class="grid grid-cols-4 gap-4 pb-4">
+  <section class="grid grid-cols-4 pb-4">
     <app-stat-card title="Erros" [value]="relatorio()?.quantidadeErros ?? 0" icon="error" />
 
     <app-stat-card title="Avisos" [value]="relatorio()?.quantidadeAvisos ?? 0" icon="warning" />
@@ -34,7 +34,17 @@
     <p-accordion [(value)]="padraoAberto" [multiple]="true">
       @for (resultado of relatorio()?.resultados; track $index) {
         <p-accordion-panel [value]="$index">
-          <p-accordion-header>{{ resultado.url }}</p-accordion-header>
+          <p-accordion-header>
+            <ng-template #toggleicon><span class="hidden"></span></ng-template>
+            <span class="inline-flex items-center gap-2">
+              <svg
+                data-p-icon="chevron-right"
+                [size]="20"
+                class="transition-transform ease-out in-data-[p=active]:-rotate-90"
+              ></svg>
+              {{ resultado.url }}
+            </span>
+          </p-accordion-header>
           <p-accordion-content>
             @for (apontamento of resultado.apontamentos; track $index) {
               <h3 class="font-medium text-1xl text-surface-900 dark:text-surface-0 mt-1">
