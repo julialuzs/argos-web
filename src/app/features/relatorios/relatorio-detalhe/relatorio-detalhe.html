@@ -9,7 +9,6 @@
     </div>
   </section>
 
-  <!-- resumo -->
   <section class="grid grid-cols-4 pb-4">
     <app-stat-card title="Erros" [value]="relatorio()?.quantidadeErros ?? 0" icon="error" />
 
@@ -26,6 +25,10 @@
       [value]="`${relatorio()?.pontuacao ?? 0} de 100`"
       icon="trophy"
       [iconColor]="getColor(relatorio()?.pontuacao ?? 0)"
+      [infoTooltip]="
+        'A pontuação é calculada através de uma média ponderada, cada severidade possuindo um peso diferente. ' +
+        'O cálculo é feito apenas para fins comparativos dentro do próprio sistema.'
+      "
     />
   </section>
 
