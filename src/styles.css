@@ -1,9 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
 @import '@fontsource-variable/inter';
 @import './styles/prism-themes.css';
+@import "primeicons/primeicons.css";
 
 @theme {
   --font-sans:

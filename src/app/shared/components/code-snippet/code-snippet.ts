@@ -1,54 +1,40 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, Input, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import * as Prism from 'prismjs';
+import { UpperCasePipe } from '@angular/common';
 
+import * as Prism from 'prismjs';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-yaml';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-typescript';
 
-export type CodeSnippetLanguage = 'json' | 'yml' | 'bash' | 'cmd';
-
-const PRISM_LANGUAGE: Record<CodeSnippetLanguage, string> = {
-  json: 'json',
-  yml: 'yaml',
-  bash: 'bash',
-  cmd: 'cmd',
-};
+export type CodeSnippetLanguage = 'json' | 'yml' | 'bash' | 'cmd' | 'html' | 'css';
 
 @Component({
   selector: 'app-code-snippet',
-  imports: [ButtonModule],
+  imports: [ButtonModule, UpperCasePipe],
   templateUrl: './code-snippet.html',
   styleUrl: './code-snippet.css',
 })
 export class CodeSnippet {
-  readonly code = input<string>('');
-  readonly language = input<CodeSnippetLanguage>('json');
+  @Input() code = '';
+  @Input() language: CodeSnippetLanguage = 'json';
+  @Input() showHeader = true;
 
   readonly copiado = signal(false);
 
-  readonly prismLanguage = computed(() => PRISM_LANGUAGE[this.language()]);
-
-  readonly languageLabel = computed(() => {
-    const language = this.prismLanguage();
-    return language === 'typescript' ? 'TS' : language.toUpperCase();
-  });
-
   readonly highlightedCode = computed(() => {
-    const code = this.code();
-    const language = this.prismLanguage();
-    const grammar = Prism.languages[language];
+    const grammar = Prism.languages[this.language];
 
-    if (!code || !grammar) {
-      return this.escapeHtml(code);
+    if (!this.code || !grammar) {
+      return this.escapeHtml(this.code);
     }
 
-    return Prism.highlight(code, grammar, language);
+    return Prism.highlight(this.code, grammar, this.language);
   });
 
   copyToClipboard(): void {
-    navigator.clipboard.writeText(this.code());
+    navigator.clipboard.writeText(this.code);
     this.copiado.set(true);
     setTimeout(() => this.copiado.set(false), 2000);
   }

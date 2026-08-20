@@ -21,4 +21,8 @@ export class ProjetoService {
   criarProjeto(request: ProjetoRequest): Observable<void> {
     return this.http.post<void>(`${environment.apiUrl}${this.baseUrl}`, request);
   }
+
+  editarProjeto(projeto: Projeto): Observable<void> {
+    return this.http.put<void>(`${environment.apiUrl}${this.baseUrl}/${projeto.id}`, projeto);
+  }
 }

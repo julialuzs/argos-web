@@ -1,4 +1,13 @@
-import { Component, inject, Input, signal, Signal, WritableSignal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+  Signal,
+  WritableSignal,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -10,6 +19,8 @@ import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { TextareaModule } from 'primeng/textarea';
 import { ProjetoRequest, ProjetoService } from '../projeto.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 const primeNgModules = [
   MessageModule,
@@ -20,16 +31,21 @@ const primeNgModules = [
   DividerModule,
   DialogModule,
   TextareaModule,
+  ToastModule,
 ];
 
 @Component({
   selector: 'app-projeto-form',
   imports: [ReactiveFormsModule, ...primeNgModules],
+  providers: [MessageService],
   templateUrl: './projeto-form.html',
   styleUrl: './projeto-form.css',
 })
 export class ProjetoForm {
   @Input() visivel: WritableSignal<boolean> = signal(false);
+  @Output() projetoCriado = new EventEmitter<void>();
+
+  toastr = inject(MessageService);
 
   projetoService = inject(ProjetoService);
   formSubmitted = false;
@@ -49,6 +65,8 @@ export class ProjetoForm {
 
   salvar() {
     this.projetoService.criarProjeto(this.request).subscribe(() => {
+      this.toastr.add({ severity: 'success', summary: 'Projeto criado com sucesso' });
+      this.projetoCriado.emit();
       this.fechar();
     });
   }

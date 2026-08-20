@@ -32,9 +32,12 @@
     />
   </section>
 
-  <!-- resultados -->
   <section>
-    <p-accordion [(value)]="padraoAberto" [multiple]="true">
+    <p-accordion
+      [(value)]="padraoAberto"
+      [multiple]="true"
+      class="w-full block border border-surface-200 dark:border-surface-700 rounded-md divide-y divide-surface-200 dark:divide-surface-700"
+    >
       @for (resultado of relatorio()?.resultados; track $index) {
         <p-accordion-panel [value]="$index">
           <p-accordion-header>
@@ -50,18 +53,48 @@
           </p-accordion-header>
           <p-accordion-content>
             @for (apontamento of resultado.apontamentos; track $index) {
-              <h3 class="font-medium text-1xl text-surface-900 dark:text-surface-0 mt-1">
-                [{{ apontamento.fonte }}] {{ apontamento.titulo }}
-              </h3>
-              <p class="text-sm">{{ apontamento.descricao }}</p>
-              <p class="text-sm">{{ apontamento.tipo }}</p>
-              <p class="text-sm">{{ apontamento.severidade }}</p>
-              <p class="text-sm">
-                Ajuda:
-                <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{
-                  apontamento.urlAjuda
-                }}</a>
-              </p>
+              <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-1 flex flex-col gap-2">
+                  <p class="text-sm">
+                    <p-chip
+                      [label]="apontamento.tipo | titlecase"
+                      [icon]="getIconTipo(apontamento.tipo)"
+                    />
+                  </p>
+                  <p class="text-sm">
+                    <p-badge
+                      [value]="apontamento.severidade"
+                      size="large"
+                      [severity]="getCorSeveridade(apontamento.severidade)"
+                    />
+                  </p>
+                </div>
+                <div class="descricao col-span-5">
+                  <h3 class="font-medium text-1xl text-surface-900 dark:text-surface-0 mt-1">
+                    {{ apontamento.titulo }}
+                  </h3>
+                  <p class="text-sm">{{ apontamento.descricao }}</p>
+                  <p class="text-sm">Identificado por: {{ apontamento.fonte }}</p>
+                </div>
+                <div class="localizacao col-span-6">
+                  @if (apontamento.elementoHtml) {
+                    <p class="text-sm">
+                      Elemento HTML:
+                      <app-code-snippet
+                        [code]="apontamento.elementoHtml"
+                        [language]="'html'"
+                        [showHeader]="false"
+                      />
+                    </p>
+                  }
+                  <p class="text-sm">
+                    Ajuda:
+                    <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{
+                      apontamento.urlAjuda
+                    }}</a>
+                  </p>
+                </div>
+              </div>
               @if ($index < resultado.apontamentos.length - 1) {
                 <p-divider />
               }

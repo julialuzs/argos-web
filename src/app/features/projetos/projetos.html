@@ -26,7 +26,12 @@
                     {{ item.nome }}
                   </h3>
                   <div class="text-surface-500 dark:text-surface-0">
-                    Última execução: {{ item.ultimaExecucao | date: 'dd/MM/yyyy HH:mm' }}
+                    Última execução:
+                    @if (item.ultimaExecucao) {
+                      {{ item.ultimaExecucao | date: 'dd/MM/yyyy HH:mm' }}
+                    } @else {
+                      <span class="text-surface-500 dark:text-surface-0">-</span>
+                    }
                   </div>
 
                   <div class="text-surface-900 dark:text-surface-0">
@@ -60,7 +65,14 @@
                   </button>
                 }
 
-                <button pButton iconOnly rounded variant="text" aria-label="Menu">
+                <button
+                  pButton
+                  iconOnly
+                  rounded
+                  variant="text"
+                  aria-label="Menu"
+                  (click)="abrirMenu($event, item)"
+                >
                   <svg data-p-icon="ellipsis-v"></svg>
                 </button>
               </div>
@@ -72,4 +84,5 @@
   </section>
 </div>
 
-<app-projeto-form [visivel]="projetoFormVisivel" />
+<p-menu #menu [model]="itensMenu" [popup]="true" styleClass="w-40" />
+<app-projeto-form [visivel]="projetoFormVisivel" (projetoCriado)="getProjetos()" />

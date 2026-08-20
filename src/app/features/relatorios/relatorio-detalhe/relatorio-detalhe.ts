@@ -4,18 +4,31 @@ import { DividerModule } from 'primeng/divider';
 import { RelatoriosService } from '../relatorios.service';
 import { MessageService } from 'primeng/api';
 import { RelatorioDetalhe as RelatorioDetalheType } from '@shared/models/relatorio';
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { AccordionModule } from 'primeng/accordion';
 import { StatCard } from '@shared/components/stat-card/stat-card';
-import { ChevronCircleRight } from '@primeicons/angular/chevron-circle-right';
 import { ChevronRight } from '@primeicons/angular/chevron-right';
+import { StyleClassModule } from 'primeng/styleclass';
+import { BadgeModule } from 'primeng/badge';
+import { BadgeSeverity } from 'primeng/types/badge';
+import { CodeSnippet } from '@shared/components/code-snippet/code-snippet';
+import { ChipModule } from 'primeng/chip';
 
-const primeNgModules = [ButtonModule, DividerModule, CardModule, AccordionModule];
+const primeNgModules = [
+  ButtonModule,
+  BadgeModule,
+  StyleClassModule,
+  DividerModule,
+  CardModule,
+  AccordionModule,
+  ChipModule,
+];
+const icons = [ChevronRight];
 
 @Component({
   selector: 'app-relatorio-detalhe',
-  imports: [StatCard, DatePipe, ChevronRight, ...primeNgModules],
+  imports: [StatCard, CodeSnippet, TitleCasePipe, DatePipe, ...icons, ...primeNgModules],
   providers: [MessageService],
   templateUrl: './relatorio-detalhe.html',
   styleUrl: './relatorio-detalhe.css',
@@ -45,6 +58,21 @@ export class RelatorioDetalhe implements OnInit {
     });
   }
 
+  getCorSeveridade(severidade: string): BadgeSeverity {
+    switch (severidade) {
+      case 'Grave':
+        return 'warn';
+      case 'Crítico':
+        return 'danger';
+      case 'Moderado':
+        return 'secondary';
+      case 'Baixo':
+        return 'info';
+      default:
+        return 'secondary';
+    }
+  }
+
   getColor(pontuacao: number) {
     if (pontuacao >= 90) {
       return 'green';
@@ -54,5 +82,14 @@ export class RelatorioDetalhe implements OnInit {
     }
 
     return 'red';
+  }
+
+  getIconTipo(tipo: string): string {
+    switch (tipo) {
+      case 'erro':
+        return 'pi pi-times-circle';
+      default:
+        return 'pi pi-exclamation-circle';
+    }
   }
 }
