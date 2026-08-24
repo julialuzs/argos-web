@@ -14,6 +14,7 @@ import { BadgeModule } from 'primeng/badge';
 import { BadgeSeverity } from 'primeng/types/badge';
 import { CodeSnippet } from '@shared/components/code-snippet/code-snippet';
 import { ChipModule } from 'primeng/chip';
+import { Trophy } from '@primeicons/angular/trophy';
 
 const primeNgModules = [
   ButtonModule,
@@ -24,7 +25,7 @@ const primeNgModules = [
   AccordionModule,
   ChipModule,
 ];
-const icons = [ChevronRight];
+const icons = [ChevronRight, Trophy];
 
 @Component({
   selector: 'app-relatorio-detalhe',

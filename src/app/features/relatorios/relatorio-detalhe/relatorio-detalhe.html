@@ -42,14 +42,24 @@
         <p-accordion-panel [value]="$index">
           <p-accordion-header>
             <ng-template #toggleicon><span class="hidden"></span></ng-template>
-            <span class="inline-flex items-center gap-2">
-              <svg
-                data-p-icon="chevron-right"
-                [size]="20"
-                class="transition-transform ease-out in-data-[p=active]:-rotate-90"
-              ></svg>
-              {{ resultado.url }}
-            </span>
+            <div class="flex items-center justify-between gap-2 w-full">
+              <span class="flex items-center gap-2">
+                <svg
+                  data-p-icon="chevron-right"
+                  [size]="20"
+                  class="transition-transform ease-out in-data-[p=active]:-rotate-90"
+                ></svg>
+                {{ resultado.url }}
+              </span>
+
+              <span class="flex items-center gap-2">
+                <p-chip
+                  [label]="resultado.pontuacao.toString()"
+                  [icon]="'pi pi-trophy'"
+                  alt="Pontuação"
+                />
+              </span>
+            </div>
           </p-accordion-header>
           <p-accordion-content>
             @for (apontamento of resultado.apontamentos; track $index) {
@@ -77,6 +87,16 @@
                   <p class="text-sm">Identificado por: {{ apontamento.fonte }}</p>
                 </div>
                 <div class="localizacao col-span-6">
+                  @if (apontamento.seletorCss) {
+                    <p class="text-sm">
+                      Seletor CSS:
+                      <app-code-snippet
+                        [code]="apontamento.seletorCss"
+                        [language]="'css'"
+                        [showHeader]="false"
+                      />
+                    </p>
+                  }
                   @if (apontamento.elementoHtml) {
                     <p class="text-sm">
                       Elemento HTML:
@@ -88,10 +108,12 @@
                     </p>
                   }
                   <p class="text-sm">
-                    Ajuda:
-                    <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{
-                      apontamento.urlAjuda
-                    }}</a>
+                    @if (apontamento.urlAjuda) {
+                      Ajuda:
+                      <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{
+                        apontamento.urlAjuda
+                      }}</a>
+                    }
                   </p>
                 </div>
               </div>

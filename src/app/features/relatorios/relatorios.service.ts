@@ -16,4 +16,5 @@ export class RelatoriosService {
   getRelatorioPorId(projetoId: number, relatorioId: number): Observable<RelatorioDetalhe> {
     return this.http.get<RelatorioDetalhe>(`${this.baseUrl}/${projetoId}/${relatorioId}`);
   }
+
 }

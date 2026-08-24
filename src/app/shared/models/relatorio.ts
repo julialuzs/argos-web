@@ -12,6 +12,7 @@ export type Apontamento = {
   urlAjuda?: string;
   referenciasWcag: string[];
   elementoHtml?: string;
+  seletorCss?: string;
   quantidadeElementos?: number;
 };
 
