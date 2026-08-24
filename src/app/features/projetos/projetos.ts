@@ -34,6 +34,7 @@ export class Projetos implements OnInit {
   projetoService = inject(ProjetoService);
   projetoSelecionadoService = inject(ProjetoSelecionadoService);
   projetoFormVisivel = signal(false);
+  projetoEmEdicao = signal<Projeto | null>(null);
 
   projetos = signal<Projeto[]>([]);
 
@@ -62,10 +63,18 @@ export class Projetos implements OnInit {
   getProjetos() {
     this.projetoService.listarProjetosPorUsuarioLogado().subscribe((projetos) => {
       this.projetos.set(projetos);
+      const selecionado = this.projetoSelecionadoService.projetoSelecionado();
+      if (selecionado) {
+        const atualizado = projetos.find((projeto) => projeto.id === selecionado.id);
+        if (atualizado) {
+          this.projetoSelecionadoService.selecionar(atualizado);
+        }
+      }
     });
   }
 
   novoProjeto() {
+    this.projetoEmEdicao.set(null);
     this.projetoFormVisivel.set(true);
   }
 
@@ -83,9 +92,8 @@ export class Projetos implements OnInit {
   }
 
   editarProjeto(projeto: Projeto) {
-    this.projetoService.editarProjeto(projeto).subscribe(() => {
-      this.getProjetos();
-    });
+    this.projetoEmEdicao.set(projeto);
+    this.projetoFormVisivel.set(true);
   }
 
   excluirProjeto(projeto: Projeto) {

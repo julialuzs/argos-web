@@ -1,7 +1,7 @@
-<p-dialog [(visible)]="visivel" [modal]="true" [style]="{ width: '25rem' }">
+<p-dialog [(visible)]="visivel" [modal]="true" [style]="{ width: '32rem' }">
   <ng-template #header>
     <div class="inline-flex items-center justify-center gap-2">
-      <span class="font-bold whitespace-nowrap">Novo projeto</span>
+      <span class="font-bold whitespace-nowrap">{{ titulo }}</span>
     </div>
   </ng-template>
   <form [formGroup]="form" class="space-y-6 mt-3">
@@ -18,7 +18,6 @@
 
     <div class="flex flex-col gap-2">
       <label pLabel for="descricao_projeto">Descrição</label>
-
       <textarea
         pTextarea
         id="descricao_projeto"
@@ -31,6 +30,48 @@
           <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
         }
       }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label pLabel for="url_base_projeto">URL base</label>
+      <input
+        pInputText
+        id="url_base_projeto"
+        formControlName="urlBase"
+        placeholder="https://exemplo.com"
+        [invalid]="isInvalid('urlBase')"
+      />
+
+      @if (isInvalid('urlBase')) {
+        @if (form.get('urlBase')?.errors?.['required']) {
+          <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
+        } @else if (form.get('urlBase')?.errors?.['pattern']) {
+          <p-message severity="error" size="small" variant="simple"
+            >Informe uma URL válida iniciando com http:// ou https://.</p-message
+          >
+        }
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label pLabel for="rotas_projeto">Rotas (uma por linha)</label>
+      <textarea
+        pTextarea
+        id="rotas_projeto"
+        formControlName="rotas"
+        rows="4"
+        placeholder="/"
+        [invalid]="isInvalid('rotas')"
+      ></textarea>
+
+      @if (isInvalid('rotas')) {
+        <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
+      }
+    </div>
+
+    <div class="flex items-center justify-between gap-3">
+      <label pLabel for="incluir_w3c">Incluir validação W3C</label>
+      <p-toggleswitch inputId="incluir_w3c" formControlName="incluirW3c" />
     </div>
   </form>
   <ng-template #footer>

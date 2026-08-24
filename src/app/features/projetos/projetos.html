@@ -85,4 +85,8 @@
 </div>
 
 <p-menu #menu [model]="itensMenu" [popup]="true" styleClass="w-40" />
-<app-projeto-form [visivel]="projetoFormVisivel" (projetoCriado)="getProjetos()" />
+<app-projeto-form
+  [visivel]="projetoFormVisivel"
+  [projeto]="projetoEmEdicao"
+  (projetoCriado)="getProjetos()"
+/>

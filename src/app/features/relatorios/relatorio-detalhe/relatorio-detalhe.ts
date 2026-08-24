@@ -25,7 +25,7 @@ const primeNgModules = [
   AccordionModule,
   ChipModule,
 ];
-const icons = [ChevronRight, Trophy];
+const icons = [ChevronRight];
 
 @Component({
   selector: 'app-relatorio-detalhe',

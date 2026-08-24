@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 export type ProjetoRequest = {
   nome: string;
   descricao: string;
+  urlBase: string;
+  rotas: string[];
+  incluirW3c: boolean;
 };
 
 @Service()
@@ -18,11 +21,22 @@ export class ProjetoService {
     return this.http.get<Projeto[]>(`${environment.apiUrl}${this.baseUrl}/listar`);
   }
 
+  getProjetoPorId(id: number): Observable<Projeto> {
+    return this.http.get<Projeto>(`${environment.apiUrl}${this.baseUrl}/${id}`);
+  }
+
   criarProjeto(request: ProjetoRequest): Observable<void> {
     return this.http.post<void>(`${environment.apiUrl}${this.baseUrl}`, request);
   }
 
   editarProjeto(projeto: Projeto): Observable<void> {
-    return this.http.put<void>(`${environment.apiUrl}${this.baseUrl}/${projeto.id}`, projeto);
+    const request: ProjetoRequest = {
+      nome: projeto.nome,
+      descricao: projeto.descricao,
+      urlBase: projeto.urlBase,
+      rotas: projeto.rotas,
+      incluirW3c: projeto.incluirW3c,
+    };
+    return this.http.put<void>(`${environment.apiUrl}${this.baseUrl}/${projeto.id}`, request);
   }
 }

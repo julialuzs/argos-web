@@ -2,10 +2,22 @@
   <section class="flex justify-between pb-3">
     <h1 class="font-semibold text-4xl">Últimas análises executadas</h1>
 
-    <button type="button" variant="outlined" rounded pButton (click)="getRelatorios()">
-      <svg data-p-icon="refresh"></svg>
-      Atualizar
-    </button>
+    <div class="flex gap-2">
+      <button
+        type="button"
+        pButton
+        [loading]="executando()"
+        [disabled]="executando()"
+        (click)="executarAnalise()"
+      >
+        <svg data-p-icon="bolt"></svg>
+        Executar análise
+      </button>
+      <button type="button" variant="outlined" rounded pButton (click)="getRelatorios()">
+        <svg data-p-icon="refresh"></svg>
+        Atualizar
+      </button>
+    </div>
   </section>
 
   <p-divider />
@@ -82,10 +94,23 @@
                   Execute o avaliador Argos para gerar um relatório ou atualize a tabela.
                 </p>
               </div>
-              <button type="button" pButton size="small" (click)="getRelatorios()">
-                <svg data-p-icon="refresh"></svg>
-                Atualizar
-              </button>
+              <div class="flex gap-2">
+                <button
+                  type="button"
+                  pButton
+                  size="small"
+                  [loading]="executando()"
+                  [disabled]="executando()"
+                  (click)="executarAnalise()"
+                >
+                  <svg data-p-icon="bolt"></svg>
+                  Executar análise
+                </button>
+                <button type="button" pButton size="small" (click)="getRelatorios()">
+                  <svg data-p-icon="refresh"></svg>
+                  Atualizar
+                </button>
+              </div>
             </div>
           </td>
         </tr>

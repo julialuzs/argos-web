@@ -17,4 +17,7 @@ export class RelatoriosService {
     return this.http.get<RelatorioDetalhe>(`${this.baseUrl}/${projetoId}/${relatorioId}`);
   }
 
+  executar(projetoId: number): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${projetoId}/executar`, {});
+  }
 }
