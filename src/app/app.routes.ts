@@ -17,7 +17,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'tutorial',
+        redirectTo: 'projetos',
         pathMatch: 'full',
       },
       {
@@ -39,7 +39,7 @@ export const routes: Routes = [
       {
         path: 'projetos',
         component: Projetos,
-      }, 
+      },
     ],
   },
   {

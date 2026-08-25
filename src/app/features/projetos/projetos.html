@@ -32,6 +32,11 @@
                     } @else {
                       <span class="text-surface-500 dark:text-surface-0">-</span>
                     }
+
+                    <button pButton size="small" iconOnly severity="secondary" (click)="copiarGuid(item.guid)">
+                      <svg data-p-icon="copy"></svg>
+                    </button>
+                    <span class="text-surface-500 dark:text-surface-0 text-sm">{{ item.guid }}</span>
                   </div>
 
                   <div class="text-surface-900 dark:text-surface-0">

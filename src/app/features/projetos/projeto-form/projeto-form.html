@@ -16,6 +16,13 @@
       }
     </div>
 
+    @if (!!projeto()) {
+      <div class="flex flex-col gap-2">
+        <label pLabel for="guid_projeto">Identificador público (Guid)</label>
+        <input pInputText id="guid_projeto" formControlName="guid" [disabled]="true" />
+      </div>
+    }
+
     <div class="flex flex-col gap-2">
       <label pLabel for="descricao_projeto">Descrição</label>
       <textarea

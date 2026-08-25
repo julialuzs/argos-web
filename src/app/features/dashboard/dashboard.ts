@@ -57,7 +57,7 @@ export type ChartOptions = {
 
 export const BAR_CHART_OPTIONS: Partial<ChartOptions> = {
   title: {
-    text: 'Erros/Avisos/Pontuação por Data',
+    text: 'Erros/Avisos por Data',
     align: 'left',
     style: {
       fontSize: '16px',
@@ -71,10 +71,6 @@ export const BAR_CHART_OPTIONS: Partial<ChartOptions> = {
     },
     {
       name: 'Avisos',
-      data: [],
-    },
-    {
-      name: 'Pontuação',
       data: [],
     },
   ],
@@ -239,14 +235,12 @@ export class Dashboard implements OnInit {
     const categorias = relatorios.map((r) => this.formatarDataExecucao(r.dataHoraExecucao));
     const erros = relatorios.map((r) => r.quantidadeErros);
     const avisos = relatorios.map((r) => r.quantidadeAvisos);
-    const pontuacoes = relatorios.map((r) => r.pontuacao);
 
     this.barChartOptions.set({
       ...this.barChartOptions(),
       series: [
         { name: 'Erros', data: erros },
         { name: 'Avisos', data: avisos },
-        { name: 'Pontuação', data: pontuacoes },
       ],
       xaxis: {
         ...this.barChartOptions().xaxis,

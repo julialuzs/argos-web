@@ -54,6 +54,7 @@ export class ProjetoForm {
 
   form = new FormGroup({
     nome: new FormControl('', [Validators.required]),
+    guid: new FormControl({value: '', disabled: true}, [Validators.required]),
     descricao: new FormControl('', [Validators.required]),
     urlBase: new FormControl('', [Validators.required, Validators.pattern(/^https?:\/\/.+/i)]),
     rotas: new FormControl('/', [Validators.required]),
@@ -71,6 +72,7 @@ export class ProjetoForm {
       if (projeto) {
         this.form.reset({
           nome: projeto.nome,
+          guid: projeto.guid,
           descricao: projeto.descricao,
           urlBase: projeto.urlBase ?? '',
           rotas: (projeto.rotas?.length ? projeto.rotas : ['/']).join('\n'),

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Plus } from '@primeicons/angular/plus';
 import { EllipsisV } from '@primeicons/angular/ellipsis-v';
 import { Check } from '@primeicons/angular/check';
+import { Copy } from '@primeicons/angular/copy';
 import { ChevronRight } from '@primeicons/angular/chevron-right';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { Projeto } from '@shared/models/projeto';
@@ -19,7 +20,7 @@ import { BadgeModule } from 'primeng/badge';
 import { PrimeiraLetraPipe } from '@shared/pipes/primeira-letra-pipe';
 
 const primeNgModules = [DividerModule, ButtonModule, DataViewModule, BadgeModule, MenuModule];
-const icons = [Plus, EllipsisV, Check, ChevronRight];
+const icons = [Plus, EllipsisV, Check, ChevronRight, Copy];
 
 @Component({
   selector: 'app-projetos',
@@ -71,6 +72,10 @@ export class Projetos implements OnInit {
         }
       }
     });
+  }
+
+  copiarGuid(guid: string) {
+    navigator.clipboard.writeText(guid);
   }
 
   novoProjeto() {

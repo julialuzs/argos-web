@@ -34,6 +34,7 @@ export type Relatorio = {
   tradutorLibrasIdentificado: boolean;
   quantidadeErros: number;
   quantidadeAvisos: number;
+  rotasAuditadas: string[];
 };
 
 export type RelatorioDetalhe = Relatorio & {

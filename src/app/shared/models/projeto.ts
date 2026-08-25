@@ -2,6 +2,7 @@ export type StatusExecucao = 'Idle' | 'Executando' | 'Falhou';
 
 export type Projeto = {
   id: number;
+  guid: string;
   nome: string;
   descricao: string;
   ultimaExecucao: Date;

@@ -1,6 +1,6 @@
 {
-  "baseUrl": "http://localhost:4200",
-  "routes": ["/login", "/cadastro"],
-  "includeW3c": false,
-  "projectId": "6"
+  "baseUrl": "https://www.gov.br/pt-br",
+  "routes": ["/", "/governodigital/pt-br/acessibilidade-e-usuario/acessibilidade-digital", "/orgaos-do-governo"],
+  "includeW3c": true,
+  "projectId": "cc0acfc6-8841-4184-8e24-d6311da00368"
 }

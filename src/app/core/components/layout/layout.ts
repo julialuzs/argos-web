@@ -87,7 +87,7 @@ export class Layout implements OnInit {
         isActive: () => this.router.url.includes('/dashboard'),
       },
       {
-        label: 'Tutorial',
+        label: 'Como configurar o Argos?',
         icon: 'book',
         routerLink: '/tutorial',
         isActive: () => this.router.url.includes('/tutorial'),

@@ -38,6 +38,7 @@
           <th>Erros encontrados</th>
           <th>Avisos encontrados</th>
           <th>Pontuação</th>
+          <th>Rotas auditadas</th>
           <th></th>
         </tr>
       </ng-template>
@@ -58,6 +59,9 @@
           <td>
             <p-tag [value]="analise.pontuacao" [severity]="getSeverity(analise.pontuacao)" />
           </td>
+          <td>
+            <span class="font-medium">{{ analise.rotasAuditadas?.join(', ') }}</span>
+          </td>
           <td class="flex justify-end">
             <button
               type="button"
@@ -67,7 +71,7 @@
               (click)="irParaRelatorio(analise.id)"
             >
               <svg data-p-icon="chevron-right"></svg>
-              Acessar
+              Ver detalhes
             </button>
           </td>
         </tr>
