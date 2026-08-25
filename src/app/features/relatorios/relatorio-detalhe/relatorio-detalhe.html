@@ -85,6 +85,7 @@
                   </h3>
                   <p class="text-sm">{{ apontamento.descricao }}</p>
                   <p class="text-sm">Identificado por: {{ apontamento.fonte }}</p>
+                  <p class="text-sm">Critérios eMAG violados: {{ apontamento.criteriosEmag?.join(', ') }}</p>
                 </div>
                 <div class="localizacao col-span-6">
                   @if (apontamento.seletorCss) {

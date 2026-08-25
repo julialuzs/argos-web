@@ -3,13 +3,7 @@
     <h1 class="font-semibold text-4xl">Últimas análises executadas</h1>
 
     <div class="flex gap-2">
-      <button
-        type="button"
-        pButton
-        [loading]="executando()"
-        [disabled]="executando()"
-        (click)="executarAnalise()"
-      >
+      <button type="button" pButton [disabled]="executando()" (click)="executarAnalise()">
         <svg data-p-icon="bolt"></svg>
         Executar análise
       </button>

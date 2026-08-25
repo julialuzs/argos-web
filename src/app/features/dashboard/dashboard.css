@@ -1,1 +1,7 @@
- 
+#chart-line,
+#chart-bar,
+#chart-pie,
+#chart-routes,
+#chart-emag {
+  min-height: 280px;
+}

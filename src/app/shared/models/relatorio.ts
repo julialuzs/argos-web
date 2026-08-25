@@ -13,7 +13,7 @@ export type Apontamento = {
   referenciasWcag: string[];
   elementoHtml?: string;
   seletorCss?: string;
-  quantidadeElementos?: number;
+  quantidadeElementos?: number; 
 };
 
 export type ResultadoAuditoria = {
