@@ -1,67 +1,204 @@
-<div class="mt-12 mx-8">
-  <section class="flex justify-between pb-3">
-    <h1 class="font-semibold text-4xl">Como configurar o Argos?</h1>
+<div class="mt-6 mx-4 sm:mt-12 sm:mx-8 pb-4">
+  <section class="pb-3">
+    <h1 class="font-semibold text-2xl sm:text-4xl">Como usar o Argos?</h1>
+    <p class="mt-1 mb-0 text-sm sm:text-base text-surface-500 dark:text-surface-400">
+      Escolha o modo de avaliação. Todos os caminhos geram relatório no mesmo projeto.
+    </p>
   </section>
 
   <p-divider />
 
-  <div class="grid grid-cols-2 gap-4 ">
-    <p-card>
-      <section class="space-y-2">
-        <h2 class="font-semibold text-xl">1. Configuração do projeto</h2>
-        <p>
-          Adicione o arquivo <code>argos.config.ci.json</code> na raiz do projeto em que você deseja
-          rodar a avaliação de acessibilidade.
-        </p>
-        <p>
-          <strong><code>baseUrl</code></strong
-          >: URL base do seu site.
-        </p>
-        <p>
-          <strong><code>routes</code></strong
-          >: Rotas que devem ser avaliadas.
-        </p>
-        <p>
-          <strong><code>projectId</code></strong
-          >: ID do projeto que você deseja avaliar.
-        </p>
-        <span> *É necessário criar um projeto no Argos para obter o ID.</span>
+  <p-card class="rounded-md">
+    <p-tabs value="aplicacao" aria-label="Modos de uso do Argos" class="rounded-md">
+      <p-tablist>
+        <p-tab value="aplicacao"><p-tag value="Recomendado para começar" /> Na aplicação </p-tab>
+        <p-tab value="pipeline"
+          ><p-tag value="Automatizado" severity="info" /> Pipeline CI/CD</p-tab
+        >
+        <p-tab value="cli">Linha de comando</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel value="aplicacao">
+          <div class="space-y-4 pt-4">
+            <p class="mt-0 text-surface-700 dark:text-surface-300">
+              Use o Argos pela interface: cadastre o projeto, execute a análise em Relatórios e
+              acompanhe o resultado no dashboard. Não é necessário arquivo de configuração nem
+              pipeline.
+            </p>
 
-        <app-code-snippet language="json" [code]="argosConfigSnippet" />
-      </section>
-    </p-card>
-    <p-card>
-      <section class="space-y-2">
-        <h2 class="font-semibold text-xl">2. Adicionando na pipeline</h2>
-        <p>Adicione os seguintes steps no arquivo de configuração .yml do seu projeto de CI/CD.</p>
-        <app-code-snippet language="yml" [code]="githubActionsSnippet" />
-      </section>
-    </p-card>
+            <ol class="m-0 list-none space-y-6 p-0">
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">1</span>
+                <div class="min-w-0 flex-1 space-y-2">
+                  <h2 class="m-0 font-semibold text-xl">Crie ou selecione um projeto</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    Informe o nome, a URL base e as rotas que devem ser avaliadas. Esses dados ficam
+                    salvos no Argos e são usados na execução.
+                  </p>
+                  <button type="button" pButton (click)="irParaProjetos()">
+                    Ir para projetos
+                    <svg data-p-icon="chevron-right" class="w-4 h-4"></svg>
+                  </button>
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">2</span>
+                <div class="min-w-0 flex-1 space-y-2">
+                  <h2 class="m-0 font-semibold text-xl">Abra Relatórios</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    Com o projeto selecionado, a aba Relatórios mostra as análises já executadas.
+                  </p>
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">3</span>
+                <div class="min-w-0 flex-1 space-y-2">
+                  <h2 class="m-0 font-semibold text-xl">Clique em "Executar análise"</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    O avaliador usa a URL e as rotas cadastradas no projeto. A execução pode levar
+                    alguns minutos, mas a lista atualizará sozinha quando o relatório ficar pronto.
+                  </p>
+                  <button type="button" pButton (click)="irParaRelatorios()">
+                    Ir para relatórios
+                    <svg data-p-icon="chevron-right" class="w-4 h-4"></svg>
+                  </button>
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">4</span>
+                <div class="min-w-0 flex-1 space-y-2">
+                  <h2 class="m-0 font-semibold text-xl">
+                    Veja o resultado no detalhamento do relatório e no dashboard
+                  </h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    Pontuação, erros, avisos ficam disponíveis no detalhamento do relatório, e a
+                    evolução entre execuções é mostrada no dashboard.
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </p-tabpanel>
+        <p-tabpanel value="pipeline">
+          <div class="space-y-4 pt-4">
+            <p class="mt-0 text-surface-700 dark:text-surface-300">
+              Integre o avaliador à pipeline de CI/CD do repositório. A cada deploy, o Argos gera um
+              relatório e envia para o projeto correspondente na aplicação.
+            </p>
 
-    <p-card class="mb-3">
-      <section class="space-y-2">
-        <h2 class="font-semibold text-xl">3. Commite os arquivos e execute a pipeline CD</h2>
+            <ol class="m-0 list-none space-y-6 p-0">
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">1</span>
+                <div class="min-w-0 flex-1 space-y-2">
+                  <h2 class="m-0 font-semibold text-xl">Crie o projeto no Argos e copie o GUID</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    O <code>projectId</code> da configuração é o GUID público do projeto, não o
+                    identificador numérico interno. Copie-o na lista de projetos ou pelo botão
+                    abaixo.
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    <button type="button" pButton size="small" (click)="copiarGuid()">
+                      <svg data-p-icon="copy" class="w-4 h-4"></svg>
+                      Copiar GUID do projeto selecionado
+                    </button>
+                    <button
+                      type="button"
+                      pButton
+                      size="small"
+                      variant="outlined"
+                      (click)="irParaProjetos()"
+                    >
+                      Ir para projetos
+                    </button>
+                  </div>
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">2</span>
+                <div class="min-w-0 flex-1 space-y-3">
+                  <h2 class="m-0 font-semibold text-xl">Adicione o arquivo de configuração</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    Na raiz do repositório, crie <code>argos.config.ci.json</code> com a URL base,
+                    as rotas e o GUID do projeto.
+                  </p>
+                  <p class="m-0 text-sm text-surface-500 dark:text-surface-400">
+                    <strong><code>baseUrl</code></strong> - URL base do site.
+                    <strong><code>routes</code></strong> - rotas avaliadas.
+                    <strong><code>projectId</code></strong> - GUID copiado no passo anterior.
+                  </p>
+                  <app-code-snippet language="json" [code]="argosConfigSnippet" />
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">3</span>
+                <div class="min-w-0 flex-1 space-y-3">
+                  <h2 class="m-0 font-semibold text-xl">Inclua os steps na pipeline</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    Adicione os passos abaixo ao arquivo <code>.yml</code> do CI/CD (exemplo para
+                    GitHub Actions).
+                  </p>
+                  <app-code-snippet language="yml" [code]="githubActionsSnippet" />
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">4</span>
+                <div class="min-w-0 flex-1 space-y-2">
+                  <h2 class="m-0 font-semibold text-xl">Faça commit e execute a pipeline</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    Depois da avaliação, o relatório aparece em Relatórios e no Dashboard do
+                    projeto.
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </div>
+        </p-tabpanel>
+        <p-tabpanel value="cli">
+          <div class="space-y-4 pt-4">
+            <p class="mt-0 text-surface-700 dark:text-surface-300">
+              Rode o avaliador no terminal, sem pipeline. Para o resultado também aparecer no Argos,
+              o projeto precisa existir na aplicação e o GUID deve estar em <code>projectId</code>.
+            </p>
 
-        <p>
-          Ao final da avaliação, o Argos irá gerar um relatório de acessibilidade e disponibilizá-lo
-          em seu dashboard.
-        </p>
-      </section>
-    </p-card>
-
-    <p-card class="mb-3">
-      <section class="flex gap-2 flex-col space-y-2">
-        <h2 class="font-semibold text-xl">4. (opcional) Rodar via CLI</h2>
-        <p>
-          Caso deseje rodar a avaliação de forma local, você pode instalar o pacote na raiz do
-          projeto e executar o comando <code>npm run audit</code>.
-        </p>
-        <app-code-snippet language="bash" [code]="'npm install argos-avaliador-acessibilidade'" />
-        <app-code-snippet
-          language="bash"
-          [code]="'npm run audit -- https://exemplo-url-base.com --config ../argos-web/argos.config.ci.json --out reports/report-argos-web.json'"
-        />
-      </section>
-    </p-card>
-  </div>
+            <ol class="m-0 list-none space-y-6 p-0">
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">1</span>
+                <div class="min-w-0 flex-1 space-y-3">
+                  <h2 class="m-0 font-semibold text-xl">Instale o pacote</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    Na raiz do repositório do site que você quer avaliar:
+                  </p>
+                  <app-code-snippet language="bash" [code]="npmInstallSnippet" />
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">2</span>
+                <div class="min-w-0 flex-1 space-y-3">
+                  <h2 class="m-0 font-semibold text-xl">
+                    (Opcional) Reutilize o arquivo de configuração
+                  </h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    O mesmo <code>argos.config.ci.json</code> da pipeline pode ser usado localmente,
+                    com URL, rotas e GUID.
+                  </p>
+                  <app-code-snippet language="json" [code]="argosConfigSnippet" />
+                </div>
+              </li>
+              <li class="flex gap-3 sm:gap-4">
+                <span class="passo">3</span>
+                <div class="min-w-0 flex-1 space-y-3">
+                  <h2 class="m-0 font-semibold text-xl">Execute a auditoria</h2>
+                  <p class="m-0 text-surface-700 dark:text-surface-300">
+                    O comando abaixo lê a configuração e grava o JSON do relatório na pasta
+                    <code>reports</code>.
+                  </p>
+                  <app-code-snippet language="bash" [code]="npmAuditSnippet" />
+                </div>
+              </li>
+            </ol>
+          </div>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </p-card>
 </div>

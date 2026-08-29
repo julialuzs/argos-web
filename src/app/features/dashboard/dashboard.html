@@ -19,37 +19,53 @@
   <p class="sr-only" aria-live="polite">{{ resumoAcessivel() }}</p>
 
   @if (!projeto()) {
-    <section class="flex flex-col items-center justify-center gap-3 py-16 text-center">
-      <div
-        class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center"
-      >
-        <svg data-p-icon="chart-bar" [size]="28" class="text-surface-400 dark:text-surface-500"></svg>
-      </div>
-      <p class="m-0 font-semibold text-surface-900 dark:text-surface-0">Nenhum projeto selecionado</p>
-      <p class="mt-1 mb-0 text-sm text-surface-500 dark:text-surface-400">
-        Selecione um projeto para visualizar o dashboard.
-      </p>
-      <button type="button" pButton size="small" (click)="irParaProjetos()">
-        Ir para projetos
-      </button>
-    </section>
+    <p-card class="rounded-md">
+      <section class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+        <div
+          class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center"
+        >
+          <svg
+            data-p-icon="chart-bar"
+            [size]="28"
+            class="text-surface-400 dark:text-surface-500"
+          ></svg>
+        </div>
+        <p class="m-0 font-semibold text-surface-900 dark:text-surface-0">
+          Nenhum projeto selecionado
+        </p>
+        <p class="mt-1 mb-0 text-sm text-surface-500 dark:text-surface-400">
+          Selecione um projeto para visualizar o dashboard.
+        </p>
+        <button type="button" pButton size="small" (click)="irParaProjetos()">
+          Ir para projetos
+        </button>
+      </section>
+    </p-card>
   } @else if (loading() && !temSeries()) {
     <p class="py-16 text-center text-surface-500 dark:text-surface-400">Carregando dashboard...</p>
   } @else if (!loading() && !temSeries()) {
-    <section class="flex flex-col items-center justify-center gap-3 py-16 text-center">
-      <div
-        class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center"
-      >
-        <svg data-p-icon="chart-bar" [size]="28" class="text-surface-400 dark:text-surface-500"></svg>
-      </div>
-      <p class="m-0 font-semibold text-surface-900 dark:text-surface-0">Nenhum relatório encontrado</p>
-      <p class="mt-1 text-sm text-surface-500 dark:text-surface-400">
-        Execute o avaliador Argos para gerar dados neste dashboard.
-      </p>
-      <button type="button" pButton size="small" (click)="irParaRelatorios()">
-        Ir para relatórios
-      </button>
-    </section>
+    <p-card class="rounded-md">
+      <section class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+        <div
+          class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center"
+        >
+          <svg
+            data-p-icon="chart-bar"
+            [size]="28"
+            class="text-surface-400 dark:text-surface-500"
+          ></svg>
+        </div>
+        <p class="m-0 font-semibold text-surface-900 dark:text-surface-0">
+          Nenhum relatório encontrado
+        </p>
+        <p class="mt-1 text-sm text-surface-500 dark:text-surface-400">
+          Execute o avaliador Argos para gerar dados neste dashboard.
+        </p>
+        <button type="button" pButton size="small" (click)="irParaRelatorios()">
+          Ir para relatórios
+        </button>
+      </section>
+    </p-card>
   } @else if (temSeries()) {
     <div class="flex flex-col gap-10">
       <section aria-labelledby="titulo-ultima-execucao">

@@ -117,7 +117,7 @@ export class Layout implements OnInit {
         isActive: () => this.router.url.includes('/dashboard'),
       },
       {
-        label: 'Como configurar o Argos?',
+        label: 'Tutorial',
         icon: 'book',
         routerLink: '/tutorial',
         disabled: false,
@@ -164,9 +164,7 @@ export class Layout implements OnInit {
 
   rotuloSeletorProjeto(): string {
     const projeto = this.projetoSelecionado();
-    return projeto
-      ? `Projeto atual: ${projeto.nome}. Clique para trocar.`
-      : 'Selecione um projeto';
+    return projeto ? `Projeto atual: ${projeto.nome}. Clique para trocar.` : 'Selecione um projeto';
   }
 
   onNavClick(event: Event, item: HeaderNavItem) {

@@ -17,8 +17,9 @@ import { ChevronRight } from '@primeicons/angular/chevron-right';
 import { Relatorio } from '@shared/models/relatorio';
 import { ProjetoService } from '@features/projetos/projeto.service';
 import { forkJoin, interval, Subscription } from 'rxjs';
+import { CardModule } from 'primeng/card';
 
-const primeNgModules = [TableModule, DividerModule, TagModule, ButtonModule, MessageModule];
+const primeNgModules = [TableModule, DividerModule, TagModule, ButtonModule, MessageModule, CardModule];
 const icons = [Refresh, Receipt, ChevronRight, Bolt];
 
 @Component({
