@@ -3,11 +3,23 @@
     <h1 class="font-semibold text-4xl">Últimas análises executadas</h1>
 
     <div class="flex gap-2">
-      <button type="button" pButton [disabled]="executando()" (click)="executarAnalise()">
+      <button
+        type="button"
+        pButton
+        [disabled]="!projeto() || executando()"
+        (click)="executarAnalise()"
+      >
         <svg data-p-icon="bolt"></svg>
         Executar análise
       </button>
-      <button type="button" variant="outlined" rounded pButton (click)="getRelatorios()">
+      <button
+        type="button"
+        variant="outlined"
+        rounded
+        pButton
+        [disabled]="!projeto()"
+        (click)="getRelatorios()"
+      >
         <svg data-p-icon="refresh"></svg>
         Atualizar
       </button>
@@ -16,7 +28,23 @@
 
   <p-divider />
 
-  <section>
+  @if (!projeto()) {
+    <section class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+      <div
+        class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center"
+      >
+        <svg data-p-icon="receipt" [size]="28" class="text-surface-400 dark:text-surface-500"></svg>
+      </div>
+      <p class="m-0 font-semibold text-surface-900 dark:text-surface-0">Nenhum projeto selecionado</p>
+      <p class="mt-1 mb-0 text-sm text-surface-500 dark:text-surface-400">
+        Selecione um projeto para visualizar os relatórios.
+      </p>
+      <button type="button" pButton size="small" (click)="irParaProjetos()">
+        Ir para projetos
+      </button>
+    </section>
+  } @else {
+    <section>
     <p-table
       [value]="relatorios()"
       [loading]="loading()"
@@ -114,5 +142,6 @@
         </tr>
       </ng-template>
     </p-table>
-  </section>
+    </section>
+  }
 </div>

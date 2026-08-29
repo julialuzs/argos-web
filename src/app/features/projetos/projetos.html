@@ -1,91 +1,167 @@
-<div class="mt-12 mx-8">
-  <section class="flex justify-between pb-3">
-    <h1 class="font-semibold text-4xl">Projetos</h1>
-    <button pButton (click)="novoProjeto()"><svg data-p-icon="plus"></svg> Novo projeto</button>
+<div class="mt-6 mx-4 sm:mt-12 sm:mx-8">
+  <section class="flex flex-col gap-3 pb-3 sm:flex-row sm:items-start sm:justify-between">
+    <div class="min-w-0">
+      <h1 class="font-semibold text-2xl sm:text-4xl">Projetos</h1>
+      <p class="mt-1 mb-0 text-sm sm:text-base text-surface-500 dark:text-surface-400">
+        Selecione um projeto para ver os relatórios e o dashboard de acessibilidade.
+      </p>
+    </div>
+    <button pButton class="self-start whitespace-nowrap" (click)="novoProjeto()">
+      <svg data-p-icon="plus"></svg> Novo projeto
+    </button>
   </section>
 
   <p-divider />
 
   <section>
-    <p-dataview #dv [value]="projetos()" [rows]="5" [paginator]="true">
-      <ng-template #list let-items>
-        <div class="grid grid-cols-12 gap-2 grid-nogutter">
-          @for (item of items; track item.id; let first = $first) {
-            <div
-              class="col-span-12 flex flex-col sm:flex-row justify-between sm:items-center rounded-sm p-5 gap-6"
-              (class)="({ 'border-t border-surface-200 dark:border-surface-700': !first })"
-            >
-              <div class="flex items-center gap-4">
-                <div
-                  class="flex items-center min-w-20 max-w-40 min-h-20 max-h-40 rounded-lg bg-linear-to-br from-violet-500 to-indigo-600 text-white text-lg font-bold justify-center"
-                >
-                  {{ item.nome | primeiraLetra }}
-                </div>
-                <div class="flex flex-row md:flex-col justify-between items-start gap-1">
-                  <h3 class="font-semibold text-2xl text-surface-900 dark:text-surface-0">
-                    {{ item.nome }}
-                  </h3>
-                  <div class="text-surface-500 dark:text-surface-0">
-                    Última execução:
-                    @if (item.ultimaExecucao) {
-                      {{ item.ultimaExecucao | date: 'dd/MM/yyyy HH:mm' }}
-                    } @else {
-                      <span class="text-surface-500 dark:text-surface-0">-</span>
-                    }
-
-                    <button pButton size="small" iconOnly severity="secondary" (click)="copiarGuid(item.guid)">
-                      <svg data-p-icon="copy"></svg>
-                    </button>
-                    <span class="text-surface-500 dark:text-surface-0 text-sm">{{ item.guid }}</span>
-                  </div>
-
-                  <div class="text-surface-900 dark:text-surface-0">
-                    {{ item.descricao }}
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex md:flex-row gap-2">
-                @if (estaSelecionado(item)) {
-                  <button
-                    type="button"
-                    pButton
-                    class="flex-auto md:flex-initial whitespace-nowrap"
-                    (click)="selecionarProjeto(item)"
-                  >
-                    <svg data-p-icon="check" class="w-4 h-4"></svg>
-                    Selecionado
-                  </button>
-                } @else {
-                  <button
-                    type="button"
-                    pButton
-                    variant="outlined"
-                    class="flex-auto md:flex-initial whitespace-nowrap"
-                    (click)="selecionarProjeto(item)"
-                    [disabled]="estaSelecionado(item)"
-                  >
-                    Selecionar
-                    <svg data-p-icon="chevron-right" class="w-4 h-4"></svg>
-                  </button>
-                }
-
-                <button
-                  pButton
-                  iconOnly
-                  rounded
-                  variant="text"
-                  aria-label="Menu"
-                  (click)="abrirMenu($event, item)"
-                >
-                  <svg data-p-icon="ellipsis-v"></svg>
-                </button>
-              </div>
-            </div>
-          }
+    @if (loading()) {
+      <p class="py-16 text-center text-surface-500 dark:text-surface-400">Carregando projetos...</p>
+    } @else if (projetos().length === 0) {
+      <div class="flex flex-col items-center justify-center gap-3 py-16 text-center">
+        <div
+          class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center"
+        >
+          <svg data-p-icon="plus" [size]="28" class="text-surface-400 dark:text-surface-500"></svg>
         </div>
-      </ng-template>
-    </p-dataview>
+        <p class="m-0 font-semibold text-surface-900 dark:text-surface-0">
+          Nenhum projeto cadastrado
+        </p>
+        <p class="mt-1 mb-0 text-sm text-surface-500 dark:text-surface-400">
+          Crie um projeto para começar a avaliar a acessibilidade.
+        </p>
+        <button type="button" pButton size="small" (click)="novoProjeto()">
+          <svg data-p-icon="plus"></svg>
+          Novo projeto
+        </button>
+      </div>
+    } @else {
+      <p-dataview #dv [value]="projetos()" [rows]="5" [paginator]="true">
+        <ng-template #list let-items>
+          <div class="grid grid-cols-12 grid-nogutter">
+            @for (item of items; track item.id; let first = $first) {
+              <div
+                class="col-span-12 flex flex-col lg:flex-row lg:items-center lg:justify-between rounded-lg p-4 sm:p-5 gap-4"
+                [class.border-t]="!first"
+                [class.border-surface-200]="!first"
+                [class.dark:border-surface-700]="!first" 
+                [class.border-l-8]="estaSelecionado(item)"
+                [class.dark:border-l-violet-500]="estaSelecionado(item)"
+                [class.border-l-violet-500]="estaSelecionado(item)"
+              >
+                <div class="flex items-start gap-3 sm:gap-4 min-w-0 w-full">
+                  <div
+                    class="flex size-12 sm:size-20 shrink-0 items-center justify-center rounded-lg bg-linear-to-br from-violet-500 to-indigo-600 text-white text-lg font-bold"
+                  >
+                    {{ item.nome | primeiraLetra }}
+                  </div>
+                  <div class="flex min-w-0 flex-1 flex-col gap-1 w-full">
+                    <h3
+                      class="font-semibold text-lg sm:text-2xl wrap-break-word text-surface-900 dark:text-surface-0"
+                    >
+                      {{ item.nome }}
+                    </h3>
+
+                    <div
+                      class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-surface-600 dark:text-surface-300"
+                    >
+                      <span>
+                        Última execução:
+                        @if (item.ultimaExecucao) {
+                          {{ item.ultimaExecucao | date: 'dd/MM/yyyy HH:mm' }}
+                        } @else {
+                          -
+                        }
+                      </span>
+                      <span class="inline-flex min-w-0 max-w-full items-center gap-1">
+                        <button
+                          pButton
+                          size="small"
+                          iconOnly
+                          severity="secondary"
+                          [attr.aria-label]="'Copiar identificador de ' + item.nome"
+                          (click)="copiarGuid(item.guid)"
+                        >
+                          <svg data-p-icon="copy"></svg>
+                        </button>
+                        <span class="hidden truncate text-xs sm:inline sm:text-sm">{{
+                          item.guid
+                        }}</span>
+                      </span>
+                    </div>
+
+                    <div
+                      class="text-sm sm:text-base wrap-break-word text-surface-900 dark:text-surface-0"
+                    >
+                      {{ item.descricao }}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 w-full lg:w-auto lg:shrink-0"
+                >
+                  @if (estaSelecionado(item)) {
+                    <button
+                      type="button"
+                      pButton
+                      class="w-full sm:w-auto whitespace-nowrap"
+                      (click)="selecionarProjeto(item)"
+                    >
+                      <svg data-p-icon="check" class="w-4 h-4"></svg>
+                      Selecionado
+                    </button>
+                    <!-- <button
+                      type="button"
+                      pButton
+                      variant="outlined"
+                      size="small"
+                      class="w-full sm:w-auto whitespace-nowrap"
+                      (click)="irParaRelatorios(item)"
+                    >
+                      <svg data-p-icon="receipt" class="w-4 h-4"></svg>
+                      Ver relatórios
+                    </button>
+                    <button
+                      type="button"
+                      pButton
+                      variant="outlined"
+                      size="small"
+                      class="w-full sm:w-auto whitespace-nowrap"
+                      (click)="irParaDashboard(item)"
+                    >
+                      <svg data-p-icon="chart-bar" class="w-4 h-4"></svg>
+                      Ver dashboard
+                    </button> -->
+                  } @else {
+                    <button
+                      type="button"
+                      pButton
+                      variant="outlined"
+                      class="w-full sm:w-auto whitespace-nowrap"
+                      (click)="selecionarProjeto(item)"
+                    >
+                      Selecionar
+                      <svg data-p-icon="chevron-right" class="w-4 h-4"></svg>
+                    </button>
+                  }
+                  <button
+                    pButton
+                    iconOnly
+                    rounded
+                    variant="text"
+                    aria-label="Menu"
+                    class="flex justify-end"
+                    (click)="abrirMenu($event, item)"
+                  >
+                    <svg data-p-icon="ellipsis-v"></svg>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        </ng-template>
+      </p-dataview>
+    }
   </section>
 </div>
 

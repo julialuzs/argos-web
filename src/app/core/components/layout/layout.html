@@ -1,5 +1,5 @@
 <header>
-  <p-menubar [model]="items()">
+  <p-menubar [model]="items()" breakpoint="640px">
     <ng-template #start>
       <div
         class="flex size-6 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-violet-500 to-indigo-600 text-white text-xs font-bold leading-none"
@@ -10,9 +10,18 @@
     <ng-template #item let-item let-root="root">
       <a
         pRipple
-        class="flex items-center px-3 py-2 cursor-pointer gap-2"
-        [class.text-primary]="item.isActive()"
-        [routerLink]="item.routerLink"
+        class="flex items-center px-3 py-2 gap-2"
+        [class.cursor-pointer]="!item.disabled"
+        [class.cursor-not-allowed]="item.disabled"
+        [class.opacity-45]="item.disabled"
+        [class.text-muted-color]="item.disabled"
+        [class.text-primary]="!item.disabled && item.isActive()"
+        [routerLink]="item.disabled ? null : item.routerLink"
+        [attr.aria-disabled]="item.disabled ? true : null"
+        [pTooltip]="item.disabledTooltip"
+        [tooltipDisabled]="!item.disabled"
+        tooltipPosition="bottom"
+        (click)="onNavClick($event, item)"
       >
         <svg [pIcon]="item.icon"></svg>
         <span class="text-sm">{{ item.label }}</span>
@@ -32,13 +41,30 @@
     </ng-template>
     <ng-template #end>
       <div class="flex items-center gap-2">
-        @if (projetoSelecionadoService.projetoSelecionado() === null) {
-          <button pButton rounded variant="outlined" (click)="selecionarProjeto()">
-            <svg data-p-icon="plus"></svg> Selecionar projeto
-          </button>
-        } @else {
-          <span class="text-sm">{{ projetoSelecionadoService.projetoSelecionado()?.nome }}</span>
-        }
+        <button
+          type="button"
+          class="flex max-w-56 items-center gap-2 rounded-lg border border-surface px-2.5 py-1.5 text-left hover:bg-emphasis transition-colors"
+          [attr.aria-label]="rotuloSeletorProjeto()"
+          aria-haspopup="menu"
+          (click)="abrirMenuProjeto($event)"
+        >
+          @if (projetoSelecionado(); as projeto) {
+            <div
+              class="flex size-6 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-violet-500 to-indigo-600 text-white text-[11px] font-bold leading-none"
+            >
+              {{ projeto.nome | primeiraLetra }}
+            </div>
+            <span class="flex min-w-0 flex-col items-start leading-tight">
+              <span class="text-[10px] uppercase tracking-wide text-muted-color">Projeto</span>
+              <span class="text-sm font-medium truncate max-w-[9rem]">{{ projeto.nome }}</span>
+            </span>
+            <svg [pIcon]="'chevron-down'" [size]="12" class="shrink-0 text-muted-color"></svg>
+          } @else {
+            <svg [pIcon]="'plus'" [size]="14" class="shrink-0"></svg>
+            <span class="text-sm whitespace-nowrap">Selecione um projeto</span>
+          }
+        </button>
+        <p-menu #menuProjeto [model]="itensMenuProjeto()" [popup]="true" appendTo="body" />
         <p-divider layout="vertical" />
         <p-toggleswitch
           inputId="alternar-tema"
@@ -61,7 +87,6 @@
           (click)="logout()"
         >
           <svg data-p-icon="sign-out"></svg>
-          <!-- <svg data-p-icon="cog"></svg> -->
         </button>
       </div>
     </ng-template>

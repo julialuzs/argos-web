@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, signal, untracked } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -27,7 +27,7 @@ const icons = [Refresh, Receipt, ChevronRight, Bolt];
   templateUrl: './relatorios.html',
   styleUrl: './relatorios.css',
 })
-export class Relatorios implements OnInit, OnDestroy {
+export class Relatorios implements OnDestroy {
   private projetoSelecionadoService = inject(ProjetoSelecionadoService);
   private relatoriosService = inject(RelatoriosService);
   private projetoService = inject(ProjetoService);
@@ -41,25 +41,11 @@ export class Relatorios implements OnInit, OnDestroy {
 
   private pollSub?: Subscription;
   private pollTimeout?: ReturnType<typeof setTimeout>;
-
-  ngOnInit() {
-    const projeto = this.projeto();
-    if (projeto === null) {
-      return;
-    }
-
-    this.projetoService.getProjetoPorId(projeto.id).subscribe({
-      next: (atualizado) => {
-        this.projetoSelecionadoService.selecionar(atualizado);
-        this.getRelatorios();
-        if (atualizado.statusExecucao === 'Executando') {
-          this.executando.set(true);
-          this.iniciarPolling(Date.now(), true);
-        }
-      },
-      error: () => this.getRelatorios(),
-    });
-  }
+  private readonly projetoId = computed(() => this.projeto()?.id ?? null);
+  private readonly sincronizarProjeto = effect(() => {
+    const projetoId = this.projetoId();
+    untracked(() => this.aoAlterarProjeto(projetoId));
+  });
 
   ngOnDestroy() {
     this.pararPolling();
@@ -141,6 +127,10 @@ export class Relatorios implements OnInit, OnDestroy {
     this.router.navigate([this.projeto()!.id, 'relatorios', relatorioId]);
   }
 
+  irParaProjetos() {
+    this.router.navigate(['/projetos']);
+  }
+
   getSeverity(pontuacao: number) {
     if (pontuacao >= 90) {
       return 'success';
@@ -150,6 +140,29 @@ export class Relatorios implements OnInit, OnDestroy {
     }
 
     return 'danger';
+  }
+
+  private aoAlterarProjeto(projetoId: number | null) {
+    this.pararPolling();
+    this.executando.set(false);
+
+    if (projetoId === null) {
+      this.relatorios.set([]);
+      this.loading.set(false);
+      return;
+    }
+
+    this.projetoService.getProjetoPorId(projetoId).subscribe({
+      next: (atualizado) => {
+        this.projetoSelecionadoService.selecionar(atualizado);
+        this.getRelatorios();
+        if (atualizado.statusExecucao === 'Executando') {
+          this.executando.set(true);
+          this.iniciarPolling(Date.now(), true);
+        }
+      },
+      error: () => this.getRelatorios(),
+    });
   }
 
   private iniciarPolling(startedAt: number, retomar: boolean) {

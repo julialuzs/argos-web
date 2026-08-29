@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -37,7 +37,7 @@ import {
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard implements OnInit {
+export class Dashboard {
   private dashboardService = inject(DashboardService);
   private temaService = inject(TemaService);
   private projetoSelecionadoService = inject(ProjetoSelecionadoService);
@@ -47,6 +47,17 @@ export class Dashboard implements OnInit {
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
   dashboard = signal<DashboardDados | null>(null);
   loading = signal(false);
+  private readonly projetoId = computed(() => this.projeto()?.id ?? null);
+  private readonly sincronizarProjeto = effect(() => {
+    const projetoId = this.projetoId();
+    untracked(() => {
+      if (projetoId === null) {
+        this.dashboard.set(null);
+        return;
+      }
+      this.getDadosDashboard();
+    });
+  });
 
   lineChartOptions = signal<Partial<ChartOptions>>(criarOpcoesPontuacao([]));
   barChartOptions = signal<Partial<ChartOptions>>(criarOpcoesErrosAvisos([]));
@@ -64,12 +75,6 @@ export class Dashboard implements OnInit {
   temEmag = computed(() => (this.dashboard()?.criteriosEmag.length ?? 0) > 0);
   quantidadeExecucoes = computed(() => this.dashboard()?.series.length ?? 0);
   resumoAcessivel = computed(() => this.montarResumoAcessivel(this.resumo(), this.temSeries()));
-
-  ngOnInit() {
-    if (this.projeto() !== null) {
-      this.getDadosDashboard();
-    }
-  }
 
   getDadosDashboard() {
     const projeto = this.projeto();
@@ -101,6 +106,10 @@ export class Dashboard implements OnInit {
       return;
     }
     this.router.navigate([projeto.id, 'relatorios']);
+  }
+
+  irParaProjetos() {
+    this.router.navigate(['/projetos']);
   }
 
   getColor(pontuacao: number) {

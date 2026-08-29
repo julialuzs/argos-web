@@ -5,10 +5,12 @@ import { EllipsisV } from '@primeicons/angular/ellipsis-v';
 import { Check } from '@primeicons/angular/check';
 import { Copy } from '@primeicons/angular/copy';
 import { ChevronRight } from '@primeicons/angular/chevron-right';
+import { Receipt } from '@primeicons/angular/receipt';
+import { ChartBar } from '@primeicons/angular/chart-bar';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { Projeto } from '@shared/models/projeto';
 import { UsuarioService } from '@shared/services/usuario.service';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
 import { Menu, MenuModule } from 'primeng/menu';
@@ -20,7 +22,7 @@ import { BadgeModule } from 'primeng/badge';
 import { PrimeiraLetraPipe } from '@shared/pipes/primeira-letra-pipe';
 
 const primeNgModules = [DividerModule, ButtonModule, DataViewModule, BadgeModule, MenuModule];
-const icons = [Plus, EllipsisV, Check, ChevronRight, Copy];
+const icons = [Plus, EllipsisV, Check, ChevronRight, Copy, Receipt, ChartBar];
 
 @Component({
   selector: 'app-projetos',
@@ -29,13 +31,13 @@ const icons = [Plus, EllipsisV, Check, ChevronRight, Copy];
   styleUrl: './projetos.css',
 })
 export class Projetos implements OnInit {
-  // todo: add breadcrumbs
-
   usuarioService = inject(UsuarioService);
   projetoService = inject(ProjetoService);
   projetoSelecionadoService = inject(ProjetoSelecionadoService);
+  messageService = inject(MessageService);
   projetoFormVisivel = signal(false);
   projetoEmEdicao = signal<Projeto | null>(null);
+  loading = signal(true);
 
   projetos = signal<Projeto[]>([]);
 
@@ -62,15 +64,20 @@ export class Projetos implements OnInit {
   }
 
   getProjetos() {
-    this.projetoService.listarProjetosPorUsuarioLogado().subscribe((projetos) => {
-      this.projetos.set(projetos);
-      const selecionado = this.projetoSelecionadoService.projetoSelecionado();
-      if (selecionado) {
-        const atualizado = projetos.find((projeto) => projeto.id === selecionado.id);
-        if (atualizado) {
-          this.projetoSelecionadoService.selecionar(atualizado);
+    this.loading.set(true);
+    this.projetoService.listarProjetosPorUsuarioLogado().subscribe({
+      next: (projetos) => {
+        this.projetos.set(projetos);
+        this.loading.set(false);
+        const selecionado = this.projetoSelecionadoService.projetoSelecionado();
+        if (selecionado) {
+          const atualizado = projetos.find((projeto) => projeto.id === selecionado.id);
+          if (atualizado) {
+            this.projetoSelecionadoService.selecionar(atualizado);
+          }
         }
-      }
+      },
+      error: () => this.loading.set(false),
     });
   }
 
@@ -84,7 +91,25 @@ export class Projetos implements OnInit {
   }
 
   selecionarProjeto(projeto: Projeto) {
+    const jaSelecionado = this.estaSelecionado(projeto);
     this.projetoSelecionadoService.selecionar(projeto);
+    if (!jaSelecionado) {
+      this.messageService.add({
+        severity: 'success',
+        summary: `${projeto.nome} selecionado`,
+        detail: 'Use Relatórios ou Dashboard no menu, ou os botões ao lado do projeto.',
+      });
+    }
+  }
+
+  irParaRelatorios(projeto: Projeto) {
+    this.projetoSelecionadoService.selecionar(projeto);
+    this.router.navigate([projeto.id, 'relatorios']);
+  }
+
+  irParaDashboard(projeto: Projeto) {
+    this.projetoSelecionadoService.selecionar(projeto);
+    this.router.navigate([projeto.id, 'dashboard']);
   }
 
   estaSelecionado(projeto: Projeto) {
