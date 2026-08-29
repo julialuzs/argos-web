@@ -71,7 +71,7 @@ export class Projetos implements OnInit {
         this.loading.set(false);
         const selecionado = this.projetoSelecionadoService.projetoSelecionado();
         if (selecionado) {
-          const atualizado = projetos.find((projeto) => projeto.id === selecionado.id);
+          const atualizado = projetos.find((projeto) => projeto.guid === selecionado.guid);
           if (atualizado) {
             this.projetoSelecionadoService.selecionar(atualizado);
           }
@@ -104,16 +104,16 @@ export class Projetos implements OnInit {
 
   irParaRelatorios(projeto: Projeto) {
     this.projetoSelecionadoService.selecionar(projeto);
-    this.router.navigate([projeto.id, 'relatorios']);
+    this.router.navigate([projeto.guid, 'relatorios']);
   }
 
   irParaDashboard(projeto: Projeto) {
     this.projetoSelecionadoService.selecionar(projeto);
-    this.router.navigate([projeto.id, 'dashboard']);
+    this.router.navigate([projeto.guid, 'dashboard']);
   }
 
   estaSelecionado(projeto: Projeto) {
-    return this.projetoSelecionadoService.projetoSelecionado()?.id === projeto.id;
+    return this.projetoSelecionadoService.projetoSelecionado()?.guid === projeto.guid;
   }
 
   abrirMenu(event: Event, projeto: Projeto) {

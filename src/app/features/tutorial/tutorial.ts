@@ -53,7 +53,7 @@ export class Tutorial {
       this.router.navigate(['/projetos']);
       return;
     }
-    this.router.navigate([projeto.id, 'relatorios']);
+    this.router.navigate([projeto.guid, 'relatorios']);
   }
 
   copiarGuid() {

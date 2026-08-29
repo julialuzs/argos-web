@@ -103,7 +103,7 @@ export class Layout implements OnInit {
       {
         label: 'Relatórios',
         icon: 'receipt',
-        routerLink: projeto ? `/${projeto.id}/relatorios` : null,
+        routerLink: projeto ? `/${projeto.guid}/relatorios` : null,
         disabled: semProjeto,
         disabledTooltip: 'Selecione um projeto para continuar',
         isActive: () => this.router.url.includes('/relatorios'),
@@ -111,7 +111,7 @@ export class Layout implements OnInit {
       {
         label: 'Dashboard',
         icon: 'chart-bar',
-        routerLink: projeto ? `/${projeto.id}/dashboard` : null,
+        routerLink: projeto ? `/${projeto.guid}/dashboard` : null,
         disabled: semProjeto,
         disabledTooltip: 'Selecione um projeto para continuar',
         isActive: () => this.router.url.includes('/dashboard'),
@@ -127,10 +127,10 @@ export class Layout implements OnInit {
   });
 
   itensMenuProjeto = computed<MenuItem[]>(() => {
-    const selecionadoId = this.projetoSelecionado()?.id;
+    const selecionadoGuid = this.projetoSelecionado()?.guid;
     const itens: MenuItem[] = this.projetos().map((projeto) => ({
       label: projeto.nome,
-      icon: projeto.id === selecionadoId ? 'pi pi-check' : 'pi pi-folder',
+      icon: projeto.guid === selecionadoGuid ? 'pi pi-check' : 'pi pi-folder',
       command: () => this.selecionarProjetoDoMenu(projeto),
     }));
 
@@ -202,11 +202,11 @@ export class Layout implements OnInit {
     this.projetoSelecionadoService.selecionar(projeto);
     const url = this.router.url;
     if (url.includes('/relatorios')) {
-      this.router.navigate([projeto.id, 'relatorios']);
+      this.router.navigate([projeto.guid, 'relatorios']);
       return;
     }
     if (url.includes('/dashboard')) {
-      this.router.navigate([projeto.id, 'dashboard']);
+      this.router.navigate([projeto.guid, 'dashboard']);
     }
   }
 }

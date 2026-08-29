@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -11,6 +11,7 @@ import { ChartBar } from '@primeicons/angular/chart-bar';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { TemaService } from '@core/services/tema.service';
 import { StatCard } from '@shared/components/stat-card/stat-card';
+import { ProjetoService } from '@features/projetos/projeto.service';
 import { DashboardService } from './dashboard.service';
 import { DashboardDados, DashboardResumo } from './dashboard.model';
 import {
@@ -41,22 +42,17 @@ export class Dashboard {
   private dashboardService = inject(DashboardService);
   private temaService = inject(TemaService);
   private projetoSelecionadoService = inject(ProjetoSelecionadoService);
+  private projetoService = inject(ProjetoService);
   private messageService = inject(MessageService);
   private router = inject(Router);
 
+  projetoGuid = input.required<string>();
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
   dashboard = signal<DashboardDados | null>(null);
   loading = signal(false);
-  private readonly projetoId = computed(() => this.projeto()?.id ?? null);
   private readonly sincronizarProjeto = effect(() => {
-    const projetoId = this.projetoId();
-    untracked(() => {
-      if (projetoId === null) {
-        this.dashboard.set(null);
-        return;
-      }
-      this.getDadosDashboard();
-    });
+    const guid = this.projetoGuid();
+    untracked(() => this.aoAlterarProjeto(guid));
   });
 
   lineChartOptions = signal<Partial<ChartOptions>>(criarOpcoesPontuacao([]));
@@ -77,13 +73,13 @@ export class Dashboard {
   resumoAcessivel = computed(() => this.montarResumoAcessivel(this.resumo(), this.temSeries()));
 
   getDadosDashboard() {
-    const projeto = this.projeto();
-    if (!projeto) {
+    const guid = this.projetoGuid();
+    if (!guid) {
       return;
     }
 
     this.loading.set(true);
-    this.dashboardService.getDashboard(projeto.id).subscribe({
+    this.dashboardService.getDashboard(guid).subscribe({
       next: (dados) => {
         this.dashboard.set(dados);
         this.atualizarGraficos(dados);
@@ -105,7 +101,7 @@ export class Dashboard {
     if (!projeto) {
       return;
     }
-    this.router.navigate([projeto.id, 'relatorios']);
+    this.router.navigate([projeto.guid, 'relatorios']);
   }
 
   irParaProjetos() {
@@ -131,6 +127,21 @@ export class Dashboard {
     }
     const sinal = variacao > 0 ? '+' : '';
     return `Variação em relação à execução anterior: ${sinal}${variacao} ponto(s).`;
+  }
+
+  private aoAlterarProjeto(guidProjeto: string) {
+    if (!guidProjeto) {
+      this.dashboard.set(null);
+      return;
+    }
+
+    if (this.projetoSelecionadoService.projetoSelecionado()?.guid !== guidProjeto) {
+      this.projetoService.getProjetoPorGuid(guidProjeto).subscribe({
+        next: (projeto) => this.projetoSelecionadoService.selecionar(projeto),
+      });
+    }
+
+    this.getDadosDashboard();
   }
 
   private atualizarGraficos(dados: DashboardDados) {

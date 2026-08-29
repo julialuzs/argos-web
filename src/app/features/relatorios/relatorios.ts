@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnDestroy, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, OnDestroy, signal, untracked } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -36,16 +36,16 @@ export class Relatorios implements OnDestroy {
   private router = inject(Router);
 
   relatorios = signal<Relatorio[]>([]);
+  projetoGuid = input.required<string>();
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
   loading = signal(false);
   executando = signal(false);
 
   private pollSub?: Subscription;
   private pollTimeout?: ReturnType<typeof setTimeout>;
-  private readonly projetoId = computed(() => this.projeto()?.id ?? null);
   private readonly sincronizarProjeto = effect(() => {
-    const projetoId = this.projetoId();
-    untracked(() => this.aoAlterarProjeto(projetoId));
+    const guid = this.projetoGuid();
+    untracked(() => this.aoAlterarProjeto(guid));
   });
 
   ngOnDestroy() {
@@ -53,13 +53,13 @@ export class Relatorios implements OnDestroy {
   }
 
   getRelatorios() {
-    const projeto = this.projeto();
-    if (!projeto) {
+    const guid = this.projetoGuid();
+    if (!guid) {
       return;
     }
 
     this.loading.set(true);
-    this.relatoriosService.getRelatoriosPorProjeto(projeto.id).subscribe({
+    this.relatoriosService.getRelatoriosPorProjeto(guid).subscribe({
       next: (relatorios) => {
         this.relatorios.set(relatorios);
         this.loading.set(false);
@@ -92,7 +92,7 @@ export class Relatorios implements OnDestroy {
 
     this.executando.set(true);
     const startedAt = Date.now();
-    this.relatoriosService.executar(projeto.id).subscribe({
+    this.relatoriosService.executar(this.projetoGuid()).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'info',
@@ -125,7 +125,7 @@ export class Relatorios implements OnDestroy {
   }
 
   irParaRelatorio(relatorioId: number) {
-    this.router.navigate([this.projeto()!.id, 'relatorios', relatorioId]);
+    this.router.navigate([this.projetoGuid(), 'relatorios', relatorioId]);
   }
 
   irParaProjetos() {
@@ -143,17 +143,17 @@ export class Relatorios implements OnDestroy {
     return 'danger';
   }
 
-  private aoAlterarProjeto(projetoId: number | null) {
+  private aoAlterarProjeto(guidProjeto: string) {
     this.pararPolling();
     this.executando.set(false);
 
-    if (projetoId === null) {
+    if (!guidProjeto) {
       this.relatorios.set([]);
       this.loading.set(false);
       return;
     }
 
-    this.projetoService.getProjetoPorId(projetoId).subscribe({
+    this.projetoService.getProjetoPorGuid(guidProjeto).subscribe({
       next: (atualizado) => {
         this.projetoSelecionadoService.selecionar(atualizado);
         this.getRelatorios();
@@ -184,14 +184,14 @@ export class Relatorios implements OnDestroy {
   }
 
   private verificarProgresso(startedAt: number, retomar: boolean) {
-    const projeto = this.projeto();
-    if (!projeto) {
+    const guid = this.projetoGuid();
+    if (!guid) {
       return;
     }
 
     forkJoin({
-      projeto: this.projetoService.getProjetoPorId(projeto.id),
-      relatorios: this.relatoriosService.getRelatoriosPorProjeto(projeto.id),
+      projeto: this.projetoService.getProjetoPorGuid(guid),
+      relatorios: this.relatoriosService.getRelatoriosPorProjeto(guid),
     }).subscribe({
       next: ({ projeto: atualizado, relatorios }) => {
         this.projetoSelecionadoService.selecionar(atualizado);

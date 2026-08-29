@@ -25,15 +25,15 @@ export const routes: Routes = [
         component: Tutorial,
       },
       {
-        path: ':projetoId/relatorios',
+        path: ':projetoGuid/relatorios',
         component: Relatorios,
       },
       {
-        path: ':projetoId/relatorios/:relatorioId',
+        path: ':projetoGuid/relatorios/:relatorioId',
         component: RelatorioDetalhe,
       },
       {
-        path: ':projetoId/dashboard',
+        path: ':projetoGuid/dashboard',
         component: Dashboard,
       },
       {
