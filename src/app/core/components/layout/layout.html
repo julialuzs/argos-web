@@ -50,13 +50,13 @@
         >
           @if (projetoSelecionado(); as projeto) {
             <div
-              class="flex size-6 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-violet-500 to-indigo-600 text-white text-[11px] font-bold leading-none"
+              class="flex size-6 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-violet-500 to-indigo-600 text-white text-[0.6875rem] font-bold leading-none"
             >
               {{ projeto.nome | primeiraLetra }}
             </div>
             <span class="flex min-w-0 flex-col items-start leading-tight">
-              <span class="text-[10px] uppercase tracking-wide text-muted-color">Projeto</span>
-              <span class="text-sm font-medium truncate max-w-[9rem]">{{ projeto.nome }}</span>
+              <span class="text-[0.625rem] uppercase tracking-wide text-muted-color">Projeto</span>
+              <span class="text-sm font-medium truncate max-w-36">{{ projeto.nome }}</span>
             </span>
             <svg [pIcon]="'chevron-down'" [size]="12" class="shrink-0 text-muted-color"></svg>
           } @else {
@@ -76,6 +76,47 @@
             <svg [pIcon]="checked ? 'moon' : 'sun'" [size]="10"></svg>
           </ng-template>
         </p-toggleswitch>
+        <button
+          pButton
+          variant="outlined"
+          class="flex size-8 items-center justify-center rounded-md hover:bg-emphasis transition-colors"
+          [attr.aria-label]="rotuloTamanhoFonte()"
+          [attr.aria-expanded]="popoverTamanhoFonteAberto()"
+          aria-haspopup="dialog"
+          aria-controls="painel-tamanho-fonte"
+          pTooltip="Tamanho da letra"
+          tooltipPosition="bottom"
+          (click)="abrirTamanhoFonte($event)"
+        >
+          <span class="text-sm font-semibold leading-none" aria-hidden="true">A+</span>
+        </button>
+        <p-popover
+          #popoverTamanhoFonte
+          (onShow)="popoverTamanhoFonteAberto.set(true)"
+          (onHide)="popoverTamanhoFonteAberto.set(false)"
+        >
+          <div id="painel-tamanho-fonte" class="flex flex-col gap-2 p-1 min-w-52">
+            <p id="titulo-tamanho-fonte" class="m-0 text-sm font-medium">Tamanho da letra</p>
+            <p-selectbutton
+              [options]="tamanhoFonteService.opcoes"
+              optionLabel="rotulo"
+              optionValue="valor"
+              [allowEmpty]="false"
+              [ngModel]="tamanhoFonteService.tamanhoFonte()"
+              (onChange)="definirTamanhoFonte($event.value)"
+              [ariaLabelledBy]="'titulo-tamanho-fonte'"
+            >
+              <ng-template #item let-opcao>
+                <span class="flex flex-col items-center gap-0.5 px-1">
+                  <span class="font-semibold leading-none" [style.font-size]="opcao.preview"
+                    >A</span
+                  >
+                  <span class="text-xs leading-none">{{ opcao.rotulo }}</span>
+                </span>
+              </ng-template>
+            </p-selectbutton>
+          </div>
+        </p-popover>
         <p-divider layout="vertical" />
         <span class="font-medium text-sm pr-2">{{ usuarioLogado()?.nome }}</span>
         <button

@@ -17,9 +17,12 @@ import { DividerModule } from 'primeng/divider';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AuthService } from '@core/services/auth.service';
 import { TemaService } from '@core/services/tema.service';
+import { TamanhoFonte, TamanhoFonteService } from '@core/services/tamanho-fonte.service';
 import { Menu, MenuModule } from 'primeng/menu';
 import { MenuItem, MessageService } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
+import { Popover, PopoverModule } from 'primeng/popover';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { ProjetoService } from '@features/projetos/projeto.service';
 import { Projeto } from '@shared/models/projeto';
 import { PrimeiraLetraPipe } from '@shared/pipes/primeira-letra-pipe';
@@ -37,6 +40,8 @@ const primeNgModules = [
   ToggleSwitchModule,
   MenuModule,
   TooltipModule,
+  PopoverModule,
+  SelectButtonModule,
 ];
 
 const icons = [SignOut];
@@ -77,12 +82,15 @@ export class Layout implements OnInit {
   projetoSelecionadoService = inject(ProjetoSelecionadoService);
   projetoService = inject(ProjetoService);
   temaService = inject(TemaService);
+  tamanhoFonteService = inject(TamanhoFonteService);
   messageService = inject(MessageService);
   router = inject(Router);
 
   readonly projetoSelecionado = this.projetoSelecionadoService.projetoSelecionado;
   menuProjeto = viewChild<Menu>('menuProjeto');
+  popoverTamanhoFonte = viewChild<Popover>('popoverTamanhoFonte');
   projetos = signal<Projeto[]>([]);
+  popoverTamanhoFonteAberto = signal(false);
 
   open = signal(true);
   isMobile = signal(false);
@@ -165,6 +173,21 @@ export class Layout implements OnInit {
   rotuloSeletorProjeto(): string {
     const projeto = this.projetoSelecionado();
     return projeto ? `Projeto atual: ${projeto.nome}. Clique para trocar.` : 'Selecione um projeto';
+  }
+
+  rotuloTamanhoFonte(): string {
+    const atual = this.tamanhoFonteService.opcoes.find(
+      (opcao) => opcao.valor === this.tamanhoFonteService.tamanhoFonte(),
+    );
+    return `Tamanho da letra. Atual: ${atual?.rotulo ?? 'Padrão'}`;
+  }
+
+  abrirTamanhoFonte(event: Event) {
+    this.popoverTamanhoFonte()?.toggle(event);
+  }
+
+  definirTamanhoFonte(valor: TamanhoFonte) {
+    this.tamanhoFonteService.definir(valor);
   }
 
   onNavClick(event: Event, item: HeaderNavItem) {

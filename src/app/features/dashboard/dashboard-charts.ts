@@ -16,7 +16,12 @@ import {
   ApexGrid,
   ApexTheme,
 } from 'ng-apexcharts';
-import { DashboardEmag, DashboardRota, DashboardSeveridade, DashboardSerieExecucao } from './dashboard.model';
+import {
+  DashboardEmag,
+  DashboardRota,
+  DashboardSeveridade,
+  DashboardSerieExecucao,
+} from './dashboard.model';
 
 export type ChartOptions = {
   series?: ApexAxisChartSeries | ApexNonAxisChartSeries;
@@ -49,18 +54,24 @@ const CORES_SEVERIDADE: Record<string, string> = {
   Informação: '#64748B',
 };
 
-function titulo(text: string): ApexTitleSubtitle {
+function converterParaPixels(base: number, escala: number): string {
+  return `${Math.round(base * escala)}px`;
+}
+
+function titulo(text: string, escala: number): ApexTitleSubtitle {
   return {
     text,
     align: 'left',
+    offsetY: 8,
+    margin: Math.round(18 * escala),
     style: {
-      fontSize: '16px',
+      fontSize: converterParaPixels(16, escala),
       fontWeight: 500,
     },
   };
 }
 
-function chartBase(type: ApexChart['type'], height = 350): ApexChart {
+function chartBase(type: ApexChart['type'], height = 350, escala = 1): ApexChart {
   return {
     type,
     height,
@@ -69,20 +80,24 @@ function chartBase(type: ApexChart['type'], height = 350): ApexChart {
     background: 'transparent',
     toolbar: { show: false },
     zoom: { enabled: false },
+    parentHeightOffset: Math.round(12 * escala),
   };
 }
 
-function eixosCategoria(categorias: string[]): { xaxis: ApexXAxis; yaxis: ApexYAxis } {
+function eixosCategoria(
+  categorias: string[],
+  escala: number,
+): { xaxis: ApexXAxis; yaxis: ApexYAxis } {
   return {
     xaxis: {
       categories: categorias,
       labels: {
-        style: { fontSize: '13px' },
+        style: { fontSize: converterParaPixels(13, escala) },
       },
     },
     yaxis: {
       labels: {
-        style: { fontSize: '13px' },
+        style: { fontSize: converterParaPixels(13, escala) },
       },
     },
   };
@@ -91,7 +106,8 @@ function eixosCategoria(categorias: string[]): { xaxis: ApexXAxis; yaxis: ApexYA
 export function formatarCategoria(data: string, todas: string[]): string {
   const atual = new Date(data);
   const dia = atual.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-  const mesmoDia = todas.filter((item) => new Date(item).toDateString() === atual.toDateString()).length > 1;
+  const mesmoDia =
+    todas.filter((item) => new Date(item).toDateString() === atual.toDateString()).length > 1;
 
   if (!mesmoDia) {
     return dia;
@@ -111,14 +127,17 @@ function corPorPontuacao(pontuacao: number): string {
   return '#F43F5E';
 }
 
-export function criarOpcoesPontuacao(series: DashboardSerieExecucao[]): Partial<ChartOptions> {
+export function criarOpcoesPontuacao(
+  series: DashboardSerieExecucao[],
+  escala = 1,
+): Partial<ChartOptions> {
   const datas = series.map((item) => item.dataHoraExecucao);
   const categorias = datas.map((data) => formatarCategoria(data, datas));
 
   return {
-    title: titulo('Pontuação ao longo do tempo'),
+    title: titulo('Pontuação ao longo do tempo', escala),
     series: [{ name: 'Pontuação', data: series.map((item) => item.pontuacao) }],
-    chart: chartBase('area'),
+    chart: chartBase('area', 350, escala),
     colors: ['#8B5CF6'],
     dataLabels: { enabled: false },
     stroke: { curve: 'smooth', width: 2 },
@@ -132,13 +151,13 @@ export function criarOpcoesPontuacao(series: DashboardSerieExecucao[]): Partial<
         stops: [0, 100],
       },
     },
-    ...eixosCategoria(categorias),
+    ...eixosCategoria(categorias, escala),
     yaxis: {
       min: 0,
       max: 100,
       title: {
         text: 'Pontuação',
-        style: { fontSize: '14px', fontWeight: 500 },
+        style: { fontSize: converterParaPixels(14, escala), fontWeight: 500 },
       },
     },
     tooltip: {
@@ -149,17 +168,20 @@ export function criarOpcoesPontuacao(series: DashboardSerieExecucao[]): Partial<
   };
 }
 
-export function criarOpcoesErrosAvisos(series: DashboardSerieExecucao[]): Partial<ChartOptions> {
+export function criarOpcoesErrosAvisos(
+  series: DashboardSerieExecucao[],
+  escala = 1,
+): Partial<ChartOptions> {
   const datas = series.map((item) => item.dataHoraExecucao);
   const categorias = datas.map((data) => formatarCategoria(data, datas));
 
   return {
-    title: titulo('Erros e avisos por execução'),
+    title: titulo('Erros e avisos por execução', escala),
     series: [
       { name: 'Erros', data: series.map((item) => item.quantidadeErros) },
       { name: 'Avisos', data: series.map((item) => item.quantidadeAvisos) },
     ],
-    chart: chartBase('bar'),
+    chart: chartBase('bar', 350, escala),
     colors: ['#F43F5E', '#F59E0B'],
     plotOptions: {
       bar: {
@@ -175,16 +197,16 @@ export function criarOpcoesErrosAvisos(series: DashboardSerieExecucao[]): Partia
       width: 2,
       colors: ['transparent'],
     },
-    ...eixosCategoria(categorias),
+    ...eixosCategoria(categorias, escala),
     yaxis: {
       min: 0,
       title: {
         text: 'Quantidade',
-        style: { fontSize: '14px', fontWeight: 500 },
+        style: { fontSize: converterParaPixels(14, escala), fontWeight: 500 },
       },
     },
     fill: { opacity: 1 },
-    legend: { position: 'bottom' },
+    legend: { position: 'bottom', fontSize: converterParaPixels(13, escala) },
     tooltip: {
       y: {
         formatter: (val: number) => `${val}`,
@@ -193,15 +215,18 @@ export function criarOpcoesErrosAvisos(series: DashboardSerieExecucao[]): Partia
   };
 }
 
-export function criarOpcoesSeveridade(achados: DashboardSeveridade[]): Partial<ChartOptions> {
+export function criarOpcoesSeveridade(
+  achados: DashboardSeveridade[],
+  escala = 1,
+): Partial<ChartOptions> {
   const comValor = achados.filter((item) => item.quantidade > 0);
 
   return {
-    title: titulo('Achados por severidade'),
+    title: titulo('Achados por severidade', escala),
     series: comValor.map((item) => item.quantidade),
     labels: comValor.map((item) => item.severidade),
     colors: comValor.map((item) => CORES_SEVERIDADE[item.severidade] ?? '#94A3B8'),
-    chart: chartBase('donut'),
+    chart: chartBase('donut', 350, escala),
     plotOptions: {
       pie: {
         borderRadius: 8,
@@ -209,9 +234,12 @@ export function criarOpcoesSeveridade(achados: DashboardSeveridade[]): Partial<C
           size: '68%',
           labels: {
             show: true,
+            name: { fontSize: converterParaPixels(14, escala) },
+            value: { fontSize: converterParaPixels(20, escala) },
             total: {
               show: true,
               label: 'Achados',
+              fontSize: converterParaPixels(16, escala),
               formatter: () => `${comValor.reduce((acc, item) => acc + item.quantidade, 0)}`,
             },
           },
@@ -220,7 +248,7 @@ export function criarOpcoesSeveridade(achados: DashboardSeveridade[]): Partial<C
     },
     stroke: { width: 0 },
     dataLabels: { enabled: false },
-    legend: { position: 'bottom' },
+    legend: { position: 'bottom', fontSize: converterParaPixels(13, escala) },
     tooltip: {
       y: {
         formatter: (val: number) => `${val}`,
@@ -229,13 +257,13 @@ export function criarOpcoesSeveridade(achados: DashboardSeveridade[]): Partial<C
   };
 }
 
-export function criarOpcoesRotas(rotas: DashboardRota[]): Partial<ChartOptions> {
+export function criarOpcoesRotas(rotas: DashboardRota[], escala = 1): Partial<ChartOptions> {
   const categorias = rotas.map((item) => item.rota);
 
   return {
-    title: titulo('Pontuação por rota'),
+    title: titulo('Pontuação por rota', escala),
     series: [{ name: 'Pontuação', data: rotas.map((item) => item.pontuacao) }],
-    chart: { ...chartBase('bar'), height: Math.max(280, rotas.length * 56) },
+    chart: { ...chartBase('bar', Math.max(280, rotas.length * Math.round(56 * escala)), escala) },
     colors: rotas.map((item) => corPorPontuacao(item.pontuacao)),
     plotOptions: {
       bar: {
@@ -249,14 +277,15 @@ export function criarOpcoesRotas(rotas: DashboardRota[]): Partial<ChartOptions> 
     dataLabels: {
       enabled: true,
       formatter: (val: number) => `${val}`,
+      style: { fontSize: converterParaPixels(12, escala) },
     },
     legend: { show: false },
-    ...eixosCategoria(categorias),
+    ...eixosCategoria(categorias, escala),
     xaxis: {
       categories: categorias,
       max: 100,
       labels: {
-        style: { fontSize: '13px' },
+        style: { fontSize: converterParaPixels(13, escala) },
       },
     },
     tooltip: {
@@ -273,13 +302,15 @@ export function criarOpcoesRotas(rotas: DashboardRota[]): Partial<ChartOptions> 
   };
 }
 
-export function criarOpcoesEmag(criterios: DashboardEmag[]): Partial<ChartOptions> {
+export function criarOpcoesEmag(criterios: DashboardEmag[], escala = 1): Partial<ChartOptions> {
   const categorias = criterios.map((item) => item.criterio);
 
   return {
-    title: titulo('Critérios eMAG mais violados'),
+    title: titulo('Critérios eMAG mais violados', escala),
     series: [{ name: 'Ocorrências', data: criterios.map((item) => item.quantidade) }],
-    chart: { ...chartBase('bar'), height: Math.max(280, criterios.length * 48) },
+    chart: {
+      ...chartBase('bar', Math.max(280, criterios.length * Math.round(48 * escala)), escala),
+    },
     colors: ['#7C3AED'],
     plotOptions: {
       bar: {
@@ -290,16 +321,16 @@ export function criarOpcoesEmag(criterios: DashboardEmag[]): Partial<ChartOption
       },
     },
     dataLabels: { enabled: false },
-    ...eixosCategoria(categorias),
+    ...eixosCategoria(categorias, escala),
     xaxis: {
       categories: categorias,
       labels: {
-        style: { fontSize: '13px' },
+        style: { fontSize: converterParaPixels(13, escala) },
       },
     },
     yaxis: {
       labels: {
-        style: { fontSize: '13px' },
+        style: { fontSize: converterParaPixels(13, escala) },
       },
     },
     tooltip: {

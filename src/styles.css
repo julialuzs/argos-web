@@ -13,6 +13,14 @@
 /* Alinha o variante `dark:` do Tailwind ao `darkModeSelector` configurado no PrimeNG. */
 @custom-variant dark (&:where(.argos-dark, .argos-dark *));
 
+html.argos-fonte-grande {
+  font-size: 125%;
+}
+
+html.argos-fonte-extra {
+  font-size: 150%;
+}
+
 body {
   background-color: var(--p-app-background);
   color: var(--p-text-color);

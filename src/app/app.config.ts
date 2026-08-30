@@ -15,6 +15,7 @@ import { responseInterceptor } from '@core/interceptors/response.interceptor';
 import { MessageService } from 'primeng/api';
 import { argosPreset } from './preset';
 import { DARK_MODE_CLASS, TemaService } from '@core/services/tema.service';
+import { TamanhoFonteService } from '@core/services/tamanho-fonte.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     provideAppInitializer(() => {
       inject(TemaService);
+      inject(TamanhoFonteService);
     }),
     providePrimeNG({
       theme: {

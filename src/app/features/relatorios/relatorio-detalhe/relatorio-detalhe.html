@@ -9,7 +9,7 @@
     </div>
   </section>
 
-  <section class="grid grid-cols-4 pb-4">
+  <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 pb-4">
     <app-stat-card title="Erros" [value]="relatorio()?.quantidadeErros ?? 0" icon="error" />
 
     <app-stat-card title="Avisos" [value]="relatorio()?.quantidadeAvisos ?? 0" icon="warning" />

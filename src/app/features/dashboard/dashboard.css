@@ -4,4 +4,10 @@
 #chart-routes,
 #chart-emag {
   min-height: 280px;
+  overflow: visible;
+}
+
+:host ::ng-deep .apexcharts-canvas,
+:host ::ng-deep .apexcharts-svg {
+  overflow: visible;
 }

@@ -104,7 +104,7 @@
 
         <div class="grid grid-cols-1 xl:grid-cols-6 gap-4">
           @if (temSeveridade()) {
-            <p-card class="col-span-2">
+            <p-card class="xl:col-span-2 overflow-visible">
               <div id="chart-pie">
                 <apx-chart
                   [theme]="{ mode: modoTema() }"
@@ -124,7 +124,7 @@
           }
 
           @if (temRotas()) {
-            <p-card class="col-span-4">
+            <p-card class="xl:col-span-4 overflow-visible">
               <div id="chart-routes">
                 <apx-chart
                   [theme]="{ mode: modoTema() }"
