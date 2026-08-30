@@ -5,8 +5,6 @@ import { EllipsisV } from '@primeicons/angular/ellipsis-v';
 import { Check } from '@primeicons/angular/check';
 import { Copy } from '@primeicons/angular/copy';
 import { ChevronRight } from '@primeicons/angular/chevron-right';
-import { Receipt } from '@primeicons/angular/receipt';
-import { ChartBar } from '@primeicons/angular/chart-bar';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { Projeto } from '@shared/models/projeto';
 import { UsuarioService } from '@shared/services/usuario.service';
@@ -22,7 +20,7 @@ import { BadgeModule } from 'primeng/badge';
 import { PrimeiraLetraPipe } from '@shared/pipes/primeira-letra-pipe';
 
 const primeNgModules = [DividerModule, ButtonModule, DataViewModule, BadgeModule, MenuModule];
-const icons = [Plus, EllipsisV, Check, ChevronRight, Copy, Receipt, ChartBar];
+const icons = [Plus, EllipsisV, Check, ChevronRight, Copy];
 
 @Component({
   selector: 'app-projetos',

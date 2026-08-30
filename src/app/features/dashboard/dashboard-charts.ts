@@ -304,11 +304,14 @@ export function criarOpcoesRotas(rotas: DashboardRota[], escala = 1): Partial<Ch
 
 export function criarOpcoesEmag(criterios: DashboardEmag[], escala = 1): Partial<ChartOptions> {
   const categorias = criterios.map((item) => item.criterio);
+  const ocorrencias = criterios.map((item) => item.quantidade);
+  const { xaxis, yaxis } = eixosCategoria(categorias, escala);
 
   return {
     title: titulo('Critérios eMAG mais violados', escala),
-    series: [{ name: 'Ocorrências', data: criterios.map((item) => item.quantidade) }],
+    series: [{ name: 'Ocorrências', data: ocorrencias }],
     chart: {
+      // altura = 48px por critério (ajustado pela fonte), com mínimo de 280px
       ...chartBase('bar', Math.max(280, criterios.length * Math.round(48 * escala)), escala),
     },
     colors: ['#7C3AED'],
@@ -321,18 +324,14 @@ export function criarOpcoesEmag(criterios: DashboardEmag[], escala = 1): Partial
       },
     },
     dataLabels: { enabled: false },
-    ...eixosCategoria(categorias, escala),
     xaxis: {
-      categories: categorias,
-      labels: {
-        style: { fontSize: converterParaPixels(13, escala) },
-      },
+      ...xaxis,
+      min: 0,
+      // ocorrências são inteiras; sem stepSize o Apex gera 0.5 e arredonda (0, 1, 1, 2, 2…)
+      stepSize: 1,
+      decimalsInFloat: 0,
     },
-    yaxis: {
-      labels: {
-        style: { fontSize: converterParaPixels(13, escala) },
-      },
-    },
+    yaxis,
     tooltip: {
       y: {
         formatter: (val: number) => `${val}`,
