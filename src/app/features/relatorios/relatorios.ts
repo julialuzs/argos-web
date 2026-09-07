@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, OnDestroy, signal, untracked } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -17,8 +17,9 @@ import { ChevronRight } from '@primeicons/angular/chevron-right';
 import { Relatorio } from '@shared/models/relatorio';
 import { ProjetoService } from '@features/projetos/projeto.service';
 import { forkJoin, interval, Subscription } from 'rxjs';
+import { CardModule } from 'primeng/card';
 
-const primeNgModules = [TableModule, DividerModule, TagModule, ButtonModule, MessageModule];
+const primeNgModules = [TableModule, DividerModule, TagModule, ButtonModule, MessageModule, CardModule];
 const icons = [Refresh, Receipt, ChevronRight, Bolt];
 
 @Component({
@@ -27,7 +28,7 @@ const icons = [Refresh, Receipt, ChevronRight, Bolt];
   templateUrl: './relatorios.html',
   styleUrl: './relatorios.css',
 })
-export class Relatorios implements OnInit, OnDestroy {
+export class Relatorios implements OnDestroy {
   private projetoSelecionadoService = inject(ProjetoSelecionadoService);
   private relatoriosService = inject(RelatoriosService);
   private projetoService = inject(ProjetoService);
@@ -35,44 +36,30 @@ export class Relatorios implements OnInit, OnDestroy {
   private router = inject(Router);
 
   relatorios = signal<Relatorio[]>([]);
+  projetoGuid = input.required<string>();
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
   loading = signal(false);
   executando = signal(false);
 
   private pollSub?: Subscription;
   private pollTimeout?: ReturnType<typeof setTimeout>;
-
-  ngOnInit() {
-    const projeto = this.projeto();
-    if (projeto === null) {
-      return;
-    }
-
-    this.projetoService.getProjetoPorId(projeto.id).subscribe({
-      next: (atualizado) => {
-        this.projetoSelecionadoService.selecionar(atualizado);
-        this.getRelatorios();
-        if (atualizado.statusExecucao === 'Executando') {
-          this.executando.set(true);
-          this.iniciarPolling(Date.now(), true);
-        }
-      },
-      error: () => this.getRelatorios(),
-    });
-  }
+  private readonly sincronizarProjeto = effect(() => {
+    const guid = this.projetoGuid();
+    untracked(() => this.aoAlterarProjeto(guid));
+  });
 
   ngOnDestroy() {
     this.pararPolling();
   }
 
   getRelatorios() {
-    const projeto = this.projeto();
-    if (!projeto) {
+    const guid = this.projetoGuid();
+    if (!guid) {
       return;
     }
 
     this.loading.set(true);
-    this.relatoriosService.getRelatoriosPorProjeto(projeto.id).subscribe({
+    this.relatoriosService.getRelatoriosPorProjeto(guid).subscribe({
       next: (relatorios) => {
         this.relatorios.set(relatorios);
         this.loading.set(false);
@@ -105,7 +92,7 @@ export class Relatorios implements OnInit, OnDestroy {
 
     this.executando.set(true);
     const startedAt = Date.now();
-    this.relatoriosService.executar(projeto.id).subscribe({
+    this.relatoriosService.executar(this.projetoGuid()).subscribe({
       next: () => {
         this.messageService.add({
           severity: 'info',
@@ -138,7 +125,11 @@ export class Relatorios implements OnInit, OnDestroy {
   }
 
   irParaRelatorio(relatorioId: number) {
-    this.router.navigate([this.projeto()!.id, 'relatorios', relatorioId]);
+    this.router.navigate([this.projetoGuid(), 'relatorios', relatorioId]);
+  }
+
+  irParaProjetos() {
+    this.router.navigate(['/projetos']);
   }
 
   getSeverity(pontuacao: number) {
@@ -150,6 +141,29 @@ export class Relatorios implements OnInit, OnDestroy {
     }
 
     return 'danger';
+  }
+
+  private aoAlterarProjeto(guidProjeto: string) {
+    this.pararPolling();
+    this.executando.set(false);
+
+    if (!guidProjeto) {
+      this.relatorios.set([]);
+      this.loading.set(false);
+      return;
+    }
+
+    this.projetoService.getProjetoPorGuid(guidProjeto).subscribe({
+      next: (atualizado) => {
+        this.projetoSelecionadoService.selecionar(atualizado);
+        this.getRelatorios();
+        if (atualizado.statusExecucao === 'Executando') {
+          this.executando.set(true);
+          this.iniciarPolling(Date.now(), true);
+        }
+      },
+      error: () => this.getRelatorios(),
+    });
   }
 
   private iniciarPolling(startedAt: number, retomar: boolean) {
@@ -170,14 +184,14 @@ export class Relatorios implements OnInit, OnDestroy {
   }
 
   private verificarProgresso(startedAt: number, retomar: boolean) {
-    const projeto = this.projeto();
-    if (!projeto) {
+    const guid = this.projetoGuid();
+    if (!guid) {
       return;
     }
 
     forkJoin({
-      projeto: this.projetoService.getProjetoPorId(projeto.id),
-      relatorios: this.relatoriosService.getRelatoriosPorProjeto(projeto.id),
+      projeto: this.projetoService.getProjetoPorGuid(guid),
+      relatorios: this.relatoriosService.getRelatoriosPorProjeto(guid),
     }).subscribe({
       next: ({ projeto: atualizado, relatorios }) => {
         this.projetoSelecionadoService.selecionar(atualizado);

@@ -12,6 +12,9 @@ export type iconTypes = 'error' | 'warning' | 'found' | 'not-found' | 'trophy';
 
 @Component({
   selector: 'app-stat-card',
+  host: {
+    class: 'block w-full min-w-0',
+  },
   imports: [
     CardModule,
     TooltipModule,

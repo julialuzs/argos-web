@@ -8,7 +8,7 @@ import { DashboardDados } from './dashboard.model';
 export class DashboardService {
   private http = inject(HttpClient);
 
-  getDashboard(projetoId: number): Observable<DashboardDados> {
-    return this.http.get<DashboardDados>(`${environment.apiUrl}/projetos/${projetoId}/dashboard`);
+  getDashboard(guidProjeto: string): Observable<DashboardDados> {
+    return this.http.get<DashboardDados>(`${environment.apiUrl}/projetos/${guidProjeto}/dashboard`);
   }
 }

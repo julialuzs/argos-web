@@ -9,15 +9,15 @@ export class RelatoriosService {
   private http = inject(HttpClient);
   private readonly baseUrl = `${environment.apiUrl}/relatorios`;
 
-  getRelatoriosPorProjeto(projetoId: number): Observable<Relatorio[]> {
-    return this.http.get<Relatorio[]>(`${this.baseUrl}/${projetoId}/listar`);
+  getRelatoriosPorProjeto(guidProjeto: string): Observable<Relatorio[]> {
+    return this.http.get<Relatorio[]>(`${this.baseUrl}/${guidProjeto}/listar`);
   }
 
-  getRelatorioPorId(projetoId: number, relatorioId: number): Observable<RelatorioDetalhe> {
-    return this.http.get<RelatorioDetalhe>(`${this.baseUrl}/${projetoId}/${relatorioId}`);
+  getRelatorioPorId(guidProjeto: string, relatorioId: number): Observable<RelatorioDetalhe> {
+    return this.http.get<RelatorioDetalhe>(`${this.baseUrl}/${guidProjeto}/${relatorioId}`);
   }
 
-  executar(projetoId: number): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/${projetoId}/executar`, {});
+  executar(guidProjeto: string): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/${guidProjeto}/executar`, {});
   }
 }

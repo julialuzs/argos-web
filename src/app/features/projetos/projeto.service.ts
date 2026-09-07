@@ -21,8 +21,8 @@ export class ProjetoService {
     return this.http.get<Projeto[]>(`${environment.apiUrl}${this.baseUrl}/listar`);
   }
 
-  getProjetoPorId(id: number): Observable<Projeto> {
-    return this.http.get<Projeto>(`${environment.apiUrl}${this.baseUrl}/${id}`);
+  getProjetoPorGuid(guid: string): Observable<Projeto> {
+    return this.http.get<Projeto>(`${environment.apiUrl}${this.baseUrl}/${guid}`);
   }
 
   criarProjeto(request: ProjetoRequest): Observable<void> {
@@ -37,6 +37,6 @@ export class ProjetoService {
       rotas: projeto.rotas,
       incluirW3c: projeto.incluirW3c,
     };
-    return this.http.put<void>(`${environment.apiUrl}${this.baseUrl}/${projeto.id}`, request);
+    return this.http.put<void>(`${environment.apiUrl}${this.baseUrl}/${projeto.guid}`, request);
   }
 }

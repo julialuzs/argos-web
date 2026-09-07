@@ -2,6 +2,8 @@ import { Component, inject, input, numberAttribute, OnInit, signal } from '@angu
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { RelatoriosService } from '../relatorios.service';
+import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
+import { ProjetoService } from '@features/projetos/projeto.service';
 import { MessageService } from 'primeng/api';
 import { RelatorioDetalhe as RelatorioDetalheType } from '@shared/models/relatorio';
 import { DatePipe, TitleCasePipe } from '@angular/common';
@@ -36,16 +38,25 @@ const icons = [ChevronRight];
 })
 export class RelatorioDetalhe implements OnInit {
   private relatoriosService = inject(RelatoriosService);
+  private projetoService = inject(ProjetoService);
+  private projetoSelecionadoService = inject(ProjetoSelecionadoService);
   private messageService = inject(MessageService);
 
   relatorio = signal<RelatorioDetalheType | null>(null);
   relatorioId = input.required<number, unknown>({ transform: numberAttribute });
-  projetoId = input.required<number, unknown>({ transform: numberAttribute });
+  projetoGuid = input.required<string>();
 
   padraoAberto = signal<number>(0);
 
   ngOnInit() {
-    this.relatoriosService.getRelatorioPorId(this.projetoId(), this.relatorioId()).subscribe({
+    const guid = this.projetoGuid();
+    if (this.projetoSelecionadoService.projetoSelecionado()?.guid !== guid) {
+      this.projetoService.getProjetoPorGuid(guid).subscribe({
+        next: (projeto) => this.projetoSelecionadoService.selecionar(projeto),
+      });
+    }
+
+    this.relatoriosService.getRelatorioPorId(guid, this.relatorioId()).subscribe({
       next: (relatorio) => {
         this.relatorio.set(relatorio);
       },

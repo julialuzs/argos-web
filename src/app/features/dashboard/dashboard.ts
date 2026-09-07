@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -10,7 +10,8 @@ import { Refresh } from '@primeicons/angular/refresh';
 import { ChartBar } from '@primeicons/angular/chart-bar';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { TemaService } from '@core/services/tema.service';
-import { StatCard } from '@shared/components/stat-card/stat-card';
+import { TamanhoFonteService } from '@core/services/tamanho-fonte.service';
+import { ProjetoService } from '@features/projetos/projeto.service';
 import { DashboardService } from './dashboard.service';
 import { DashboardDados, DashboardResumo } from './dashboard.model';
 import {
@@ -32,21 +33,37 @@ import {
     Refresh,
     ChartBar,
     NgApexchartsModule,
-    StatCard,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
-export class Dashboard implements OnInit {
+export class Dashboard {
   private dashboardService = inject(DashboardService);
   private temaService = inject(TemaService);
+  private tamanhoFonteService = inject(TamanhoFonteService);
   private projetoSelecionadoService = inject(ProjetoSelecionadoService);
+  private projetoService = inject(ProjetoService);
   private messageService = inject(MessageService);
   private router = inject(Router);
 
+  projetoGuid = input.required<string>();
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
   dashboard = signal<DashboardDados | null>(null);
   loading = signal(false);
+  private readonly sincronizarProjeto = effect(() => {
+    const guid = this.projetoGuid();
+    untracked(() => this.aoAlterarProjeto(guid));
+  });
+  private readonly sincronizarGraficos = effect(() => {
+    const dados = this.dashboard();
+    const escala = this.tamanhoFonteService.escala();
+    untracked(() => {
+      if (!dados) {
+        return;
+      }
+      this.atualizarGraficos(dados, escala);
+    });
+  });
 
   lineChartOptions = signal<Partial<ChartOptions>>(criarOpcoesPontuacao([]));
   barChartOptions = signal<Partial<ChartOptions>>(criarOpcoesErrosAvisos([]));
@@ -58,30 +75,23 @@ export class Dashboard implements OnInit {
   resumo = computed(() => this.dashboard()?.resumo ?? null);
   temSeries = computed(() => (this.dashboard()?.series.length ?? 0) > 0);
   temSeveridade = computed(
-    () => (this.dashboard()?.achadosPorSeveridade.some((item) => item.quantidade > 0) ?? false),
+    () => this.dashboard()?.achadosPorSeveridade.some((item) => item.quantidade > 0) ?? false,
   );
   temRotas = computed(() => (this.dashboard()?.pontuacaoPorRota.length ?? 0) > 0);
   temEmag = computed(() => (this.dashboard()?.criteriosEmag.length ?? 0) > 0);
   quantidadeExecucoes = computed(() => this.dashboard()?.series.length ?? 0);
   resumoAcessivel = computed(() => this.montarResumoAcessivel(this.resumo(), this.temSeries()));
 
-  ngOnInit() {
-    if (this.projeto() !== null) {
-      this.getDadosDashboard();
-    }
-  }
-
   getDadosDashboard() {
-    const projeto = this.projeto();
-    if (!projeto) {
+    const guid = this.projetoGuid();
+    if (!guid) {
       return;
     }
 
     this.loading.set(true);
-    this.dashboardService.getDashboard(projeto.id).subscribe({
+    this.dashboardService.getDashboard(guid).subscribe({
       next: (dados) => {
         this.dashboard.set(dados);
-        this.atualizarGraficos(dados);
         this.loading.set(false);
       },
       error: () => {
@@ -100,7 +110,11 @@ export class Dashboard implements OnInit {
     if (!projeto) {
       return;
     }
-    this.router.navigate([projeto.id, 'relatorios']);
+    this.router.navigate([projeto.guid, 'relatorios']);
+  }
+
+  irParaProjetos() {
+    this.router.navigate(['/projetos']);
   }
 
   getColor(pontuacao: number) {
@@ -124,12 +138,27 @@ export class Dashboard implements OnInit {
     return `Variação em relação à execução anterior: ${sinal}${variacao} ponto(s).`;
   }
 
-  private atualizarGraficos(dados: DashboardDados) {
-    this.lineChartOptions.set(criarOpcoesPontuacao(dados.series));
-    this.barChartOptions.set(criarOpcoesErrosAvisos(dados.series));
-    this.pieChartOptions.set(criarOpcoesSeveridade(dados.achadosPorSeveridade));
-    this.routeChartOptions.set(criarOpcoesRotas(dados.pontuacaoPorRota));
-    this.emagChartOptions.set(criarOpcoesEmag(dados.criteriosEmag));
+  private aoAlterarProjeto(guidProjeto: string) {
+    if (!guidProjeto) {
+      this.dashboard.set(null);
+      return;
+    }
+
+    if (this.projetoSelecionadoService.projetoSelecionado()?.guid !== guidProjeto) {
+      this.projetoService.getProjetoPorGuid(guidProjeto).subscribe({
+        next: (projeto) => this.projetoSelecionadoService.selecionar(projeto),
+      });
+    }
+
+    this.getDadosDashboard();
+  }
+
+  private atualizarGraficos(dados: DashboardDados, escala: number) {
+    this.lineChartOptions.set(criarOpcoesPontuacao(dados.series, escala));
+    this.barChartOptions.set(criarOpcoesErrosAvisos(dados.series, escala));
+    this.pieChartOptions.set(criarOpcoesSeveridade(dados.achadosPorSeveridade, escala));
+    this.routeChartOptions.set(criarOpcoesRotas(dados.pontuacaoPorRota, escala));
+    this.emagChartOptions.set(criarOpcoesEmag(dados.criteriosEmag, escala));
   }
 
   private montarResumoAcessivel(resumo: DashboardResumo | null, temSeries: boolean): string {
