@@ -1,7 +1,9 @@
 <main>
   <router-outlet />
 
-  <p-toast />
+  @defer (on immediate) {
+    <p-toast />
+  }
 
   <app-loading />
 </main>
