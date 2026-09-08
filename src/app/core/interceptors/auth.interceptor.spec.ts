@@ -36,9 +36,9 @@ describe('authInterceptor', () => {
   it('should attach Bearer token for API requests', () => {
     auth.getToken.mockReturnValue('jwt-token');
 
-    http.get(`${environment.apiUrl}resource`).subscribe();
+    http.get(`${environment.apiUrl}/resource`).subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}resource`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/resource`);
     expect(req.request.headers.get('Authorization')).toBe('Bearer jwt-token');
     req.flush({});
   });
@@ -46,9 +46,9 @@ describe('authInterceptor', () => {
   it('should not attach Authorization when there is no token', () => {
     auth.getToken.mockReturnValue(null);
 
-    http.get(`${environment.apiUrl}resource`).subscribe();
+    http.get(`${environment.apiUrl}/resource`).subscribe();
 
-    const req = httpMock.expectOne(`${environment.apiUrl}resource`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/resource`);
     expect(req.request.headers.has('Authorization')).toBe(false);
     req.flush({});
   });
@@ -56,9 +56,9 @@ describe('authInterceptor', () => {
   it('should logout and redirect to login on 401 response', () => {
     auth.getToken.mockReturnValue('jwt-token');
 
-    http.get(`${environment.apiUrl}resource`).subscribe({ error: () => {} });
+    http.get(`${environment.apiUrl}/resource`).subscribe({ error: () => {} });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}resource`);
+    const req = httpMock.expectOne(`${environment.apiUrl}/resource`);
     req.flush({}, { status: 401, statusText: 'Unauthorized' });
 
     expect(auth.logout).toHaveBeenCalled();
