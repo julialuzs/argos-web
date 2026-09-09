@@ -12,7 +12,7 @@ export type DashboardResumo = {
   quantidadeErros: number;
   quantidadeAvisos: number;
   rotasAuditadas: number;
-  tradutorLibrasIdentificado: boolean;
+  vLibrasIdentificado: boolean;
   handTalkIdentificado: boolean;
 };
 

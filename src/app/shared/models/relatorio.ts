@@ -39,6 +39,7 @@ export type Relatorio = {
 
 export type RelatorioDetalhe = Relatorio & {
   handTalkIdentificado: boolean;
+  vLibrasIdentificado: boolean;
   rotasAuditadas: number;
   fluxosAuditados: number;
   resultados: ResultadoAuditoria[];

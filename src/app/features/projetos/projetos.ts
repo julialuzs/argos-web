@@ -26,7 +26,6 @@ const icons = [Plus, EllipsisV, Check, ChevronRight, Copy];
   selector: 'app-projetos',
   imports: [...primeNgModules, ...icons, PrimeiraLetraPipe, DatePipe, ProjetoForm],
   templateUrl: './projetos.html',
-  styleUrl: './projetos.css',
 })
 export class Projetos implements OnInit {
   usuarioService = inject(UsuarioService);

@@ -1,7 +1,22 @@
 <div class="mt-12 mx-8 pb-4 overflow-hidden">
   <section class="flex justify-between pb-4">
     <div>
-      <h1 class="font-semibold text-4xl">Relatório de Acessibilidade</h1>
+      <div class="flex items-center gap-2">
+        <h1 class="font-semibold text-4xl">Relatório de Acessibilidade</h1>
+        <button
+          type="button"
+          class="inline-flex items-center text-muted-color hover:text-color cursor-help"
+          [pTooltip]="tooltipRelatorio"
+          tooltipPosition="right"
+          tooltipStyleClass="w-100!"
+          [attr.aria-label]="textoTooltipRelatorio"
+        >
+          <ng-template #tooltipRelatorio>
+            <div class="text-sm">{{ textoTooltipRelatorio }}</div>
+          </ng-template>
+          <svg data-p-icon="info-circle" [size]="22"></svg>
+        </button>
+      </div>
 
       <small
         >Executado em {{ relatorio()?.dataHoraExecucao | date: "dd/MM/yyyy 'às' HH:mm" }}
@@ -15,9 +30,9 @@
     <app-stat-card title="Avisos" [value]="relatorio()?.quantidadeAvisos ?? 0" icon="warning" />
 
     <app-stat-card
-      title="VLibras"
-      [value]="relatorio()?.tradutorLibrasIdentificado ? 'Identificado' : 'Não identificado'"
-      [icon]="relatorio()?.tradutorLibrasIdentificado ? 'found' : 'not-found'"
+      title="Tradutor de Libras"
+      [value]="tradutorLibras()"
+      [icon]="tradutorLibrasIdentificado() ? 'found' : 'not-found'"
     />
 
     <app-stat-card
@@ -85,7 +100,9 @@
                   </h3>
                   <p class="text-sm">{{ apontamento.descricao }}</p>
                   <p class="text-sm">Identificado por: {{ apontamento.fonte }}</p>
-                  <p class="text-sm">Critérios eMAG violados: {{ apontamento.criteriosEmag?.join(', ') }}</p>
+                  <p class="text-sm">
+                    Critérios eMAG violados: {{ apontamento.criteriosEmag?.join(', ') }}
+                  </p>
                 </div>
                 <div class="localizacao col-span-6">
                   @if (apontamento.seletorCss) {

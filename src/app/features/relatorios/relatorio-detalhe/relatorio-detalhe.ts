@@ -1,4 +1,4 @@
-import { Component, inject, input, numberAttribute, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, numberAttribute, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { RelatoriosService } from '../relatorios.service';
@@ -16,7 +16,8 @@ import { BadgeModule } from 'primeng/badge';
 import { BadgeSeverity } from 'primeng/types/badge';
 import { CodeSnippet } from '@shared/components/code-snippet/code-snippet';
 import { ChipModule } from 'primeng/chip';
-import { Trophy } from '@primeicons/angular/trophy';
+import { TooltipModule } from 'primeng/tooltip';
+import { InfoCircle } from '@primeicons/angular/info-circle';
 
 const primeNgModules = [
   ButtonModule,
@@ -26,8 +27,9 @@ const primeNgModules = [
   CardModule,
   AccordionModule,
   ChipModule,
+  TooltipModule,
 ];
-const icons = [ChevronRight];
+const icons = [ChevronRight, InfoCircle];
 
 @Component({
   selector: 'app-relatorio-detalhe',
@@ -46,7 +48,17 @@ export class RelatorioDetalhe implements OnInit {
   relatorioId = input.required<number, unknown>({ transform: numberAttribute });
   projetoGuid = input.required<string>();
 
+  tradutorLibrasIdentificado = computed(() => {
+    return this.relatorio()?.vLibrasIdentificado ?? this.relatorio()?.handTalkIdentificado ?? false;
+  });
+
+  tradutorLibras = computed(() =>
+    this.tradutorLibrasIdentificado() ? 'VLibras Identificado' : 'Hand Talk Identificado',
+  );
+
   padraoAberto = signal<number>(0);
+  readonly textoTooltipRelatorio =
+    'Este relatório foi gerado pelo Argos, que intermediou a avaliação utilizando o motor axe-core e as APIs da W3C. A avaliação automatizada não substitui uma análise manual.';
 
   ngOnInit() {
     const guid = this.projetoGuid();

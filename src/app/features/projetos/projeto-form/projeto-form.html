@@ -40,7 +40,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label pLabel for="url_base_projeto">URL base</label>
+      <label pLabel for="url_base_projeto">URL base do site</label>
       <input
         pInputText
         id="url_base_projeto"
@@ -61,7 +61,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label pLabel for="rotas_projeto">Rotas (uma por linha)</label>
+      <label pLabel for="rotas_projeto">Rotas que serão avaliadas (uma por linha)</label>
       <textarea
         pTextarea
         id="rotas_projeto"
@@ -76,10 +76,10 @@
       }
     </div>
 
-    <div class="flex items-center justify-between gap-3">
+    <!-- <div class="flex items-center justify-between gap-3">
       <label pLabel for="incluir_w3c">Incluir validação W3C</label>
       <p-toggleswitch inputId="incluir_w3c" formControlName="incluirW3c" />
-    </div>
+    </div> -->
   </form>
   <ng-template #footer>
     <button type="button" pButton [outlined]="true" severity="secondary" (click)="fechar()">
