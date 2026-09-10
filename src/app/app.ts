@@ -10,5 +10,5 @@ import { Toast } from 'primeng/toast';
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('argos');
+  protected readonly title = signal('Argos');
 }

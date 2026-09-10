@@ -4,7 +4,7 @@ export type Projeto = {
   id: number;
   guid: string;
   nome: string;
-  descricao: string;
+  descricao: string | null;
   ultimaExecucao: Date;
   urlBase: string;
   rotas: string[];

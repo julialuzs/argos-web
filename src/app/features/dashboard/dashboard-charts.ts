@@ -327,7 +327,6 @@ export function criarOpcoesEmag(criterios: DashboardEmag[], escala = 1): Partial
     xaxis: {
       ...xaxis,
       min: 0,
-      // ocorrências são inteiras; sem stepSize o Apex gera 0.5 e arredonda (0, 1, 1, 2, 2…)
       stepSize: 1,
       decimalsInFloat: 0,
     },

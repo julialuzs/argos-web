@@ -2,9 +2,9 @@
   <p-menubar [model]="items()" breakpoint="640px">
     <ng-template #start>
       <div
-        class="flex size-6 shrink-0 items-center justify-center rounded-md bg-linear-to-br from-violet-500 to-indigo-600 text-white text-xs font-bold leading-none"
+        class="flex border border-surface rounded-md size-9 shrink-0 items-center justify-center ml-2"
       >
-        A
+        <img src="argos-64x64.png" alt="Argos icon" class="size-8" />
       </div>
     </ng-template>
     <ng-template #item let-item let-root="root">
@@ -105,9 +105,13 @@
               [ngModel]="tamanhoFonteService.tamanhoFonte()"
               (onChange)="definirTamanhoFonte($event.value)"
               [ariaLabelledBy]="'titulo-tamanho-fonte'"
+              class="align-end"
             >
               <ng-template #item let-opcao>
-                <span class="flex flex-col items-center gap-0.5 px-1">
+                <span
+                  class="flex flex-col items-center justify-end gap-0.5 px-1"
+                  [class.text-primary]="opcao.valor === tamanhoFonteService.tamanhoFonte()"
+                >
                   <span class="font-semibold leading-none" [style.font-size]="opcao.preview"
                     >A</span
                   >

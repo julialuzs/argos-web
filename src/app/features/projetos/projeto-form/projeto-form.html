@@ -6,7 +6,7 @@
   </ng-template>
   <form [formGroup]="form" class="space-y-6 mt-3">
     <div class="flex flex-col gap-2">
-      <label pLabel for="nome_projeto">Nome do projeto</label>
+      <label pLabel for="nome_projeto">Nome do projeto <span class="text-red-500">*</span></label>
       <input pInputText id="nome_projeto" formControlName="nome" [invalid]="isInvalid('nome')" />
 
       @if (isInvalid('nome')) {
@@ -25,22 +25,11 @@
 
     <div class="flex flex-col gap-2">
       <label pLabel for="descricao_projeto">Descrição</label>
-      <textarea
-        pTextarea
-        id="descricao_projeto"
-        formControlName="descricao"
-        [invalid]="isInvalid('descricao')"
-      ></textarea>
-
-      @if (isInvalid('descricao')) {
-        @if (form.get('descricao')?.errors?.['required']) {
-          <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
-        }
-      }
+      <textarea pTextarea id="descricao_projeto" formControlName="descricao"></textarea>
     </div>
 
     <div class="flex flex-col gap-2">
-      <label pLabel for="url_base_projeto">URL base do site</label>
+      <label pLabel for="url_base_projeto">URL base do site <span class="text-red-500">*</span></label>
       <input
         pInputText
         id="url_base_projeto"
@@ -61,7 +50,7 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label pLabel for="rotas_projeto">Rotas que serão avaliadas (uma por linha)</label>
+      <label pLabel for="rotas_projeto">Rotas que serão avaliadas (uma por linha) <span class="text-red-500">*</span></label>
       <textarea
         pTextarea
         id="rotas_projeto"

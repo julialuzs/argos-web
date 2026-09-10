@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 
 export type ProjetoRequest = {
   nome: string;
-  descricao: string;
+  descricao: string | null;
   urlBase: string;
   rotas: string[];
   incluirW3c: boolean;

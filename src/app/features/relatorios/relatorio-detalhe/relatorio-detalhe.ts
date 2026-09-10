@@ -52,9 +52,15 @@ export class RelatorioDetalhe implements OnInit {
     return this.relatorio()?.vLibrasIdentificado ?? this.relatorio()?.handTalkIdentificado ?? false;
   });
 
-  tradutorLibras = computed(() =>
-    this.tradutorLibrasIdentificado() ? 'VLibras Identificado' : 'Hand Talk Identificado',
-  );
+  tradutorLibras = computed(() => {
+    if (this.relatorio()?.vLibrasIdentificado) {
+      return 'VLibras Identificado';
+    }
+    if (this.relatorio()?.handTalkIdentificado) {
+      return 'Hand Talk Identificado';
+    }
+    return 'Não Identificado';
+  });
 
   padraoAberto = signal<number>(0);
   readonly textoTooltipRelatorio =
