@@ -71,7 +71,14 @@ function titulo(text: string, escala: number): ApexTitleSubtitle {
   };
 }
 
-function chartBase(type: ApexChart['type'], height = 350, escala = 1): ApexChart {
+export type CliquePontoGrafico = (indice: number, event: MouseEvent) => void;
+
+function chartBase(
+  type: ApexChart['type'],
+  height = 350,
+  escala = 1,
+  events?: ApexChart['events'],
+): ApexChart {
   return {
     type,
     height,
@@ -81,6 +88,33 @@ function chartBase(type: ApexChart['type'], height = 350, escala = 1): ApexChart
     toolbar: { show: false },
     zoom: { enabled: false },
     parentHeightOffset: Math.round(12 * escala),
+    events,
+  };
+}
+
+function eventosCliquePonto(aoClicar?: CliquePontoGrafico): ApexChart['events'] | undefined {
+  if (!aoClicar) {
+    return undefined;
+  }
+
+  let ultimoDisparo = 0;
+  const disparar = (event: MouseEvent, options?: { dataPointIndex?: number }) => {
+    const indice = options?.dataPointIndex;
+    if (indice == null || indice < 0) {
+      return;
+    }
+
+    const agora = Date.now();
+    if (agora - ultimoDisparo < 300) {
+      return;
+    }
+    ultimoDisparo = agora;
+    aoClicar(indice, event);
+  };
+
+  return {
+    click: (event, _chart, options) => disparar(event, options),
+    markerClick: (event, _chart, options) => disparar(event, options),
   };
 }
 
@@ -130,6 +164,7 @@ function corPorPontuacao(pontuacao: number): string {
 export function criarOpcoesPontuacao(
   series: DashboardSerieExecucao[],
   escala = 1,
+  aoClicar?: CliquePontoGrafico,
 ): Partial<ChartOptions> {
   const datas = series.map((item) => item.dataHoraExecucao);
   const categorias = datas.map((data) => formatarCategoria(data, datas));
@@ -137,7 +172,7 @@ export function criarOpcoesPontuacao(
   return {
     title: titulo('Pontuação ao longo do tempo', escala),
     series: [{ name: 'Pontuação', data: series.map((item) => item.pontuacao) }],
-    chart: chartBase('area', 350, escala),
+    chart: chartBase('area', 350, escala, eventosCliquePonto(aoClicar)),
     colors: ['#8B5CF6'],
     dataLabels: { enabled: false },
     stroke: { curve: 'smooth', width: 2 },
@@ -171,6 +206,7 @@ export function criarOpcoesPontuacao(
 export function criarOpcoesErrosAvisos(
   series: DashboardSerieExecucao[],
   escala = 1,
+  aoClicar?: CliquePontoGrafico,
 ): Partial<ChartOptions> {
   const datas = series.map((item) => item.dataHoraExecucao);
   const categorias = datas.map((data) => formatarCategoria(data, datas));
@@ -181,7 +217,7 @@ export function criarOpcoesErrosAvisos(
       { name: 'Erros', data: series.map((item) => item.quantidadeErros) },
       { name: 'Avisos', data: series.map((item) => item.quantidadeAvisos) },
     ],
-    chart: chartBase('bar', 350, escala),
+    chart: chartBase('bar', 350, escala, eventosCliquePonto(aoClicar)),
     colors: ['#F43F5E', '#F59E0B'],
     plotOptions: {
       bar: {
@@ -218,6 +254,7 @@ export function criarOpcoesErrosAvisos(
 export function criarOpcoesSeveridade(
   achados: DashboardSeveridade[],
   escala = 1,
+  aoClicar?: CliquePontoGrafico,
 ): Partial<ChartOptions> {
   const comValor = achados.filter((item) => item.quantidade > 0);
 
@@ -226,7 +263,7 @@ export function criarOpcoesSeveridade(
     series: comValor.map((item) => item.quantidade),
     labels: comValor.map((item) => item.severidade),
     colors: comValor.map((item) => CORES_SEVERIDADE[item.severidade] ?? '#94A3B8'),
-    chart: chartBase('donut', 350, escala),
+    chart: chartBase('donut', 350, escala, eventosCliquePonto(aoClicar)),
     plotOptions: {
       pie: {
         borderRadius: 8,
@@ -257,13 +294,24 @@ export function criarOpcoesSeveridade(
   };
 }
 
-export function criarOpcoesRotas(rotas: DashboardRota[], escala = 1): Partial<ChartOptions> {
+export function criarOpcoesRotas(
+  rotas: DashboardRota[],
+  escala = 1,
+  aoClicar?: CliquePontoGrafico,
+): Partial<ChartOptions> {
   const categorias = rotas.map((item) => item.rota);
 
   return {
     title: titulo('Pontuação por rota', escala),
     series: [{ name: 'Pontuação', data: rotas.map((item) => item.pontuacao) }],
-    chart: { ...chartBase('bar', Math.max(280, rotas.length * Math.round(56 * escala)), escala) },
+    chart: {
+      ...chartBase(
+        'bar',
+        Math.max(280, rotas.length * Math.round(56 * escala)),
+        escala,
+        eventosCliquePonto(aoClicar),
+      ),
+    },
     colors: rotas.map((item) => corPorPontuacao(item.pontuacao)),
     plotOptions: {
       bar: {
@@ -302,7 +350,11 @@ export function criarOpcoesRotas(rotas: DashboardRota[], escala = 1): Partial<Ch
   };
 }
 
-export function criarOpcoesEmag(criterios: DashboardEmag[], escala = 1): Partial<ChartOptions> {
+export function criarOpcoesEmag(
+  criterios: DashboardEmag[],
+  escala = 1,
+  aoClicar?: CliquePontoGrafico,
+): Partial<ChartOptions> {
   const categorias = criterios.map((item) => item.criterio);
   const ocorrencias = criterios.map((item) => item.quantidade);
   const { xaxis, yaxis } = eixosCategoria(categorias, escala);
@@ -312,7 +364,12 @@ export function criarOpcoesEmag(criterios: DashboardEmag[], escala = 1): Partial
     series: [{ name: 'Ocorrências', data: ocorrencias }],
     chart: {
       // altura = 48px por critério (ajustado pela fonte), com mínimo de 280px
-      ...chartBase('bar', Math.max(280, criterios.length * Math.round(48 * escala)), escala),
+      ...chartBase(
+        'bar',
+        Math.max(280, criterios.length * Math.round(48 * escala)),
+        escala,
+        eventosCliquePonto(aoClicar),
+      ),
     },
     colors: ['#7C3AED'],
     plotOptions: {

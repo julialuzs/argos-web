@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, NgZone, signal, untracked } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -45,6 +45,7 @@ export class Dashboard {
   private projetoService = inject(ProjetoService);
   private messageService = inject(MessageService);
   private router = inject(Router);
+  private ngZone = inject(NgZone);
 
   projetoGuid = input.required<string>();
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
@@ -113,6 +114,25 @@ export class Dashboard {
     this.router.navigate([projeto.guid, 'relatorios']);
   }
 
+  abrirRelatorio(relatorioId: number, event?: MouseEvent) {
+    const projeto = this.projeto();
+    if (!projeto || !relatorioId) {
+      return;
+    }
+
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([projeto.guid, 'relatorios', relatorioId]),
+    );
+
+    this.ngZone.run(() => {
+      if (event?.ctrlKey || event?.metaKey) {
+        window.open(url, '_blank', 'noopener');
+        return;
+      }
+      void this.router.navigateByUrl(url);
+    });
+  }
+
   irParaProjetos() {
     this.router.navigate(['/projetos']);
   }
@@ -154,11 +174,28 @@ export class Dashboard {
   }
 
   private atualizarGraficos(dados: DashboardDados, escala: number) {
-    this.lineChartOptions.set(criarOpcoesPontuacao(dados.series, escala));
-    this.barChartOptions.set(criarOpcoesErrosAvisos(dados.series, escala));
-    this.pieChartOptions.set(criarOpcoesSeveridade(dados.achadosPorSeveridade, escala));
-    this.routeChartOptions.set(criarOpcoesRotas(dados.pontuacaoPorRota, escala));
-    this.emagChartOptions.set(criarOpcoesEmag(dados.criteriosEmag, escala));
+    const aoClicarExecucao = (indice: number, event: MouseEvent) => {
+      const relatorioId = dados.series[indice]?.relatorioId;
+      if (relatorioId) {
+        this.abrirRelatorio(relatorioId, event);
+      }
+    };
+    const ultimoRelatorioId = dados.series.at(-1)?.relatorioId;
+    const aoClicarUltimaExecucao = (_indice: number, event: MouseEvent) => {
+      if (ultimoRelatorioId) {
+        this.abrirRelatorio(ultimoRelatorioId, event);
+      }
+    };
+
+    this.lineChartOptions.set(criarOpcoesPontuacao(dados.series, escala, aoClicarExecucao));
+    this.barChartOptions.set(criarOpcoesErrosAvisos(dados.series, escala, aoClicarExecucao));
+    this.pieChartOptions.set(
+      criarOpcoesSeveridade(dados.achadosPorSeveridade, escala, aoClicarUltimaExecucao),
+    );
+    this.routeChartOptions.set(
+      criarOpcoesRotas(dados.pontuacaoPorRota, escala, aoClicarUltimaExecucao),
+    );
+    this.emagChartOptions.set(criarOpcoesEmag(dados.criteriosEmag, escala, aoClicarUltimaExecucao));
   }
 
   private montarResumoAcessivel(resumo: DashboardResumo | null, temSeries: boolean): string {

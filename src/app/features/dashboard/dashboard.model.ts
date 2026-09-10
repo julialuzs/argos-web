@@ -1,4 +1,5 @@
 export type DashboardSerieExecucao = {
+  relatorioId: number;
   dataHoraExecucao: string;
   pontuacao: number;
   quantidadeErros: number;

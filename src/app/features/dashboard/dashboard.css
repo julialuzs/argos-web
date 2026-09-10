@@ -11,3 +11,10 @@
 :host ::ng-deep .apexcharts-svg {
   overflow: visible;
 }
+
+:host ::ng-deep .apexcharts-bar-area,
+:host ::ng-deep .apexcharts-pie-area,
+:host ::ng-deep .apexcharts-series-markers .apexcharts-marker,
+:host ::ng-deep .apexcharts-area {
+  cursor: pointer;
+}
