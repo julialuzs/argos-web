@@ -5,8 +5,7 @@ import { DividerModule } from 'primeng/divider';
 import {
   ARGOS_CONFIG_SNIPPET,
   GITHUB_ACTIONS_SNIPPET,
-  NPM_AUDIT_SNIPPET,
-  NPM_INSTALL_SNIPPET,
+  NPX_AUDIT_SNIPPET,
 } from './snippets';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -35,8 +34,7 @@ export class Tutorial {
 
   readonly argosConfigSnippet = ARGOS_CONFIG_SNIPPET;
   readonly githubActionsSnippet = GITHUB_ACTIONS_SNIPPET;
-  readonly npmInstallSnippet = NPM_INSTALL_SNIPPET;
-  readonly npmAuditSnippet = NPM_AUDIT_SNIPPET;
+  readonly npxAuditSnippet = NPX_AUDIT_SNIPPET;
 
   irParaProjetos() {
     this.router.navigate(['/projetos']);
