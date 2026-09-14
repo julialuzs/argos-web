@@ -16,7 +16,7 @@ import { DashboardService } from './dashboard.service';
 import { DashboardDados, DashboardResumo } from './dashboard.model';
 import {
   ChartOptions,
-  criarOpcoesEmag,
+  criarOpcoesWcag,
   criarOpcoesErrosAvisos,
   criarOpcoesPontuacao,
   criarOpcoesRotas,
@@ -70,7 +70,7 @@ export class Dashboard {
   barChartOptions = signal<Partial<ChartOptions>>(criarOpcoesErrosAvisos([]));
   pieChartOptions = signal<Partial<ChartOptions>>(criarOpcoesSeveridade([]));
   routeChartOptions = signal<Partial<ChartOptions>>(criarOpcoesRotas([]));
-  emagChartOptions = signal<Partial<ChartOptions>>(criarOpcoesEmag([]));
+  wcagChartOptions = signal<Partial<ChartOptions>>(criarOpcoesWcag([]));
 
   modoTema = computed(() => (this.temaService.temaEscuro() ? 'dark' : 'light'));
   resumo = computed(() => this.dashboard()?.resumo ?? null);
@@ -79,7 +79,7 @@ export class Dashboard {
     () => this.dashboard()?.achadosPorSeveridade.some((item) => item.quantidade > 0) ?? false,
   );
   temRotas = computed(() => (this.dashboard()?.pontuacaoPorRota.length ?? 0) > 0);
-  temEmag = computed(() => (this.dashboard()?.criteriosEmag.length ?? 0) > 0);
+  temWcag = computed(() => (this.dashboard()?.criteriosWcag?.length ?? 0) > 0);
   quantidadeExecucoes = computed(() => this.dashboard()?.series.length ?? 0);
   resumoAcessivel = computed(() => this.montarResumoAcessivel(this.resumo(), this.temSeries()));
 
@@ -195,7 +195,9 @@ export class Dashboard {
     this.routeChartOptions.set(
       criarOpcoesRotas(dados.pontuacaoPorRota, escala, aoClicarUltimaExecucao),
     );
-    this.emagChartOptions.set(criarOpcoesEmag(dados.criteriosEmag, escala, aoClicarUltimaExecucao));
+    this.wcagChartOptions.set(
+      criarOpcoesWcag(dados.criteriosWcag ?? [], escala, aoClicarUltimaExecucao),
+    );
   }
 
   private montarResumoAcessivel(resumo: DashboardResumo | null, temSeries: boolean): string {

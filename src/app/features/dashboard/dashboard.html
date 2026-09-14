@@ -143,21 +143,21 @@
             </p-card>
           }
 
-          @if (temEmag()) {
+          @if (temWcag()) {
             <div class="xl:col-span-6">
               <p-card>
-                <div id="chart-emag">
+                <div id="chart-wcag">
                   <apx-chart
                     [theme]="{ mode: modoTema() }"
-                    [series]="emagChartOptions().series!"
-                    [chart]="emagChartOptions().chart!"
-                    [xaxis]="emagChartOptions().xaxis!"
-                    [yaxis]="emagChartOptions().yaxis!"
-                    [plotOptions]="emagChartOptions().plotOptions!"
-                    [dataLabels]="emagChartOptions().dataLabels!"
-                    [colors]="emagChartOptions().colors!"
-                    [tooltip]="emagChartOptions().tooltip!"
-                    [title]="emagChartOptions().title!"
+                    [series]="wcagChartOptions().series!"
+                    [chart]="wcagChartOptions().chart!"
+                    [xaxis]="wcagChartOptions().xaxis!"
+                    [yaxis]="wcagChartOptions().yaxis!"
+                    [plotOptions]="wcagChartOptions().plotOptions!"
+                    [dataLabels]="wcagChartOptions().dataLabels!"
+                    [colors]="wcagChartOptions().colors!"
+                    [tooltip]="wcagChartOptions().tooltip!"
+                    [title]="wcagChartOptions().title!"
                   />
                 </div>
               </p-card>

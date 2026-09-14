@@ -7,13 +7,12 @@ export type Apontamento = {
   tipo: 'erro' | 'aviso';
   fonte: string;
   descricao: string;
-  criteriosEmag: string[];
   recomendacao: string;
   urlAjuda?: string;
   referenciasWcag: string[];
   elementoHtml?: string;
   seletorCss?: string;
-  quantidadeElementos?: number; 
+  quantidadeElementos?: number;
 };
 
 export type ResultadoAuditoria = {
@@ -21,7 +20,6 @@ export type ResultadoAuditoria = {
   caminho: string;
   pontuacao: number;
   problemasCriticos: number;
-  criteriosEmagMapeados: string[];
   apontamentos: Apontamento[];
 };
 

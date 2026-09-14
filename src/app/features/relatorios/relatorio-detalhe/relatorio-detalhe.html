@@ -100,9 +100,28 @@
                   </h3>
                   <p class="text-sm">{{ apontamento.descricao }}</p>
                   <p class="text-sm">Identificado por: {{ apontamento.fonte }}</p>
-                  <p class="text-sm">
-                    Critérios eMAG violados: {{ apontamento.criteriosEmag?.join(', ') }}
-                  </p>
+                  @let criterios = criteriosWcag(apontamento);
+                  @if (criterios.length) {
+                    <p class="text-sm criterios-wcag">
+                      Critérios WCAG relacionados:
+                      @for (criterio of criterios; track criterio; let last = $last) {
+                        <a
+                          class="text-primary underline underline-offset-2"
+                          [href]="urlGuidelineWcag(criterio)"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          [attr.aria-label]="
+                            'Abrir critério WCAG ' + rotuloCriterioWcag(criterio) + ' em português'
+                          "
+                        >
+                          {{ rotuloCriterioWcag(criterio) }}
+                        </a>
+                        @if (!last) {
+                          <span>, </span>
+                        }
+                      }
+                    </p>
+                  }
                 </div>
                 <div class="localizacao col-span-6">
                   @if (apontamento.seletorCss) {
@@ -127,10 +146,18 @@
                   }
                   <p class="text-sm">
                     @if (apontamento.urlAjuda) {
-                      Ajuda:
-                      <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{
-                        apontamento.urlAjuda
-                      }}</a>
+                      <a
+                        pButton
+                        link
+                        class="p-0! inline-flex items-center gap-1"
+                        [href]="apontamento.urlAjuda"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Como posso resolver? Abre em uma nova aba"
+                      >
+                        Como posso resolver?
+                        <svg data-p-icon="external-link" [size]="14" aria-hidden="true"></svg>
+                      </a>
                     }
                   </p>
                 </div>

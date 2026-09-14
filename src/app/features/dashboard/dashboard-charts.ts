@@ -17,7 +17,7 @@ import {
   ApexTheme,
 } from 'ng-apexcharts';
 import {
-  DashboardEmag,
+  DashboardWcag,
   DashboardRota,
   DashboardSeveridade,
   DashboardSerieExecucao,
@@ -350,8 +350,8 @@ export function criarOpcoesRotas(
   };
 }
 
-export function criarOpcoesEmag(
-  criterios: DashboardEmag[],
+export function criarOpcoesWcag(
+  criterios: DashboardWcag[],
   escala = 1,
   aoClicar?: CliquePontoGrafico,
 ): Partial<ChartOptions> {
@@ -360,7 +360,7 @@ export function criarOpcoesEmag(
   const { xaxis, yaxis } = eixosCategoria(categorias, escala);
 
   return {
-    title: titulo('Critérios eMAG mais violados', escala),
+    title: titulo('Critérios WCAG mais violados', escala),
     series: [{ name: 'Ocorrências', data: ocorrencias }],
     chart: {
       // altura = 48px por critério (ajustado pela fonte), com mínimo de 280px
