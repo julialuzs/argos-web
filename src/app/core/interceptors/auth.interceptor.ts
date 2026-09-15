@@ -10,7 +10,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const token = auth.getToken();
 
-  if (token && req.url.startsWith(environment.apiUrl)) {
+  if (token && isArgosApiRequest(req.url)) {
     req = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` },
     });
@@ -26,3 +26,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     }),
   );
 };
+
+function isArgosApiRequest(url: string): boolean {
+  if (url.startsWith(environment.apiUrl)) {
+    return true;
+  }
+
+  if (!environment.apiUrl.startsWith('/')) {
+    return false;
+  }
+
+  try {
+    return new URL(url, 'http://localhost').pathname.startsWith(environment.apiUrl);
+  } catch {
+    return false;
+  }
+}

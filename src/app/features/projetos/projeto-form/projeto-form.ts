@@ -41,7 +41,6 @@ const primeNgModules = [
   imports: [ReactiveFormsModule, ...primeNgModules],
   providers: [MessageService],
   templateUrl: './projeto-form.html',
-  styleUrl: './projeto-form.css',
 })
 export class ProjetoForm {
   @Input() visivel: WritableSignal<boolean> = signal(false);
@@ -54,11 +53,11 @@ export class ProjetoForm {
 
   form = new FormGroup({
     nome: new FormControl('', [Validators.required]),
-    guid: new FormControl({value: '', disabled: true}, [Validators.required]),
-    descricao: new FormControl('', [Validators.required]),
+    guid: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    descricao: new FormControl(''),
     urlBase: new FormControl('', [Validators.required, Validators.pattern(/^https?:\/\/.+/i)]),
     rotas: new FormControl('/', [Validators.required]),
-    incluirW3c: new FormControl(false, { nonNullable: true }),
+    incluirW3c: new FormControl(true, { nonNullable: true }),
   });
 
   constructor() {
@@ -73,10 +72,10 @@ export class ProjetoForm {
         this.form.reset({
           nome: projeto.nome,
           guid: projeto.guid,
-          descricao: projeto.descricao,
+          descricao: projeto.descricao ?? '',
           urlBase: projeto.urlBase ?? '',
           rotas: (projeto.rotas?.length ? projeto.rotas : ['/']).join('\n'),
-          incluirW3c: projeto.incluirW3c ?? false,
+          incluirW3c: projeto.incluirW3c ?? true,
         });
       } else {
         this.form.reset({
@@ -84,7 +83,7 @@ export class ProjetoForm {
           descricao: '',
           urlBase: '',
           rotas: '/',
-          incluirW3c: false,
+          incluirW3c: true,
         });
       }
     });
@@ -103,7 +102,7 @@ export class ProjetoForm {
 
     return {
       nome: raw.nome ?? '',
-      descricao: raw.descricao ?? '',
+      descricao: raw.descricao?.trim() ? raw.descricao.trim() : null,
       urlBase: (raw.urlBase ?? '').trim(),
       rotas: rotas.length > 0 ? rotas : ['/'],
       incluirW3c: raw.incluirW3c,

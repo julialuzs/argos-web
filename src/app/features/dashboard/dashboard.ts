@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, input, NgZone, signal, untracked } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -16,7 +16,7 @@ import { DashboardService } from './dashboard.service';
 import { DashboardDados, DashboardResumo } from './dashboard.model';
 import {
   ChartOptions,
-  criarOpcoesEmag,
+  criarOpcoesWcag,
   criarOpcoesErrosAvisos,
   criarOpcoesPontuacao,
   criarOpcoesRotas,
@@ -45,6 +45,7 @@ export class Dashboard {
   private projetoService = inject(ProjetoService);
   private messageService = inject(MessageService);
   private router = inject(Router);
+  private ngZone = inject(NgZone);
 
   projetoGuid = input.required<string>();
   projeto = computed(() => this.projetoSelecionadoService.projetoSelecionado());
@@ -69,7 +70,7 @@ export class Dashboard {
   barChartOptions = signal<Partial<ChartOptions>>(criarOpcoesErrosAvisos([]));
   pieChartOptions = signal<Partial<ChartOptions>>(criarOpcoesSeveridade([]));
   routeChartOptions = signal<Partial<ChartOptions>>(criarOpcoesRotas([]));
-  emagChartOptions = signal<Partial<ChartOptions>>(criarOpcoesEmag([]));
+  wcagChartOptions = signal<Partial<ChartOptions>>(criarOpcoesWcag([]));
 
   modoTema = computed(() => (this.temaService.temaEscuro() ? 'dark' : 'light'));
   resumo = computed(() => this.dashboard()?.resumo ?? null);
@@ -78,7 +79,7 @@ export class Dashboard {
     () => this.dashboard()?.achadosPorSeveridade.some((item) => item.quantidade > 0) ?? false,
   );
   temRotas = computed(() => (this.dashboard()?.pontuacaoPorRota.length ?? 0) > 0);
-  temEmag = computed(() => (this.dashboard()?.criteriosEmag.length ?? 0) > 0);
+  temWcag = computed(() => (this.dashboard()?.criteriosWcag?.length ?? 0) > 0);
   quantidadeExecucoes = computed(() => this.dashboard()?.series.length ?? 0);
   resumoAcessivel = computed(() => this.montarResumoAcessivel(this.resumo(), this.temSeries()));
 
@@ -111,6 +112,25 @@ export class Dashboard {
       return;
     }
     this.router.navigate([projeto.guid, 'relatorios']);
+  }
+
+  abrirRelatorio(relatorioId: number, event?: MouseEvent) {
+    const projeto = this.projeto();
+    if (!projeto || !relatorioId) {
+      return;
+    }
+
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([projeto.guid, 'relatorios', relatorioId]),
+    );
+
+    this.ngZone.run(() => {
+      if (event?.ctrlKey || event?.metaKey) {
+        window.open(url, '_blank', 'noopener');
+        return;
+      }
+      void this.router.navigateByUrl(url);
+    });
   }
 
   irParaProjetos() {
@@ -154,11 +174,30 @@ export class Dashboard {
   }
 
   private atualizarGraficos(dados: DashboardDados, escala: number) {
-    this.lineChartOptions.set(criarOpcoesPontuacao(dados.series, escala));
-    this.barChartOptions.set(criarOpcoesErrosAvisos(dados.series, escala));
-    this.pieChartOptions.set(criarOpcoesSeveridade(dados.achadosPorSeveridade, escala));
-    this.routeChartOptions.set(criarOpcoesRotas(dados.pontuacaoPorRota, escala));
-    this.emagChartOptions.set(criarOpcoesEmag(dados.criteriosEmag, escala));
+    const aoClicarExecucao = (indice: number, event: MouseEvent) => {
+      const relatorioId = dados.series[indice]?.relatorioId;
+      if (relatorioId) {
+        this.abrirRelatorio(relatorioId, event);
+      }
+    };
+    const ultimoRelatorioId = dados.series.at(-1)?.relatorioId;
+    const aoClicarUltimaExecucao = (_indice: number, event: MouseEvent) => {
+      if (ultimoRelatorioId) {
+        this.abrirRelatorio(ultimoRelatorioId, event);
+      }
+    };
+
+    this.lineChartOptions.set(criarOpcoesPontuacao(dados.series, escala, aoClicarExecucao));
+    this.barChartOptions.set(criarOpcoesErrosAvisos(dados.series, escala, aoClicarExecucao));
+    this.pieChartOptions.set(
+      criarOpcoesSeveridade(dados.achadosPorSeveridade, escala, aoClicarUltimaExecucao),
+    );
+    this.routeChartOptions.set(
+      criarOpcoesRotas(dados.pontuacaoPorRota, escala, aoClicarUltimaExecucao),
+    );
+    this.wcagChartOptions.set(
+      criarOpcoesWcag(dados.criteriosWcag ?? [], escala, aoClicarUltimaExecucao),
+    );
   }
 
   private montarResumoAcessivel(resumo: DashboardResumo | null, temSeries: boolean): string {

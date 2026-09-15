@@ -1,3 +1,5 @@
+@import '../../../../styles/prism-themes.css';
+
 pre[class*='language-'] {
   margin: 0 !important;
   padding: 1rem !important;

@@ -2,7 +2,7 @@
 #chart-bar,
 #chart-pie,
 #chart-routes,
-#chart-emag {
+#chart-wcag {
   min-height: 280px;
   overflow: visible;
 }
@@ -10,4 +10,11 @@
 :host ::ng-deep .apexcharts-canvas,
 :host ::ng-deep .apexcharts-svg {
   overflow: visible;
+}
+
+:host ::ng-deep .apexcharts-bar-area,
+:host ::ng-deep .apexcharts-pie-area,
+:host ::ng-deep .apexcharts-series-markers .apexcharts-marker,
+:host ::ng-deep .apexcharts-area {
+  cursor: pointer;
 }

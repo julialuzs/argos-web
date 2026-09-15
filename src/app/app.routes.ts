@@ -1,18 +1,10 @@
 import { Routes } from '@angular/router';
-import { Login } from '@features/login/login';
-import { Cadastro } from '@features/cadastro/cadastro';
 import { authGuard } from '@core/guards/auth.guard';
-import { Layout } from '@core/components/layout/layout';
-import { Relatorios } from '@features/relatorios/relatorios';
-import { Dashboard } from '@features/dashboard/dashboard';
-import { Projetos } from '@features/projetos/projetos';
-import { RelatorioDetalhe } from '@features/relatorios/relatorio-detalhe/relatorio-detalhe';
-import { Tutorial } from '@features/tutorial/tutorial';
 
 export const routes: Routes = [
   {
     path: '',
-    component: Layout,
+    loadComponent: () => import('@core/components/layout/layout').then((m) => m.Layout),
     canActivate: [authGuard],
     children: [
       {
@@ -22,32 +14,35 @@ export const routes: Routes = [
       },
       {
         path: 'tutorial',
-        component: Tutorial,
+        loadComponent: () => import('@features/tutorial/tutorial').then((m) => m.Tutorial),
       },
       {
         path: ':projetoGuid/relatorios',
-        component: Relatorios,
+        loadComponent: () => import('@features/relatorios/relatorios').then((m) => m.Relatorios),
       },
       {
         path: ':projetoGuid/relatorios/:relatorioId',
-        component: RelatorioDetalhe,
+        loadComponent: () =>
+          import('@features/relatorios/relatorio-detalhe/relatorio-detalhe').then(
+            (m) => m.RelatorioDetalhe,
+          ),
       },
       {
         path: ':projetoGuid/dashboard',
-        component: Dashboard,
+        loadComponent: () => import('@features/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
         path: 'projetos',
-        component: Projetos,
+        loadComponent: () => import('@features/projetos/projetos').then((m) => m.Projetos),
       },
     ],
   },
   {
     path: 'login',
-    component: Login,
+    loadComponent: () => import('@features/login/login').then((m) => m.Login),
   },
   {
     path: 'cadastro',
-    component: Cadastro,
+    loadComponent: () => import('@features/cadastro/cadastro').then((m) => m.Cadastro),
   },
 ];

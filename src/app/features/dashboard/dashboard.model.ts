@@ -1,4 +1,5 @@
 export type DashboardSerieExecucao = {
+  relatorioId: number;
   dataHoraExecucao: string;
   pontuacao: number;
   quantidadeErros: number;
@@ -12,7 +13,7 @@ export type DashboardResumo = {
   quantidadeErros: number;
   quantidadeAvisos: number;
   rotasAuditadas: number;
-  tradutorLibrasIdentificado: boolean;
+  vLibrasIdentificado: boolean;
   handTalkIdentificado: boolean;
 };
 
@@ -28,7 +29,7 @@ export type DashboardRota = {
   quantidadeApontamentos: number;
 };
 
-export type DashboardEmag = {
+export type DashboardWcag = {
   criterio: string;
   quantidade: number;
 };
@@ -38,5 +39,5 @@ export type DashboardDados = {
   series: DashboardSerieExecucao[];
   achadosPorSeveridade: DashboardSeveridade[];
   pontuacaoPorRota: DashboardRota[];
-  criteriosEmag: DashboardEmag[];
+  criteriosWcag: DashboardWcag[];
 };

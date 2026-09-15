@@ -11,10 +11,8 @@
   <p-card class="rounded-md">
     <p-tabs value="aplicacao" aria-label="Modos de uso do Argos" class="rounded-md">
       <p-tablist>
-        <p-tab value="aplicacao"><p-tag value="Recomendado para começar" /> Na aplicação </p-tab>
-        <p-tab value="pipeline"
-          ><p-tag value="Automatizado" severity="info" /> Pipeline CI/CD</p-tab
-        >
+        <p-tab value="aplicacao"> Pela interface </p-tab>
+        <p-tab value="pipeline"> Integração com pipeline CD</p-tab>
         <p-tab value="cli">Linha de comando</p-tab>
       </p-tablist>
       <p-tabpanels>
@@ -82,7 +80,7 @@
         <p-tabpanel value="pipeline">
           <div class="space-y-4 pt-4">
             <p class="mt-0 text-surface-700 dark:text-surface-300">
-              Integre o avaliador à pipeline de CI/CD do repositório. A cada deploy, o Argos gera um
+              Integre o avaliador à pipeline de CD do repositório. A cada deploy, o Argos gera um
               relatório e envia para o projeto correspondente na aplicação.
             </p>
 
@@ -118,7 +116,7 @@
                 <div class="min-w-0 flex-1 space-y-3">
                   <h2 class="m-0 font-semibold text-xl">Adicione o arquivo de configuração</h2>
                   <p class="m-0 text-surface-700 dark:text-surface-300">
-                    Na raiz do repositório, crie <code>argos.config.ci.json</code> com a URL base,
+                    Na raiz do repositório, crie <code>argos.config.json</code> com a URL base,
                     as rotas e o GUID do projeto.
                   </p>
                   <p class="m-0 text-sm text-surface-500 dark:text-surface-400">
@@ -134,7 +132,7 @@
                 <div class="min-w-0 flex-1 space-y-3">
                   <h2 class="m-0 font-semibold text-xl">Inclua os steps na pipeline</h2>
                   <p class="m-0 text-surface-700 dark:text-surface-300">
-                    Adicione os passos abaixo ao arquivo <code>.yml</code> do CI/CD (exemplo para
+                    Adicione os passos abaixo ao arquivo <code>.yml</code> de CD (exemplo para
                     GitHub Actions).
                   </p>
                   <app-code-snippet language="yml" [code]="githubActionsSnippet" />
@@ -164,35 +162,30 @@
               <li class="flex gap-3 sm:gap-4">
                 <span class="passo">1</span>
                 <div class="min-w-0 flex-1 space-y-3">
-                  <h2 class="m-0 font-semibold text-xl">Instale o pacote</h2>
+                  <h2 class="m-0 font-semibold text-xl">Crie o arquivo de configuração</h2>
                   <p class="m-0 text-surface-700 dark:text-surface-300">
-                    Na raiz do repositório do site que você quer avaliar:
+                    Na raiz do repositório do site que você quer avaliar, crie
+                    <code>argos.config.json</code> com a URL base, as rotas e o GUID do projeto.
+                    Se a pipeline já usa esse arquivo, reutilize o mesmo.
                   </p>
-                  <app-code-snippet language="bash" [code]="npmInstallSnippet" />
-                </div>
-              </li>
-              <li class="flex gap-3 sm:gap-4">
-                <span class="passo">2</span>
-                <div class="min-w-0 flex-1 space-y-3">
-                  <h2 class="m-0 font-semibold text-xl">
-                    (Opcional) Reutilize o arquivo de configuração
-                  </h2>
-                  <p class="m-0 text-surface-700 dark:text-surface-300">
-                    O mesmo <code>argos.config.ci.json</code> da pipeline pode ser usado localmente,
-                    com URL, rotas e GUID.
+                  <p class="m-0 text-sm text-surface-500 dark:text-surface-400">
+                    <strong><code>baseUrl</code></strong> - URL base do site.
+                    <strong><code>routes</code></strong> - rotas avaliadas.
+                    <strong><code>projectId</code></strong> - GUID do projeto no Argos.
                   </p>
                   <app-code-snippet language="json" [code]="argosConfigSnippet" />
                 </div>
               </li>
               <li class="flex gap-3 sm:gap-4">
-                <span class="passo">3</span>
+                <span class="passo">2</span>
                 <div class="min-w-0 flex-1 space-y-3">
                   <h2 class="m-0 font-semibold text-xl">Execute a auditoria</h2>
                   <p class="m-0 text-surface-700 dark:text-surface-300">
-                    O comando abaixo lê a configuração e grava o JSON do relatório na pasta
-                    <code>reports</code>.
+                    Na mesma pasta do <code>argos.config.json</code>, rode o comando abaixo. O
+                    <code>npx</code> baixa o avaliador, lê a configuração e grava o JSON em
+                    <code>reports/report.json</code>.
                   </p>
-                  <app-code-snippet language="bash" [code]="npmAuditSnippet" />
+                  <app-code-snippet language="bash" [code]="npxAuditSnippet" />
                 </div>
               </li>
             </ol>

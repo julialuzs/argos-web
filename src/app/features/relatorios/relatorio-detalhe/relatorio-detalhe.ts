@@ -1,11 +1,11 @@
-import { Component, inject, input, numberAttribute, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, numberAttribute, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { RelatoriosService } from '../relatorios.service';
 import { ProjetoSelecionadoService } from '@core/services/projeto-selecionado.service';
 import { ProjetoService } from '@features/projetos/projeto.service';
 import { MessageService } from 'primeng/api';
-import { RelatorioDetalhe as RelatorioDetalheType } from '@shared/models/relatorio';
+import { RelatorioDetalhe as RelatorioDetalheType, Apontamento } from '@shared/models/relatorio';
 import { DatePipe, TitleCasePipe } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { AccordionModule } from 'primeng/accordion';
@@ -16,7 +16,14 @@ import { BadgeModule } from 'primeng/badge';
 import { BadgeSeverity } from 'primeng/types/badge';
 import { CodeSnippet } from '@shared/components/code-snippet/code-snippet';
 import { ChipModule } from 'primeng/chip';
-import { Trophy } from '@primeicons/angular/trophy';
+import { TooltipModule } from 'primeng/tooltip';
+import { InfoCircle } from '@primeicons/angular/info-circle';
+import { ExternalLink } from '@primeicons/angular/external-link';
+import {
+  formatarReferenciasWcag,
+  rotuloCriterioWcag as rotuloCriterioWcagUtil,
+  urlGuidelineWcag as urlGuidelineWcagUtil,
+} from '@shared/utils/wcag';
 
 const primeNgModules = [
   ButtonModule,
@@ -26,8 +33,9 @@ const primeNgModules = [
   CardModule,
   AccordionModule,
   ChipModule,
+  TooltipModule,
 ];
-const icons = [ChevronRight];
+const icons = [ChevronRight, InfoCircle, ExternalLink];
 
 @Component({
   selector: 'app-relatorio-detalhe',
@@ -46,7 +54,23 @@ export class RelatorioDetalhe implements OnInit {
   relatorioId = input.required<number, unknown>({ transform: numberAttribute });
   projetoGuid = input.required<string>();
 
+  tradutorLibrasIdentificado = computed(() => {
+    return this.relatorio()?.vLibrasIdentificado ?? this.relatorio()?.handTalkIdentificado ?? false;
+  });
+
+  tradutorLibras = computed(() => {
+    if (this.relatorio()?.vLibrasIdentificado) {
+      return 'VLibras Identificado';
+    }
+    if (this.relatorio()?.handTalkIdentificado) {
+      return 'Hand Talk Identificado';
+    }
+    return 'Não Identificado';
+  });
+
   padraoAberto = signal<number>(0);
+  readonly textoTooltipRelatorio =
+    'Este relatório foi gerado pelo Argos, que intermediou a avaliação utilizando o motor axe-core e as APIs da W3C. A avaliação automatizada não substitui uma análise manual.';
 
   ngOnInit() {
     const guid = this.projetoGuid();
@@ -103,5 +127,17 @@ export class RelatorioDetalhe implements OnInit {
       default:
         return 'pi pi-exclamation-circle';
     }
+  }
+
+  criteriosWcag(apontamento: Apontamento): string[] {
+    return formatarReferenciasWcag(apontamento.referenciasWcag);
+  }
+
+  urlGuidelineWcag(criterio: string): string {
+    return urlGuidelineWcagUtil(criterio);
+  }
+
+  rotuloCriterioWcag(criterio: string): string {
+    return rotuloCriterioWcagUtil(criterio);
   }
 }

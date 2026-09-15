@@ -1,8 +1,15 @@
 @import 'tailwindcss';
 @import 'tailwindcss-primeui';
-@import '@fontsource-variable/inter';
-@import './styles/prism-themes.css';
-@import "primeicons/primeicons.css";
+@import 'primeicons/primeicons.css';
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF;
+}
 
 @theme {
   --font-sans:

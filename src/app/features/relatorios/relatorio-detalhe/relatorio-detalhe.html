@@ -1,7 +1,22 @@
 <div class="mt-12 mx-8 pb-4 overflow-hidden">
   <section class="flex justify-between pb-4">
     <div>
-      <h1 class="font-semibold text-4xl">Relatório de Acessibilidade</h1>
+      <div class="flex items-center gap-2">
+        <h1 class="font-semibold text-4xl">Relatório de Acessibilidade</h1>
+        <button
+          type="button"
+          class="inline-flex items-center text-muted-color hover:text-color cursor-help"
+          [pTooltip]="tooltipRelatorio"
+          tooltipPosition="right"
+          tooltipStyleClass="w-100!"
+          [attr.aria-label]="textoTooltipRelatorio"
+        >
+          <ng-template #tooltipRelatorio>
+            <div class="text-sm">{{ textoTooltipRelatorio }}</div>
+          </ng-template>
+          <svg data-p-icon="info-circle" [size]="22"></svg>
+        </button>
+      </div>
 
       <small
         >Executado em {{ relatorio()?.dataHoraExecucao | date: "dd/MM/yyyy 'às' HH:mm" }}
@@ -15,9 +30,9 @@
     <app-stat-card title="Avisos" [value]="relatorio()?.quantidadeAvisos ?? 0" icon="warning" />
 
     <app-stat-card
-      title="VLibras"
-      [value]="relatorio()?.tradutorLibrasIdentificado ? 'Identificado' : 'Não identificado'"
-      [icon]="relatorio()?.tradutorLibrasIdentificado ? 'found' : 'not-found'"
+      title="Tradutor de Libras"
+      [value]="tradutorLibras()"
+      [icon]="tradutorLibrasIdentificado() ? 'found' : 'not-found'"
     />
 
     <app-stat-card
@@ -85,7 +100,28 @@
                   </h3>
                   <p class="text-sm">{{ apontamento.descricao }}</p>
                   <p class="text-sm">Identificado por: {{ apontamento.fonte }}</p>
-                  <p class="text-sm">Critérios eMAG violados: {{ apontamento.criteriosEmag?.join(', ') }}</p>
+                  @let criterios = criteriosWcag(apontamento);
+                  @if (criterios.length) {
+                    <p class="text-sm criterios-wcag">
+                      Critérios WCAG relacionados:
+                      @for (criterio of criterios; track criterio; let last = $last) {
+                        <a
+                          class="text-primary underline underline-offset-2"
+                          [href]="urlGuidelineWcag(criterio)"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          [attr.aria-label]="
+                            'Abrir critério WCAG ' + rotuloCriterioWcag(criterio) + ' em português'
+                          "
+                        >
+                          {{ rotuloCriterioWcag(criterio) }}
+                        </a>
+                        @if (!last) {
+                          <span>, </span>
+                        }
+                      }
+                    </p>
+                  }
                 </div>
                 <div class="localizacao col-span-6">
                   @if (apontamento.seletorCss) {
@@ -110,10 +146,18 @@
                   }
                   <p class="text-sm">
                     @if (apontamento.urlAjuda) {
-                      Ajuda:
-                      <a pButton link href="{{ apontamento.urlAjuda }}" target="_blank">{{
-                        apontamento.urlAjuda
-                      }}</a>
+                      <a
+                        pButton
+                        link
+                        class="p-0! inline-flex items-center gap-1"
+                        [href]="apontamento.urlAjuda"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Como posso resolver? Abre em uma nova aba"
+                      >
+                        Como posso resolver?
+                        <svg data-p-icon="external-link" [size]="14" aria-hidden="true"></svg>
+                      </a>
                     }
                   </p>
                 </div>
