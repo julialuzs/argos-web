@@ -1,0 +1,216 @@
+<header class="sticky top-0 z-40 border-b border-surface bg-white/95 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-8">
+    <a
+      href="#conteudo"
+      class="flex items-center gap-2 text-inherit no-underline"
+      (click)="irParaSecao($event, 'conteudo')"
+    >
+      <span
+        class="flex size-9 shrink-0 items-center justify-center rounded-md border border-surface"
+      >
+        <img src="argos-64x64.png" alt="" class="size-8" />
+      </span>
+      <span class="text-lg font-bold">Argos</span>
+    </a>
+
+    <nav aria-label="Seções da página" class="hidden items-center gap-5 text-sm md:flex">
+      <a
+        href="#por-que"
+        class="text-surface-700 no-underline hover:text-primary dark:text-surface-300"
+        (click)="irParaSecao($event, 'por-que')"
+        >Por quê</a
+      >
+      <a
+        href="#o-que-faz"
+        class="text-surface-700 no-underline hover:text-primary dark:text-surface-300"
+        (click)="irParaSecao($event, 'o-que-faz')"
+        >O que faz</a
+      >
+    </nav>
+
+    <div class="flex shrink-0 items-center gap-2">
+      <a routerLink="/login" pButton variant="outlined" size="small">Entrar</a>
+      <a routerLink="/cadastro" pButton size="small">Criar conta</a>
+    </div>
+  </div>
+</header>
+
+<section
+  id="conteudo"
+  tabindex="-1"
+  class="landing-section mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-8 sm:py-16 lg:grid-cols-2"
+>
+  <div class="space-y-6">
+    <h1 class="m-0 text-3xl font-semibold leading-tight sm:text-5xl">
+      Acessibilidade contínua para sites da web
+    </h1>
+    <p class="m-0 max-w-xl text-base text-surface-600 dark:text-surface-300 sm:text-lg">
+      O Argos avalia páginas com base nas WCAG 2.2, gera relatórios com pontuação e acompanha a
+      evolução no dashboard, pela interface, por linha de comando ou em uma pipeline.
+    </p>
+    <div class="flex flex-wrap gap-3 pt-4">
+      <a routerLink="/cadastro" pButton>Criar conta</a>
+      <a routerLink="/login" pButton variant="outlined">Entrar</a>
+    </div>
+  </div>
+
+  <div aria-hidden="true" class="grid gap-3 sm:grid-cols-3">
+    <p-card>
+      <div class="flex flex-col gap-2">
+        <svg data-p-icon="trophy" class="text-primary" size="28"></svg>
+        <span class="text-sm text-muted-color">Pontuação</span>
+        <span class="text-2xl font-semibold">86</span>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="flex flex-col gap-2">
+        <svg data-p-icon="times-circle" color="red" size="28"></svg>
+        <span class="text-sm text-muted-color">Erros</span>
+        <span class="text-2xl font-semibold">4</span>
+      </div>
+    </p-card>
+    <p-card>
+      <div class="flex flex-col gap-2">
+        <svg data-p-icon="exclamation-circle" color="orange" size="28"></svg>
+        <span class="text-sm text-muted-color">Avisos</span>
+        <span class="text-2xl font-semibold">9</span>
+      </div>
+    </p-card>
+  </div>
+</section>
+
+<section id="por-que" tabindex="-1" class="landing-section border-t border-surface">
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-16">
+    <h2 class="m-0 text-2xl font-semibold sm:text-3xl">Por que se preocupar com acessibilidade?</h2>
+    <!-- <p class="mt-2 mb-8 max-w-3xl text-surface-600 dark:text-surface-300">
+      Acessibilidade não é um extra: é inclusão, qualidade e, em muitos casos, obrigação legal.
+    </p> -->
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 pt-3">
+      <p-card>
+        <div class="flex flex-col gap-3">
+          <span
+            class="flex size-10 items-center justify-center rounded-md bg-surface-100 text-primary dark:bg-surface-800"
+          >
+            <svg data-p-icon="users" size="20"></svg>
+          </span>
+          <h3 class="m-0 text-lg font-semibold">Inclusão</h3>
+          <p class="m-0 text-sm text-surface-600 dark:text-surface-300">
+            Sites acessíveis para todos, incluindo pessoas com deficiência visual, motora, cognitiva
+            ou surdez.
+          </p>
+        </div>
+      </p-card>
+      <p-card>
+        <div class="flex flex-col gap-3">
+          <span
+            class="flex size-10 items-center justify-center rounded-md bg-surface-100 text-primary dark:bg-surface-800"
+          >
+            <svg data-p-icon="search" size="20"></svg>
+          </span>
+          <h3 class="m-0 text-lg font-semibold">SEO</h3>
+          <p class="m-0 text-sm text-surface-600 dark:text-surface-300">
+            HTML semântico, contraste e alternativas textuais ajudam a indexação e o ranqueamento.
+          </p>
+        </div>
+      </p-card>
+      <p-card>
+        <div class="flex flex-col gap-3">
+          <span
+            class="flex size-10 items-center justify-center rounded-md bg-surface-100 text-primary dark:bg-surface-800"
+          >
+            <svg data-p-icon="book" size="20"></svg>
+          </span>
+          <h3 class="m-0 text-lg font-semibold">Obrigação legal</h3>
+          <p class="m-0 text-sm text-surface-600 dark:text-surface-300">
+            A LBI (Lei 13.146/2015) exige que sites e serviços digitais sejam acessíveis segundo as
+            <a href="https://www.w3.org/TR/WCAG22/" target="_blank" class="text-primary underline"
+              >WCAG 2.2</a
+            >, que são a referência técnica.
+          </p>
+        </div>
+      </p-card>
+      <p-card>
+        <div class="flex flex-col gap-3">
+          <span
+            class="flex size-10 items-center justify-center rounded-md bg-surface-100 text-primary dark:bg-surface-800"
+          >
+            <svg data-p-icon="sparkles" size="20"></svg>
+          </span>
+          <h3 class="m-0 text-lg font-semibold">Qualidade</h3>
+          <p class="m-0 text-sm text-surface-600 dark:text-surface-300">
+            Navegação por teclado, leitores de tela e clareza melhoram a experiência de todo mundo.
+          </p>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</section>
+
+<section id="o-que-faz" tabindex="-1" class="landing-section border-t border-surface">
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-8 sm:py-16">
+    <h2 class="m-0 text-2xl font-semibold sm:text-3xl">O que o Argos faz?</h2>
+    <!-- <p class="mt-2 mb-8 max-w-3xl text-surface-600 dark:text-surface-300">
+      Uma plataforma para auditoria contínua de acessibilidade web, com relatórios e histórico no
+      mesmo projeto.
+    </p> -->
+
+    <div class="grid gap-4 md:grid-cols-3 pt-3">
+      <p-card>
+        <div class="flex flex-col gap-3">
+          <span
+            class="flex size-10 items-center justify-center rounded-md bg-surface-100 text-primary dark:bg-surface-800"
+          >
+            <svg data-p-icon="bolt" size="20"></svg>
+          </span>
+          <h3 class="m-0 text-lg font-semibold">Avalia as rotas do site</h3>
+          <p class="m-0 text-sm text-surface-600 dark:text-surface-300">
+            Usa axe-core e validadores da W3C, e detecta tecnologias assistivas brasileiras como
+            VLibras e Hand Talk.
+          </p>
+        </div>
+      </p-card>
+      <p-card>
+        <div class="flex flex-col gap-3">
+          <span
+            class="flex size-10 items-center justify-center rounded-md bg-surface-100 text-primary dark:bg-surface-800"
+          >
+            <svg data-p-icon="receipt" size="20"></svg>
+          </span>
+          <h3 class="m-0 text-lg font-semibold">Entrega um relatório acionável</h3>
+          <p class="m-0 text-sm text-surface-600 dark:text-surface-300">
+            Erros, avisos, trechos de código, critérios WCAG e orientações de como resolver cada
+            achado.
+          </p>
+        </div>
+      </p-card>
+      <p-card>
+        <div class="flex flex-col gap-3">
+          <span
+            class="flex size-10 items-center justify-center rounded-md bg-surface-100 text-primary dark:bg-surface-800"
+          >
+            <svg data-p-icon="chart-line" size="20"></svg>
+          </span>
+          <h3 class="m-0 text-lg font-semibold">Acompanha a evolução</h3>
+          <p class="m-0 text-sm text-surface-600 dark:text-surface-300">
+            O dashboard mostra a pontuação e a quantidade de problemas ao longo das execuções.
+          </p>
+        </div>
+      </p-card>
+    </div>
+
+    <p class="mt-6 mb-0 flex items-start gap-2 text-sm text-surface-500 dark:text-surface-400">
+      <svg data-p-icon="info-circle" size="16" class="mt-0.5 shrink-0"></svg>
+      <span
+        >A avaliação automatizada não substitui uma análise manual. Use o Argos para encontrar
+        problemas recorrentes e acompanhar o progresso.</span
+      >
+    </p>
+  </div>
+</section>
+
+<footer class="border-t border-surface">
+  <div class="mx-auto max-w-6xl px-4 py-6 text-sm text-muted-color sm:px-8">
+    Argos · Avaliador de acessibilidade
+  </div>
+</footer>

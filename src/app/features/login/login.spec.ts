@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 import { Login } from './login';
@@ -33,5 +33,15 @@ describe('Login', () => {
     component.onSubmit();
 
     expect(auth.login).toHaveBeenCalledWith({ email: 'a@b.com', senha: 'secret' });
+  });
+
+  it('should navigate to projetos after login', () => {
+    const router = TestBed.inject(Router);
+    const navigate = vi.spyOn(router, 'navigate');
+
+    component.form.setValue({ email: 'a@b.com', senha: 'secret' });
+    component.onSubmit();
+
+    expect(navigate).toHaveBeenCalledWith(['/projetos']);
   });
 });

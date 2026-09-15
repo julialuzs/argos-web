@@ -1,11 +1,15 @@
 <header>
   <p-menubar [model]="items()" breakpoint="640px">
     <ng-template #start>
-      <div
+      <div class="flex items-center gap-2">
+
+        <div
         class="flex border border-surface rounded-md size-9 shrink-0 items-center justify-center ml-2"
       >
-        <img src="argos-64x64.png" alt="Argos icon" class="size-8" />
+        <img src="argos-64x64.png" alt="Logo do Argos" class="size-8" />
       </div>
+      <span class="text-lg font-bold">Argos</span>
+    </div>
     </ng-template>
     <ng-template #item let-item let-root="root">
       <a

@@ -1,17 +1,29 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards/auth.guard';
+import { guestGuard } from '@core/guards/guest.guard';
 
 export const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('@features/landing/landing').then((m) => m.Landing),
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('@features/login/login').then((m) => m.Login),
+    canActivate: [guestGuard],
+  },
+  {
+    path: 'cadastro',
+    loadComponent: () => import('@features/cadastro/cadastro').then((m) => m.Cadastro),
+    canActivate: [guestGuard],
+  },
   {
     path: '',
     loadComponent: () => import('@core/components/layout/layout').then((m) => m.Layout),
     canActivate: [authGuard],
     children: [
-      {
-        path: '',
-        redirectTo: 'projetos',
-        pathMatch: 'full',
-      },
       {
         path: 'tutorial',
         loadComponent: () => import('@features/tutorial/tutorial').then((m) => m.Tutorial),
@@ -36,13 +48,5 @@ export const routes: Routes = [
         loadComponent: () => import('@features/projetos/projetos').then((m) => m.Projetos),
       },
     ],
-  },
-  {
-    path: 'login',
-    loadComponent: () => import('@features/login/login').then((m) => m.Login),
-  },
-  {
-    path: 'cadastro',
-    loadComponent: () => import('@features/cadastro/cadastro').then((m) => m.Cadastro),
   },
 ];

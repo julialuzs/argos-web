@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputPasswordModule } from 'primeng/inputpassword';
@@ -28,7 +28,7 @@ const primeNgModules = [
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ...primeNgModules, ...icons],
+  imports: [ReactiveFormsModule, RouterLink, ...primeNgModules, ...icons],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -59,7 +59,7 @@ export class Login {
     this.auth.login(this.loginRequest).subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['']);
+        this.router.navigate(['/projetos']);
       },
       error: () => {
         this.loading.set(false);
