@@ -1,0 +1,26 @@
+<p-breadcrumb
+  [home]="inicio"
+  [model]="itens()"
+  homeAriaLabel="Ir para Projetos"
+  [pt]="{ root: { 'aria-label': 'Navegação estrutural' } }"
+>
+  <ng-template #item let-item>
+    @if (!item.label) {
+      <a class="p-breadcrumb-item-link" [routerLink]="item.routerLink" aria-label="Ir para Projetos">
+        <svg data-p-icon="home" class="p-breadcrumb-item-icon"></svg>
+      </a>
+    } @else if (item.current) {
+      <span class="p-breadcrumb-item-link" aria-current="page">
+        <span class="p-breadcrumb-item-label">{{ item.label }}</span>
+      </span>
+    } @else if (item.routerLink) {
+      <a class="p-breadcrumb-item-link" [routerLink]="item.routerLink">
+        <span class="p-breadcrumb-item-label">{{ item.label }}</span>
+      </a>
+    } @else {
+      <span class="p-breadcrumb-item-link">
+        <span class="p-breadcrumb-item-label">{{ item.label }}</span>
+      </span>
+    }
+  </ng-template>
+</p-breadcrumb>

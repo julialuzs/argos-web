@@ -3,6 +3,7 @@ import AuraBase from '@primeuix/themes/aura/base';
 import accordion from '@primeuix/themes/aura/accordion';
 import avatar from '@primeuix/themes/aura/avatar';
 import badge from '@primeuix/themes/aura/badge';
+import breadcrumb from '@primeuix/themes/aura/breadcrumb';
 import button from '@primeuix/themes/aura/button';
 import card from '@primeuix/themes/aura/card';
 import chip from '@primeuix/themes/aura/chip';
@@ -38,6 +39,7 @@ export const argosPreset = definePreset(
       accordion,
       avatar,
       badge,
+      breadcrumb,
       button,
       card,
       chip,
@@ -86,6 +88,22 @@ export const argosPreset = definePreset(
       extend: {
         app: {
           background: 'light-dark({surface.50}, {surface.950})',
+        },
+      },
+    },
+    components: {
+      breadcrumb: {
+        root: {
+          padding: '0',
+          background: 'transparent',
+        },
+        item: {
+          icon: {
+            size: '0.875rem',
+          },
+          label: {
+            fontSize: '0.75rem',
+          },
         },
       },
     },
