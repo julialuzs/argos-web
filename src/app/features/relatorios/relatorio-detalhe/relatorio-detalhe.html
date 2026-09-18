@@ -1,11 +1,13 @@
-<div class="mt-12 mx-8 pb-4 overflow-hidden">
+<div class="mt-12 mx-4 sm:mx-8 pb-4">
   <section class="flex justify-between pb-4">
-    <div>
-      <div class="flex items-center gap-2">
-        <h1 class="font-semibold text-4xl">Relatório de Acessibilidade</h1>
+    <div class="min-w-0">
+      <div class="flex items-start gap-2">
+        <h1 class="min-w-0 font-semibold text-2xl wrap-break-word sm:text-3xl 2xl:text-4xl">
+          Relatório de Acessibilidade
+        </h1>
         <button
           type="button"
-          class="inline-flex items-center text-muted-color hover:text-color cursor-help"
+          class="inline-flex shrink-0 items-center text-muted-color hover:text-color cursor-help mt-1"
           [pTooltip]="tooltipRelatorio"
           tooltipPosition="right"
           tooltipStyleClass="w-100!"
@@ -51,23 +53,23 @@
     <p-accordion
       [(value)]="padraoAberto"
       [multiple]="true"
-      class="w-full block border border-surface-200 dark:border-surface-700 rounded-md divide-y divide-surface-200 dark:divide-surface-700"
+      class="w-full block overflow-hidden border border-surface-200 dark:border-surface-700 rounded-md divide-y divide-surface-200 dark:divide-surface-700"
     >
       @for (resultado of relatorio()?.resultados; track $index) {
         <p-accordion-panel [value]="$index">
           <p-accordion-header>
             <ng-template #toggleicon><span class="hidden"></span></ng-template>
-            <div class="flex items-center justify-between gap-2 w-full">
-              <span class="flex items-center gap-2">
+            <div class="flex w-full min-w-0 items-center justify-between gap-2">
+              <span class="flex min-w-0 items-center gap-2">
                 <svg
                   data-p-icon="chevron-right"
                   [size]="20"
-                  class="transition-transform ease-out in-data-[p=active]:-rotate-90"
+                  class="shrink-0 transition-transform ease-out in-data-[p=active]:-rotate-90"
                 ></svg>
-                {{ resultado.url }}
+                <span class="min-w-0 break-all">{{ resultado.url }}</span>
               </span>
 
-              <span class="flex items-center gap-2">
+              <span class="flex shrink-0 items-center gap-2">
                 <p-chip
                   [label]="resultado.pontuacao.toString()"
                   [icon]="'pi pi-trophy'"
@@ -78,31 +80,32 @@
           </p-accordion-header>
           <p-accordion-content>
             @for (apontamento of resultado.apontamentos; track $index) {
-              <div class="grid grid-cols-12 gap-4">
-                <div class="col-span-1 flex flex-col gap-2">
-                  <p class="text-sm">
-                    <p-chip
-                      [label]="apontamento.tipo | titlecase"
-                      [icon]="getIconTipo(apontamento.tipo)"
-                    />
-                  </p>
-                  <p class="text-sm">
-                    <p-badge
-                      [value]="apontamento.severidade"
-                      size="large"
-                      [severity]="getCorSeveridade(apontamento.severidade)"
-                    />
-                  </p>
+              <div class="grid grid-cols-1 gap-4 min-w-0 lg:grid-cols-12">
+                <div
+                  class="flex flex-row flex-wrap items-center gap-2 lg:col-span-2 xl:col-span-1 lg:flex-col lg:items-start"
+                >
+                  <p-chip
+                    [label]="apontamento.tipo | titlecase"
+                    [icon]="getIconTipo(apontamento.tipo)"
+                  />
+                  <p-badge
+                    [value]="apontamento.severidade"
+                    size="large"
+                    [severity]="getCorSeveridade(apontamento.severidade)"
+                  />
                 </div>
-                <div class="descricao col-span-5">
-                  <h3 class="font-medium text-1xl text-surface-900 dark:text-surface-0 mt-1">
+                <div class="descricao min-w-0 lg:col-span-5">
+                  <h3
+                    class="mt-1 font-medium text-1xl wrap-break-word text-surface-900 dark:text-surface-0"
+                  >
                     {{ apontamento.titulo }}
                   </h3>
                   <p class="text-sm">{{ apontamento.descricao }}</p>
-                  <p class="text-sm">Identificado por: {{ apontamento.fonte }}</p>
+
+                  <p class="text-xs pt-2">Identificado por: {{ apontamento.fonte }}</p>
                   @let criterios = criteriosWcag(apontamento);
                   @if (criterios.length) {
-                    <p class="text-sm criterios-wcag">
+                    <p class="text-xs criterios-wcag">
                       Critérios WCAG relacionados:
                       @for (criterio of criterios; track criterio; let last = $last) {
                         <a
@@ -123,26 +126,26 @@
                     </p>
                   }
                 </div>
-                <div class="localizacao col-span-6">
+                <div class="localizacao min-w-0 lg:col-span-5">
                   @if (apontamento.seletorCss) {
-                    <p class="text-sm">
+                    <div class="min-w-0 text-sm">
                       Seletor CSS:
                       <app-code-snippet
                         [code]="apontamento.seletorCss"
                         [language]="'css'"
                         [showHeader]="false"
                       />
-                    </p>
+                    </div>
                   }
                   @if (apontamento.elementoHtml) {
-                    <p class="text-sm">
+                    <div class="min-w-0 text-sm">
                       Elemento HTML:
                       <app-code-snippet
                         [code]="apontamento.elementoHtml"
                         [language]="'html'"
                         [showHeader]="false"
                       />
-                    </p>
+                    </div>
                   }
                   <p class="text-sm">
                     @if (apontamento.urlAjuda) {

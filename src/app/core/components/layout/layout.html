@@ -1,15 +1,14 @@
 <header>
   <p-menubar [model]="items()" breakpoint="640px">
     <ng-template #start>
-      <div class="flex items-center gap-2">
-
+      <div class="flex items-center gap-2 cursor-pointer" (click)="router.navigate(['/'])">
         <div
-        class="flex border border-surface rounded-md size-9 shrink-0 items-center justify-center ml-2"
-      >
-        <img src="argos-64x64.png" alt="Logo do Argos" class="size-8" />
+          class="flex border border-surface rounded-md size-9 shrink-0 items-center justify-center ml-2"
+        >
+          <img src="argos-64x64.png" alt="Logo do Argos" class="size-8" />
+        </div>
+        <span class="hidden text-lg font-bold sm:inline">Argos</span>
       </div>
-      <span class="text-lg font-bold">Argos</span>
-    </div>
     </ng-template>
     <ng-template #item let-item let-root="root">
       <a
@@ -44,10 +43,10 @@
       </a>
     </ng-template>
     <ng-template #end>
-      <div class="flex items-center gap-2">
+      <div class="flex min-w-0 items-center justify-end gap-1 sm:gap-2">
         <button
           type="button"
-          class="flex max-w-56 items-center gap-2 rounded-lg border border-surface px-2.5 py-1.5 text-left hover:bg-emphasis transition-colors"
+          class="flex min-w-0 max-w-44 items-center gap-2 overflow-hidden rounded-lg border border-surface px-2 py-1.5 text-left hover:bg-emphasis transition-colors sm:max-w-48 sm:px-2.5 lg:max-w-56"
           [attr.aria-label]="rotuloSeletorProjeto()"
           aria-haspopup="menu"
           (click)="abrirMenuProjeto($event)"
@@ -58,18 +57,22 @@
             >
               {{ projeto.nome | primeiraLetra }}
             </div>
-            <span class="flex min-w-0 flex-col items-start leading-tight">
+            <span class="hidden min-w-0 flex-1 flex-col overflow-hidden leading-tight sm:flex">
               <span class="text-[0.625rem] uppercase tracking-wide text-muted-color">Projeto</span>
-              <span class="text-sm font-medium truncate max-w-36">{{ projeto.nome }}</span>
+              <span class="block min-w-0 truncate text-sm font-medium">{{ projeto.nome }}</span>
             </span>
-            <svg [pIcon]="'chevron-down'" [size]="12" class="shrink-0 text-muted-color"></svg>
+            <svg
+              [pIcon]="'chevron-down'"
+              [size]="12"
+              class="hidden shrink-0 text-muted-color sm:inline"
+            ></svg>
           } @else {
             <svg [pIcon]="'plus'" [size]="14" class="shrink-0"></svg>
-            <span class="text-sm whitespace-nowrap">Selecione um projeto</span>
+            <span class="hidden min-w-0 truncate text-sm sm:inline">Selecione um projeto</span>
           }
         </button>
         <p-menu #menuProjeto [model]="itensMenuProjeto()" [popup]="true" appendTo="body" />
-        <p-divider layout="vertical" />
+        <p-divider layout="vertical" class="hidden sm:block" />
         <p-toggleswitch
           inputId="alternar-tema"
           [ngModel]="temaService.temaEscuro()"
@@ -83,7 +86,7 @@
         <button
           pButton
           variant="outlined"
-          class="flex size-8 items-center justify-center rounded-md hover:bg-emphasis transition-colors"
+          class="flex size-8 shrink-0 items-center justify-center rounded-md hover:bg-emphasis transition-colors"
           [attr.aria-label]="rotuloTamanhoFonte()"
           [attr.aria-expanded]="popoverTamanhoFonteAberto()"
           aria-haspopup="dialog"
@@ -125,13 +128,14 @@
             </p-selectbutton>
           </div>
         </p-popover>
-        <p-divider layout="vertical" />
-        <span class="font-medium text-sm pr-2">{{ usuarioLogado()?.nome }}</span>
+        <p-divider layout="vertical" class="hidden 2xl:block" />
+        <span class="hidden font-medium text-sm pr-2 2xl:inline">{{ usuarioLogado()?.nome }}</span>
         <button
           pButton
           iconOnly
           variant="outlined"
           rounded
+          class="shrink-0"
           aria-label="Sair da conta"
           (click)="logout()"
         >

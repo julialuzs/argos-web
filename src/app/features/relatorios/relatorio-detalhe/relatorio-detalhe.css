@@ -1,3 +1,8 @@
 .criterios-wcag a {
   white-space: normal;
 }
+
+.descricao,
+.localizacao {
+  min-width: 0;
+}
