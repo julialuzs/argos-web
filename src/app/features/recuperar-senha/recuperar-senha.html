@@ -1,0 +1,118 @@
+<div class="h-full flex flex-col justify-center items-center gap-4 px-4">
+  <a routerLink="/" pButton variant="link" class="p-0">Voltar ao início</a>
+  <p-card class="max-w-sm w-full">
+    <ng-template #header>
+      <div class="pl-4 pt-3">
+        <h1 class="text-xl font-bold pb-2">Argos</h1>
+        <h2 class="text-base">Informe o e-mail cadastrado e defina uma nova senha:</h2>
+      </div>
+    </ng-template>
+    <form [formGroup]="form" class="space-y-6 mt-3" autocomplete="off">
+      <div class="flex flex-col gap-2">
+        <label pLabel for="recuperar-email">E-mail</label>
+        <input
+          name="recuperar-email"
+          pInputText
+          type="email"
+          id="recuperar-email"
+          placeholder="Digite seu e-mail"
+          formControlName="email"
+          autocomplete="off"
+          [invalid]="isInvalid('email')"
+        />
+        @if (isInvalid('email')) {
+          @if (form.get('email')?.errors?.['required']) {
+            <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
+          }
+          @if (form.get('email')?.errors?.['email']) {
+            <p-message severity="error" size="small" variant="simple"
+              >Digite um e-mail válido.</p-message
+            >
+          }
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label pLabel for="recuperar-senha">Nova senha</label>
+        <input
+          pInputPassword
+          id="recuperar-senha"
+          name="recuperar-senha"
+          formControlName="senha"
+          placeholder="Digite a nova senha"
+          autocomplete="off"
+          [invalid]="isInvalid('senha')"
+        />
+        <ul class="flex flex-col gap-2 list-none ms-1 my-1 p-0">
+          @for (req of requirements; track req.id) {
+            <li class="flex items-center gap-2 text-sm transition-all duration-300">
+              <svg
+                data-p-icon="check-circle"
+                [class]="
+                  'transition-all duration-300 ease-out ' +
+                  (req.test(senha)
+                    ? 'text-green-500 scale-110 opacity-100'
+                    : 'text-surface-600 scale-90 opacity-70')
+                "
+              ></svg>
+              <span
+                [class]="
+                  'transition-all duration-300 ease-out ' +
+                  (req.test(senha)
+                    ? 'text-green-700 dark:text-green-400 line-through decoration-2 decoration-green-500/70'
+                    : 'text-surface-600 dark:text-surface-300 dark:opacity-70')
+                "
+              >
+                {{ req.label }}
+              </span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label pLabel for="recuperar-confirmacao-senha">Confirme a senha</label>
+        <input
+          pInputPassword
+          id="recuperar-confirmacao-senha"
+          name="recuperar-confirmacao-senha"
+          formControlName="confirmacaoSenha"
+          placeholder="Digite a senha novamente"
+          autocomplete="off"
+          [invalid]="isInvalid('confirmacaoSenha')"
+        />
+        @if (isInvalid('confirmacaoSenha')) {
+          @if (form.get('confirmacaoSenha')?.errors?.['required']) {
+            <p-message severity="error" size="small" variant="simple">Campo obrigatório.</p-message>
+          } @else if (form.get('confirmacaoSenha')?.errors?.['match']) {
+            <p-message severity="error" size="small" variant="simple"
+              >As senhas não batem.</p-message
+            >
+          }
+        }
+      </div>
+    </form>
+    @if (error(); as message) {
+      <p class="text-sm" role="alert">{{ message }}</p>
+    }
+    <ng-template #footer>
+      <div class="flex flex-col gap-4 mt-6">
+        <button
+          pButton
+          type="button"
+          class="w-full"
+          (click)="onSubmit()"
+          [disabled]="loading() || !formValido"
+        >
+          Redefinir senha
+        </button>
+        <div class="mt-2 text-center text-surface-500 text-sm">
+          Lembrou a senha?
+          <button type="button" pButton variant="link" (click)="redirectLogin()" class="p-0">
+            Fazer login
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </p-card>
+</div>

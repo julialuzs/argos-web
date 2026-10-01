@@ -75,4 +75,8 @@ export class Login {
   redirectCadastro() {
     this.router.navigate(['cadastro']);
   }
+
+  redirectRecuperarSenha() {
+    this.router.navigate(['recuperar-senha']);
+  }
 }

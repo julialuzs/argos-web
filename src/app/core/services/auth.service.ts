@@ -5,6 +5,7 @@ import { environment } from '@env/environment';
 import { isJwtExpired } from '@core/utils/jwt.util';
 import { LoginRequest } from './login-request';
 import { LoginResponse } from './login-response';
+import { RedefinirSenhaRequest } from './redefinir-senha-request';
 
 const TOKEN_KEY = 'argos_auth_token';
 
@@ -33,6 +34,10 @@ export class AuthService {
     return this.http
       .post<LoginResponse>(`${environment.apiUrl}/auth/login`, request)
       .pipe(tap((response) => this.setToken(response.token)));
+  }
+
+  redefinirSenha(request: RedefinirSenhaRequest): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/auth/redefinir-senha`, request);
   }
 
   logout(): void {

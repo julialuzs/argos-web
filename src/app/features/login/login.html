@@ -37,7 +37,9 @@
       <div class="flex flex-col gap-2">
         <div class="flex items-center justify-between">
           <label pLabel for="password" class="flex-1">Senha</label>
-          <button type="button" pButton variant="link" class="p-0">Esqueceu a senha?</button>
+          <button type="button" pButton variant="link" class="p-0" (click)="redirectRecuperarSenha()">
+            Esqueceu a senha?
+          </button>
         </div>
         <p-iconfield class="w-full">
           <input

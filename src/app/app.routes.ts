@@ -20,6 +20,12 @@ export const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
+    path: 'recuperar-senha',
+    loadComponent: () =>
+      import('@features/recuperar-senha/recuperar-senha').then((m) => m.RecuperarSenha),
+    canActivate: [guestGuard],
+  },
+  {
     path: '',
     loadComponent: () => import('@core/components/layout/layout').then((m) => m.Layout),
     canActivate: [authGuard],

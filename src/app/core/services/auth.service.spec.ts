@@ -50,6 +50,28 @@ describe('AuthService', () => {
     expect(localStorage.getItem('argos_auth_token')).toBe('jwt-token');
   });
 
+  it('deve redefinir a senha sem gravar token', () => {
+    service
+      .redefinirSenha({
+        email: 'a@b.com',
+        senha: 'Senha123',
+        confirmacaoSenha: 'Senha123',
+      })
+      .subscribe();
+
+    const req = httpMock.expectOne(`${environment.apiUrl}/auth/redefinir-senha`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({
+      email: 'a@b.com',
+      senha: 'Senha123',
+      confirmacaoSenha: 'Senha123',
+    });
+    req.flush(null);
+
+    expect(service.getToken()).toBeNull();
+    expect(localStorage.getItem('argos_auth_token')).toBeNull();
+  });
+
   it('deve limpar token ao fazer logout', () => {
     service.login({ email: 'a@b.com', senha: 'segredo' }).subscribe();
     httpMock.expectOne(`${environment.apiUrl}/auth/login`).flush({ token: 'jwt-token' });
