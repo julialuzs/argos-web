@@ -1,0 +1,9 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+:host ::ng-deep .p-breadcrumb-item-link[aria-current='page'],
+:host ::ng-deep .p-breadcrumb-item-link[aria-current='page'] .p-breadcrumb-item-label {
+  color: var(--p-primary-color);
+}

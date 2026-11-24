@@ -1,30 +1,30 @@
-<p-card class="w-full">
-  <div class="flex items-center justify-between gap-4">
-    <div class="flex items-center gap-4">
+<p-card class="w-full min-w-0">
+  <div class="flex min-w-0 items-center justify-between gap-2 sm:gap-4">
+    <div class="flex min-w-0 items-center gap-3 sm:gap-4">
       @switch (icon()) {
         @case ('found') {
-          <svg data-p-icon="check-circle" color="green" size="30"></svg>
+          <svg data-p-icon="check-circle" class="shrink-0" color="green" size="30"></svg>
         }
         @case ('not-found') {
-          <svg data-p-icon="times-circle" color="red" size="30"></svg>
+          <svg data-p-icon="times-circle" class="shrink-0" color="red" size="30"></svg>
         }
         @case ('warning') {
-          <svg data-p-icon="exclamation-circle" color="orange" size="30"></svg>
+          <svg data-p-icon="exclamation-circle" class="shrink-0" color="orange" size="30"></svg>
         }
         @case ('trophy') {
-          <svg data-p-icon="trophy" [attr.color]="iconColor()" size="30"></svg>
+          <svg data-p-icon="trophy" class="shrink-0" [attr.color]="iconColor()" size="30"></svg>
         }
         @case ('error') {
-          <svg data-p-icon="times-circle" color="red" size="30"></svg>
+          <svg data-p-icon="times-circle" class="shrink-0" color="red" size="30"></svg>
         }
         @default {
-          <svg data-p-icon="check-circle" color="green" size="30"></svg>
+          <svg data-p-icon="check-circle" class="shrink-0" color="green" size="30"></svg>
         }
       }
 
-      <div>
-        <h3 class="font-semibold text-lg">{{ title() }}</h3>
-        <p class="text-base font-semibold">{{ value() }}</p>
+      <div class="min-w-0">
+        <h3 class="font-semibold text-lg wrap-break-word">{{ title() }}</h3>
+        <p class="text-base font-semibold wrap-break-word">{{ value() }}</p>
       </div>
     </div>
 

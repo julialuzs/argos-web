@@ -22,6 +22,7 @@ import { ProjetoRequest, ProjetoService } from '../projeto.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Projeto } from '@shared/models/projeto';
+import { InfoCircle } from '@primeicons/angular/info-circle';
 
 const primeNgModules = [
   MessageModule,
@@ -38,7 +39,7 @@ const primeNgModules = [
 
 @Component({
   selector: 'app-projeto-form',
-  imports: [ReactiveFormsModule, ...primeNgModules],
+  imports: [ReactiveFormsModule, ...primeNgModules, InfoCircle],
   providers: [MessageService],
   templateUrl: './projeto-form.html',
 })

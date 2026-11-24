@@ -11,7 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { LabelModule } from 'primeng/label';
 import { MessageModule } from 'primeng/message';
 import { CheckCircle } from '@primeicons/angular/check-circle';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
@@ -32,7 +32,7 @@ const primeNgModules = [
 
 @Component({
   selector: 'app-cadastro',
-  imports: [ReactiveFormsModule, ...primeNgModules, ...icons],
+  imports: [ReactiveFormsModule, RouterLink, ...primeNgModules, ...icons],
   providers: [MessageService],
   templateUrl: './cadastro.html',
   styleUrl: './cadastro.css',
@@ -92,7 +92,7 @@ export class Cadastro {
     this.usuarioService.criarUsuario(this.request).subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
         this.messageService.add({
           severity: 'success',
           summary: 'Usuário criado',

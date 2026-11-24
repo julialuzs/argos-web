@@ -1,0 +1,11 @@
+:host ::ng-deep .p-menubar,
+:host ::ng-deep [data-pc-name='menubar'] {
+  min-width: 0;
+}
+
+:host ::ng-deep .p-menubar-end,
+:host ::ng-deep [data-pc-section='end'] {
+  min-width: 0;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}

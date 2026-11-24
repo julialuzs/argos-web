@@ -3,6 +3,7 @@
 pre[class*='language-'] {
   margin: 0 !important;
   padding: 1rem !important;
+  max-width: 100%;
   overflow-x: auto;
   white-space: pre;
   background: transparent !important;

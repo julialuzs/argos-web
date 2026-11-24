@@ -70,7 +70,7 @@ export class RelatorioDetalhe implements OnInit {
 
   padraoAberto = signal<number>(0);
   readonly textoTooltipRelatorio =
-    'Este relatório foi gerado pelo Argos, que intermediou a avaliação utilizando o motor axe-core e as APIs da W3C. A avaliação automatizada não substitui uma análise manual.';
+    'Este relatório foi gerado pelo Argos, que intermediou a avaliação utilizando o motor axe-core e o validador W3C. A avaliação automatizada não substitui uma análise manual.';
 
   ngOnInit() {
     const guid = this.projetoGuid();

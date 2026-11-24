@@ -26,6 +26,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ProjetoService } from '@features/projetos/projeto.service';
 import { Projeto } from '@shared/models/projeto';
 import { PrimeiraLetraPipe } from '@shared/pipes/primeira-letra-pipe';
+import { AppBreadcrumb } from '@shared/components/breadcrumb/breadcrumb';
 
 const primeNgModules = [
   SidebarModule,
@@ -70,6 +71,7 @@ interface NavItem {
     RouterLinkWithHref,
     FormsModule,
     PrimeiraLetraPipe,
+    AppBreadcrumb,
     ...primeNgModules,
     ...icons,
   ],
